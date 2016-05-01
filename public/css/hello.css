@@ -1,0 +1,110 @@
+.hello{
+	background-color: #234563;
+	height: 100px;
+	width: 50%;
+	margin-left: 25%;
+	text-align: center;
+	color: #fff;
+	margin-top: 50px;
+	border-radius: 10px;
+	
+}
+
+.a0{
+	text-align: center;
+}
+.a1{
+ float: left;
+ margin-left: 8%;
+ font-style: italic;
+ font-weight: bold;
+
+	
+}
+.a2{
+	margin-left: 22%;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.a3{
+	margin-left: 40%;
+	font-size: 35;
+	font-weight: bolder;
+}
+
+.a4{
+	margin-left: 8%;
+	font-weight: bold;
+}
+
+.a5{
+	margin-left: 25%;
+	font-style: normal;
+}
+.header{
+	display: block;
+	overflow: hidden;
+	text-align: center;
+	color: #fff;
+	background: url('img/cover copy.jpg');
+    background-size: 100% 120%;
+     font-family: cursive;
+    background-repeat: no-repeat;
+}
+.teacher{
+
+}
+.fl{
+	float: right;
+	left: 70%;
+	top: -100px;
+}
+
+.exampleserif {
+    font-family: Times, "Times New Roman", Georgia, serif;
+}
+
+.examplesansserif {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.examplemonospace {
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+.examplecursive {
+    font-family: cursive;
+    text-align: center;
+	color: #fff;
+	background: url('img/cover copy.jpg');
+    background-size: 100% 120%;
+    background-repeat: no-repeat;
+}
+
+.examplefantasy {
+    font-family: fantasy;
+}
+
+a.dp-choose-date {
+	float: left;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	margin: 5px 3px 0;
+	display: block;
+	text-indent: -2000px;
+	overflow: hidden;
+	background: url(calendar.png) no-repeat; 
+}
+a.dp-choose-date.dp-disabled {
+	background-position: 0 -20px;
+	cursor: default;
+}
+/* makes the input field shorter once the date picker code
+ * has run (to allow space for the calendar icon
+ */
+input.dp-applied {
+	width: 140px;
+	float: left;
+}
