@@ -1,4 +1,5 @@
 @extends('layouts.teacher')
+
 <?php
 $classes = DB::table('section')
 			->select('class_id')
@@ -8,26 +9,19 @@ $classes = DB::table('section')
 @section('content')
 @if(count($club))
 @foreach($club as $clb)
-<!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
-<script src="//www.google-analytics.com/ga.js"></script>
-
-
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
 <script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
 <link rel="stylesheet" type="text/css" href="../../app.css">
 
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//www.google-analytics.com/ga.js"></script>
 <style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
 <style type="text/css">.header-color{background: #ff3b31;}</style>
+
+
 
 
 <div class="principal-container page-users-edit_profile" role="main">
@@ -37,7 +31,7 @@ $classes = DB::table('section')
 			<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b>{{$clb->club_name}}</b></h2><br></center>
+							<center><h2>You are Currently Moderating <br><b></b></h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
@@ -55,7 +49,8 @@ $classes = DB::table('section')
 						</li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active" id="add">
+
+            <div class="tab-pane active" id="add">
             <center></center>
 							<div class="panel-body">
 
@@ -151,6 +146,7 @@ $classes = DB::table('section')
 
 
 
+
 						<div class="tab-pane" id="del">
 						Hello2
 						</div>
@@ -166,11 +162,15 @@ $classes = DB::table('section')
 	</div>
 </div>
 
+
+
+
 <script>
   $('#class_id').on('change', function(e){
     console.log(e);
     var class_id = e.target.value;
     console.log(class_id);
+
     $.get("{{ url('api/dropdown')}}=" + class_id, function(data){
       console.log(data);
       $('#section_id').empty();
@@ -189,66 +189,6 @@ $classes = DB::table('section')
 
    });
   </script>
-
-
-<script>
-            function getXMLHTTPRequest() {
-                var req = false;
-                try {
-                    /* for Firefox */
-                    req = new XMLHttpRequest();
-                } catch (err) {
-                    try {
-                        /* for some versions of IE */
-                        req = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (err) {
-                        try {
-                        /* for some other versions of IE */
-                            req = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (err) {
-                            req = false;
-                        }
-                    }
-                }
-                return req;
-            }
-
-            function loadOptions() {
-                var opt = document.getElementById("second");
-                var opt2 = document.getElementById("third");
-                var selected = opt.options[opt.selectedIndex].value;
-                console.log(selected);
-                if(selected == "-1")  {
-                  opt2.innerHTML = "Select a Section";
-                  return;
-                }
-
-                var ajaxRequest = getXMLHTTPRequest();
-                ajaxRequest.open("POST", "../../../app/Http/Controllers/temp.php", true);
-                ajaxRequest.onreadystatechange = response;
-                ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                ajaxRequest.send("select1=" + selected);
-
-                function response() {
-                    if(ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
-                        console.log("response: " + ajaxRequest.responseText);
-
-                        if(ajaxRequest.responseText != null || ajaxRequest.responseText != "") {
-                            var arr = JSON.parse(ajaxRequest.responseText);
-                            console.log("response: " + arr);
-                            opt2.innerHTML = "Select a Class";
-                                for(var i = 0; i < arr.length; i++) {
-                                    opt2.innerHTML += "<option>" + arr[i] + "</option>";
-                                }
-                        }
-                    }
-                }
-
-            }
-
-
-</script>
-
 
 
 
@@ -374,12 +314,64 @@ $classes = DB::table('section')
 			<div class="colorpicker-alpha" style="background-color: rgb(255, 59, 48);"><i style="top: 0px;"></i></div>
 			<div class="colorpicker-color" style="background-color: rgb(255, 59, 48);"><div style="background-color: rgb(255, 59, 48);"></div></div>
 
-@endforeach
-@else
-@endif
+      @endforeach
+      @else
+<script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../app.css">
+
+<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//www.google-analytics.com/ga.js"></script>
+<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
+<style type="text/css">.header-color{background: #ff3b31;}</style>
 
 
+<style>
+  .title{
+    font-size: 36px;
+  }
 
+  .subtitle{
+    font-size: 20px;
+  }
+
+
+</style>
+<br><br><br><br>
+<div class="title">
+  <center>Currently You Are Not Assigned to Moderate any Club</center>
+</div>
+
+<div class="subtitle">
+  <center>Please Contact the Authority if You Are Highly Interested</center>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<footer class="footer row" role="contentinfo">
+      <div class="bs-docs-social">
+        <ul class="bs-docs-social-buttons">
+          <li class="follow-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
+             <i class="fa fa-facebook"></i> Like ILS </a></li>
+          <li class="tweet-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
+              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
+          </ul>
+        </div>
+
+        <ul class="footer-links text-muted">
+          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
+          <li>.</li>
+          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
+          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
+          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
+        </ul>
+      </footer>
+
+      @endif
 
 
 @endsection

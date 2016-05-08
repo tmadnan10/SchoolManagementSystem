@@ -9,6 +9,7 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="1.ico" />
     
+
         <link rel="stylesheet" href="../css/jquery-ui.css">
         <link href="hello.css" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
@@ -30,12 +31,21 @@
         <script src="js/bootstrap.min.js"></script>
 
     <!-- Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../app.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+
+<link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+
 
     <style>
         body {
@@ -58,96 +68,60 @@
 </head>
 <body id="app-layout">
 
-<!--<nav class="main-v2 no-button">
-    <ul>
-        <li><a href="/" class="logo"></a></li>
-            <li id="search-container" class="spacer"></li>
-        <li class="cart mobile">
-            <span class="flaticon-cart"></span>
-            <span id="cart-badge-mob"></span>
-        </li>
-        <li class="menu mobile">
-            <span class="flaticon-menu"></span>
-            <span class="flaticon-cancel"></span>
-        </li>
-        <li class="nav-items">
-            <ul>
-                <li class="explore" onclick="navigateToUri('/explore/categories')">
-                    <span class="normal-label">Explore</span>
-                    <span class="flaticon-explore"></span>
-                    <span class="mobile label">Explore</span>
-                </li>
-                <li class="expandable notifications">
-                    <span class="normal-label" onclick="navigateToUri('/notifications')">Notifications</span>
-                    <span class="flaticon-bell" onclick="navigateToUri('/notifications')"></span>
-                    <span class="mobile label">Notifications</span>
-                    <span id="notifications-badge" class="desktop"></span>
-                    <div id="notifications-nav" class="desktop dropdown notifications animated fadeIn"></div>
-                </li>
-                <li class="expandable cart desktop">
-                    <span class="normal-label" onclick="navigateToUri('/cart')">Shopping</span>
-                    <span class="flaticon-cart" onclick="navigateToUri('/cart')"></span>
-                    <span class="mobile label">Shopping</span>
-                    <span id="cart-badge" class="desktop"></span>
-                    <div id="cart-nav" class="desktop dropdown cart animated fadeIn"></div>
-                </li>
-                <li class="expandable user">
-                    <span class="normal-label" onclick="navigateToUri('/backpack#requests')">Tariq</span>
-                    <span id="nav-avatar" class="profile alt" onclick="navigateToUri('/backpack#requests')" style="background-image: url('https://graph.facebook.com/10205865639752742/picture?width=200&height=200')"></span>
-                    <span class="mobile label">Tariq Adnan</span>
-
-                    </li>
-                    </ul>
-                    </li>
-                    </ul>
-                    </nav>-->
-<!--
-<nav id="mainNav" class="navbar navbar-default navbar-fixed-top affix-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Start Bootstrap</a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="">
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li class="">
-                        <a class="page-scroll" href="#services">Services</a>
-                    </li>
-                    <li class="">
-                        <a class="page-scroll" href="#portfolio">Portfolio</a>
-                    </li>
-                    <li class="">
-                        <a class="page-scroll" href="#contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
+<header class="navbar navbar-default navbar-fixed-top affix-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{{ url('/') }}" class="navbar-brand logo-app-name">Admin's Portal</a>
         </div>
-    </nav>
-    -->
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="snippets-index snippets-view snippets-add snippets-edit">
+                    <a href="{{ url('/').'/addnew' }}"> <span class="glyphicon glyphicon-user"></span> Add New User </a>
+                </li>
+                <li class="themes-index themes-view themes-add">
+                    <a href="{{url('/teacher_management')}}"> <span class="glyphicon glyphicon-briefcase"></span> Teacher Management </a>
+                </li>
+                <li class="utilities-index utilities-view utilities-add">
+                    <a href="{{url('/exam_management')}}"> <span class="glyphicon glyphicon-book"></span> Examination Management </a>
+                </li>
+                <li class="utilities-index utilities-view utilities-add">
+                    <a href="{{url('/club_management')}}"> <span class="glyphicon glyphicon-th-large"></span> Club Management </a>
+                </li>
+            </ul>
 
 
-    <!--<nav class="main-v2 no-button with-bg">
-        <div class="container">-->
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <i class="fa fa-user"> </i>&nbsp{{ Auth::user()->username }} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <!--<li>
+                            <a href="/users/edit_profile"> <i class="fa fa-gear"></i> Edit profile </a>
+                        </li>-->
+                        <li>
+                            <a href="{{ url('/logout') }}"> <i class="fa fa-power-off"></i> Logout </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
 
 
-
-
-
-
-<nav id="mainNav" class="navbar navbar-default navbar-fixed-top affix-top">
+<!--<nav id="mainNav" class="navbar navbar-default navbar-fixed-top affix-top">
         <div class="container-fluid">
             <div class="navbar-header">
 
-                <!-- Collapsed Hamburger -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
                     <span class="icon-bar"></span>
@@ -155,7 +129,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <!-- Branding Image -->
+
 
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Admin Portal
@@ -168,16 +142,16 @@
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
+
                 <ul class="nav navbar-nav">
                 </ul>
 
-                <!-- Right Side Of Navbar -->
+
                 <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
+
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">Login</a></li>
-                        <!--<li><a href="{{ url('/register') }}">Register</a></li>-->
+
                     @else
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -192,7 +166,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav>-->
 <br><br><br style="line-height: .5em"/>
     @yield('content')
 

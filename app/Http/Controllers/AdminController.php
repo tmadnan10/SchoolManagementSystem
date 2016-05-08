@@ -152,6 +152,17 @@ class AdminController extends Controller
     }
 
 
+    public function addClubModerator(Request $request){
+        $this->validate($request, [
+            'club_id' => 'required',
+            'dept_id' => 'required',
+            'username' => 'required',
+        ]);
+
+        echo ($request->club_id).($request->dept_id).($request->username);
+    }
+
+
     public function set(Request $request){
         $one = '10';
         $two = 'A';

@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use DB;
 use App\Teacher;
+use App\Student;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\StudentRepository;
@@ -36,7 +38,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Display teacher profile of the user.
+     * Display Student profile of the user.
      *
      * @param  Request  $request
      * @return Response
@@ -50,5 +52,96 @@ class StudentController extends Controller
         }
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
+
+
+    /**
+     * Edit Student profile of the user.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function edit(Request $request)
+    {
+        if (Auth::user()->account_type == 'student') {
+            return view('student.edit', [
+                'student' => $this->student->forUser($request->user()),
+            ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+
+    /**
+    * Save Edited Data.
+    *
+    * @param  Request  $request
+    * @return Response
+    */
+    public function editData(Request $request)
+    {
+      $this->validate($request, [
+          'first_name' => 'max:255',
+          'last_name' => 'max:255',
+          'email' => 'email|unique:users,email,'.Auth::user()->username.',username',
+          'date_of_birth' => 'date',
+          'blood_group' => 'max:15',
+          'address' => 'max:255',
+          'profile_pic' => 'max:200',
+      ]);
+      $array = array(
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'date_of_birth' => $request->date_of_birth,
+        'blood_group' => $request->blood_group,
+        'Address' => $request->address,
+        'profile_pic' => $request->profile_pic
+      );
+      Student::where('username', '=', Auth::user()->username)->update($array);
+      if ($request->email != "") {
+        DB::table('users')
+            ->where('username', Auth::user()->username)
+            ->update(['email' => $request->email]);
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+
+    /**
+    * Save 1st Time Edited Data.
+    *
+    * @param  Request  $request
+    * @return Response
+    */
+    public function firstEdit(Request $request)
+    {
+      $this->validate($request, [
+          'first_name' => 'required|max:255',
+          'last_name' => 'required|max:255',
+          'email' => 'required|email|unique:users,email,'.Auth::user()->username.',username',
+          'date_of_birth' => 'required',
+          'blood_group' => 'max:15',
+          'address' => 'required|max:255',
+      ]);
+      $array = array(
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'date_of_birth' => $request->date_of_birth,
+        'blood_group' => $request->blood_group,
+        'Address' => $request->address,
+        'profile_pic' => $request->profile_pic
+      );
+      Student::where('username', '=', Auth::user()->username)->update($array);
+      if ($request->email != "") {
+        DB::table('users')
+            ->where('username', Auth::user()->username)
+            ->update(['email' => $request->email]);
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+
+
 
 }

@@ -1,106 +1,18 @@
 @extends('layouts.teacher')
 
+
 @section('content')
+    @if (count($teacher) > 0)
+    @foreach ($teacher as $tchr)
+    <?
 
-@if (count($teacher) > 0)
-@foreach ($teacher as $tchr)
-
-		<?php
 
 		$dept = DB::table('department')->where('dept_id', $tchr->dept_id)->first();
-		$flag = 1;
-    if ($tchr->first_name == "" | $tchr->last_name == ""| $tchr->email == "" |
-       $tchr->Address == "" | $tchr->blood_group == "" ) {
-        $flag = 0;
-    }
-    ?>
 
-@endforeach
-@endif
-
-<br><br><br><br>
-
-<!--<META http-equiv="refresh" content="3;URL=http://www.indiana.edu/~account/new-directory">-->
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
-@if($flag)
-<div class="container bootstrap snippet">
-<div class="row">
-  <div class="profile-nav col-md-3">
-      <div class="panel">
-          <div class="user-heading round">
-              <a href="#">
-                  <img src="../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
-              </a>
-              <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
-              <p>{{ $tchr->email }}</p>
-          </div>
-
-          <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
-              <li><a href="{{url('/teacher/edit')}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
-          </ul>
-      </div>
-  </div>
-  <div class="profile-info col-md-9">
-    @if (count($teacher) > 0)
-		@foreach ($teacher as $tchr)
-      <div class="panel">
-          <div class="bio-graph-heading">
-              <font size="4", style="italic"><i>Welcome</i></font> <font size="6" weight=900>
-               {{ $tchr->first_name }} {{ $tchr->last_name }}</font>
-          </div>
-          <div class="panel-body bio-graph-info">
-              <h1>Bio Graph</h1>
-              <div class="row">
-                  <div class="bio-row">
-
-                      <p><span>First Name </span>: {{ $tchr->first_name }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Last Name </span>: {{ $tchr->last_name }}</p>
-                  </div>
-
-                  <div class="bio-row">
-                      <p><span>Department </span>: {{ $dept->dept_name }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Designation</span>: {{ $tchr->designation }}</p>
-                  </div>
-
-									<div class="bio-row">
-                      <p><span>Blood Group </span>: {{ $tchr->blood_group }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Join Date </span>: {{ $tchr->join_date }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>Email </span>: {{ $tchr->email }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Mobile </span>: (12) 03 4567890</p>
-                  </div>
-
-                  <div class="bio-row1">
-                      <p><span>Address </span>: {{ $tchr->Address }}</p>
-                  </div>
-
-              </div>
-          </div>
-      </div>
-@endforeach
-@endif
-
-
-
-@else
-@foreach ($teacher as $tchr)
+    /*php $class = DB::table('section')
+                  ->where('class_id', $tchr->class_id)
+                  ->where('section_id', $tchr->section_id)
+                  ->first();*/ ?>
 <br><br><br><br>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
@@ -129,11 +41,11 @@
 
       <div class="panel">
           <div class="bio-graph-heading">
-              <font size="5" weight=900>
-               Please Give Your Complete Information To Continue</font>
+              <font size="4", style="italic"><i>Welcome</i></font> <font size="6" weight=900>
+               {{ $tchr->first_name }} {{ $tchr->last_name }}</font>
           </div>
           <div class="panel-body bio-graph-info">
-              <h1></h1>
+              <h1>Edit Bio</h1>
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/edit') }}">
                         {!! csrf_field() !!}
                         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
@@ -268,10 +180,7 @@
           </div>
       </div>
 @endforeach
-
-
 @endif
-
 <br><br><br><br><br>
 
     <footer class="footer row" role="contentinfo">
@@ -294,6 +203,5 @@
           <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
         </ul>
       </footer>
-
 
 @endsection

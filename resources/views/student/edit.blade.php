@@ -6,103 +6,12 @@
     <?php $class = DB::table('section')
                   ->where('class_id', $tchr->class_id)
                   ->where('section_id', $tchr->section_id)
-                  ->first();
-      $flag = 1;
-      if ($tchr->first_name == "" | $tchr->last_name == ""| $tchr->email == "" |
-        $tchr->date_of_birth == "" | $tchr->Address == "" | $tchr->blood_group == "" ) {
-        $flag = 0;
-      }
-
-      ?>
+                  ->first(); ?>
 <br><br><br>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
-@if($flag)
-<div class="container bootstrap snippet">
-<div class="row">
-  <div class="profile-nav col-md-3">
-      <div class="panel">
-          <div class="user-heading round">
-              <a href="#">
-                  <img src="../pro_pics/{{ Auth::user()->username }}.jpg" alt="../pro_pics/default_avatar.png">
-              </a>
-              <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
-              <p>{{ $tchr->email }}</p>
-          </div>
+<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 
-          <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
-              <li><a href="{{url('/student/edit')}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
-          </ul>
-      </div>
-  </div>
-  <div class="profile-info col-md-9">
-
-      <div class="panel">
-          <div class="bio-graph-heading">
-              <font size="4", style="italic"><i>Welcome</i></font> <font size="6" weight=900>
-               {{ $tchr->first_name }} {{ $tchr->last_name }}</font>
-          </div>
-          <div class="panel-body bio-graph-info">
-              <h1>Bio Graph</h1>
-              <div class="row">
-
-                  <div class="bio-row">
-                      <p><span>Class </span>: {{ $tchr->class_id }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Section </span>: {{ $tchr->section_id }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>Roll No </span>: {{ $tchr->student_id }}</p>
-                  </div>
-                  <div class="bio-row">
-                    <p><span>Class Room</span>: {{ $class->room_no }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>First Name </span>: {{ $tchr->first_name }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Last Name </span>: {{ $tchr->last_name }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>Date Of Birth </span>: {{ $tchr->date_of_birth }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Blood Group </span>: {{ $tchr->admission_year }}</p>
-                  </div>
-
-                  <div class="bio-row">
-                      <p><span>Blood Group </span>: {{ $tchr->blood_group }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>E-mail</span>: {{ $tchr->email }}</p>
-                  </div>
-
-
-                  <div class="bio-row1">
-                      <p><span>Address</span>: {{ $tchr->Address }}</p>
-                  </div>
-
-
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
-</div>
-
-
-
-@else
 <div class="container bootstrap snippet">
 <div class="row">
   <div class="profile-nav col-md-3">
@@ -126,12 +35,12 @@
 
       <div class="panel">
           <div class="bio-graph-heading">
-              <font size="5" weight=900>
-               Please Give Your Complete Information To Continue</font>
+              <font size="4", style="italic"><i>Welcome</i></font> <font size="6" weight=900>
+               {{ $tchr->first_name }} {{ $tchr->last_name }}</font>
           </div>
           <div class="panel-body bio-graph-info">
-              <h1></h1>
-              <form class="form-horizontal" role="form" method="POST" action="{{ url('/student/firstedit') }}">
+              <h1>Edit Bio</h1>
+              <form class="form-horizontal" role="form" method="POST" action="{{ url('/student/edit') }}">
                         {!! csrf_field() !!}
 
 
@@ -293,7 +202,7 @@
                             <label class="col-md-4 control-label">Profile Picture</label>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="profile_pic" value="{{ old('profile_pic') }}">
+                                <input type="text" class="form-control" name="profile_pic" value="{{ $tchr->profile_pic }}">
 
                                 @if ($errors->has('profile_pic'))
                                     <span class="help-block">
@@ -313,36 +222,32 @@
                             </div>
                         </div>
                     </form>
-                  </div>
               </div>
           </div>
       </div>
-    </div>
-@endif
-
 @endforeach
 @endif
 <br><br><br><br><br>
 
-<footer class="footer row" role="contentinfo">
-  <div class="bs-docs-social">
-    <ul class="bs-docs-social-buttons">
-      <li class="follow-btn">
-        <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
-         <i class="fa fa-facebook"></i> Like ILS </a></li>
-      <li class="tweet-btn">
-        <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
-          <i class="fa fa-twitter"></i> Follow @ILS </a></li>
-      </ul>
-  </div>
+    <footer class="footer row" role="contentinfo">
+      <div class="bs-docs-social">
+        <ul class="bs-docs-social-buttons">
+          <li class="follow-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
+             <i class="fa fa-facebook"></i> Like ILS </a></li>
+          <li class="tweet-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
+              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
+          </ul>
+        </div>
 
-    <ul class="footer-links text-muted">
-      <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
-      <li>.</li>
-      <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
-      <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
-      <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
-    </ul>
-</footer>
+        <ul class="footer-links text-muted">
+          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
+          <li>.</li>
+          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
+          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
+          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
+        </ul>
+      </footer>
 
 @endsection
