@@ -44,7 +44,7 @@ $classes = DB::table('section')
               <center></center>
   							<div class="panel-body">
 
-  							<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher_management') }}">
+  							<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher_management/st') }}">
                           		{!! csrf_field() !!}
 
 
@@ -55,7 +55,7 @@ $classes = DB::table('section')
                               <label class="col-md-4 control-label">Class</label>
 
                               <div class="col-md-6">
-                                  <select class="form-control" name= "class_id" id="class_id">
+                                  <select class="form-control" name= "class_id" id="class_id" value="{{old('class_id')}}">
                                   <option value="">Select A Class</option>
                                   @foreach($classes as $class)
                                   <option value="{{$class->class_id}}">{{$class->class_id}}</option>
@@ -101,8 +101,22 @@ $classes = DB::table('section')
                               </div>
                             </div>
 
+                            <div class="form-group{{ $errors->has('moderator') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Teacher</label>
+
+                              <div class="col-md-6">
+                                  
+                                  <input type="text" value="" name="moderator" id="moderator" readonly="" class="form-control"> 
+                                  @if ($errors->has('moderator'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('moderator') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
                             <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Teacher</label>
+                              <label class="col-md-4 control-label">New Teacher</label>
 
                               <div class="col-md-6">
                                   <select class="form-control" name= "username" id="username">
@@ -119,7 +133,43 @@ $classes = DB::table('section')
 
 
 
+                            <div class="form-group{{ $errors->has('duration') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Class duration</label>
 
+                              <div class="col-md-6">
+                                  <select class="form-control" name= "duration" id="duration">
+                                  <option value="">Select A Duration</option>
+                                  <option value="45:00:00">45 mins</option>
+                                  <option value="40:00:00">40 mins</option>
+                                  <option value="35:00:00">35 mins</option> 
+                                  </select>
+                                  @if ($errors->has('duration'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('duration') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('classes_per_week') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Classes Per Week</label>
+
+                              <div class="col-md-6">
+                                  <select class="form-control" name= "classes_per_week" id="classes_per_week">
+                                  <option value="">Select Number of Classes</option>
+                                  <option value="6">6 Classes</option>
+                                  <option value="5">5 Classes</option>
+                                  <option value="4">4 Classes</option>
+                                  <option value="3">3 Classes</option>
+                                  <option value="2">2 Classes</option> 
+                                  </select>
+                                  @if ($errors->has('classes_per_week'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('classes_per_week') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
 
 
 
@@ -127,7 +177,7 @@ $classes = DB::table('section')
                           	<div class="form-group">
                               <div class="col-md-6 col-md-offset-4">
                                   <button type="submit" class="btn btn-primary">
-                                      <i class=""></i>Next
+                                      <i class=""></i>Assign
                                   </button>
                               </div>
                           </div>
@@ -140,7 +190,7 @@ $classes = DB::table('section')
               <center></center>
                 <div class="panel-body">
 
-                <form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher_management') }}">
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher_management/ct') }}">
                               {!! csrf_field() !!}
 
 
@@ -181,9 +231,23 @@ $classes = DB::table('section')
                               </div>
                             </div>
 
+                             <div class="form-group{{ $errors->has('moderator1') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Class Teacher</label>
+
+                              <div class="col-md-6">
+                                  
+                                  <input type="text" value="" name="moderator1" id="moderator1" readonly="" class="form-control"> 
+                                  @if ($errors->has('moderator1'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('moderator1') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
 
                             <div class="form-group{{ $errors->has('username1') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Teacher</label>
+                              <label class="col-md-4 control-label">New Class Teacher</label>
 
                               <div class="col-md-6">
                                   <select class="form-control" name= "username1" id="username1">
@@ -250,7 +314,11 @@ $classes = DB::table('section')
 
 });
 
-   $('#class_id').on('change', function(e){
+  
+
+
+
+$('#class_id').on('change', function(e){
      console.log(e);
      var class_id = e.target.value;
      console.log(class_id);
@@ -261,16 +329,111 @@ $classes = DB::table('section')
        //console.log('data');
 
             $('#subject_id').append(' Please section_id one');
-            //console.log('data');
+            
             var arr = JSON.parse(data);
             console.log(arr.length);
-            for (var i = 0; i < arr.length; i++) {
+            if(arr.length > 1) {
+              $('#subject_id').append('<option value="">Select A Subject</option>');
+              for (var i = 0; i < arr.length; i+=2) {
+               $('#subject_id').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
+             console.log(arr[i]);
+             };
+
+            }
+            else {
+              for (var i = 0; i < arr.length; i+=2) {
                $('#subject_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
              console.log(arr[i]);
              };
+            }
+            
       });
 });
 
+$('#subject_id').on('change', function(e){
+    console.log(e);
+   
+    var subject_id = e.target.value;
+    var class_id = ($('#class_id').val());
+    var section_id = ($('#section_id').val());
+    console.log(subject_id);
+
+    $.get("{{url('/teacher')}}=" + subject_id +"="+class_id +"="+section_id,  function(data){
+      console.log(data);
+      //$('#section_id').empty();
+      //console.log('data');
+
+        //   $('#section_id').append(' Please section_id one');
+           //console.log('data');
+          var arr = JSON.parse(data);
+           $('#moderator').val(arr[0]);
+          //console.log(arr.length);
+          //for (var i = 0; i < arr.length; i++) {
+             // $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            //console.log(arr[i]);
+      //      };
+    });
+
+});
+
+$('#subject_id').on('change', function(e){
+    console.log(e);
+   
+    var subject_id = e.target.value;
+    console.log(subject_id);
+
+    $.get("{{url('/teachers')}}="+subject_id,  function(data){
+      console.log(data);
+      $('#username').empty();
+      //console.log('data');
+
+        //   $('#section_id').append(' Please section_id one');
+           //console.log('data');
+
+          var arr = JSON.parse(data);
+           if(arr.length > 1) {
+              $('#username').append('<option value="">Select A Teacher</option>');
+              for (var i = 0; i < arr.length; i+=2) {
+               $('#username').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
+             console.log(arr[i]);
+             };
+
+            }
+            else {
+              for (var i = 0; i < arr.length; i+=2) {
+               $('#username').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+             console.log(arr[i]);
+             };
+            }
+    });
+
+});
+
+$('#section_id').on('change', function(e){
+    console.log(e);
+   
+    var subject_id = ($('#subject_id').val());
+    var class_id = ($('#class_id').val());
+    var section_id = e.target.value;
+    console.log(subject_id);
+
+    $.get("{{url('/teacher')}}=" + subject_id +"="+class_id +"="+section_id,  function(data){
+      console.log(data);
+      //$('#section_id').empty();
+      //console.log('data');
+
+        //   $('#section_id').append(' Please section_id one');
+           //console.log('data');
+          var arr = JSON.parse(data);
+           $('#moderator').val(arr[0]);
+          //console.log(arr.length);
+          //for (var i = 0; i < arr.length; i++) {
+             // $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            //console.log(arr[i]);
+      //      };
+    });
+
+});
 
 
 $('#class_id1').on('change', function(e){
@@ -291,6 +454,73 @@ $('#class_id1').on('change', function(e){
             $('#section_id1').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
           console.log(arr[i]);
           };
+  });
+
+});
+
+$('#class_id1').on('change', function(e){
+  console.log(e);
+  var class_id = e.target.value;
+  console.log(class_id);
+
+  $.get("{{ url('api/dropdown')}}=" + class_id, function(data){
+    console.log(data);
+    $('#section_id1').empty();
+    $('#username1').empty();
+    //console.log('data');
+    $('#moderator1').empty();
+
+         $('#section_id1').append(' Please section_id one');
+         //console.log('data');
+         var arr = JSON.parse(data);
+         console.log(arr.length);
+         for (var i = 0; i < arr.length; i++) {
+            $('#section_id1').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+          console.log(arr[i]);
+          };
+  });
+
+});
+
+$('#section_id1').on('change', function(e){
+  console.log(e);
+  var section_id = e.target.value;
+  var class_id = $('#class_id1').val();
+  console.log(class_id);
+
+  $.get("{{ url('class_teacher')}}=" + class_id + "=" + section_id, function(data){
+    console.log(data);
+    //$('#section_id1').empty();
+    //console.log('data');
+    $('#moderator1').empty();
+    var arr = JSON.parse(data);
+    $('#moderator1').val(arr[0]);
+
+  });
+  $.get("{{ url('teacher_list')}}=" + class_id + "=" + section_id, function(data){
+    console.log(data);
+    //$('#section_id1').empty();
+    $('#username1').empty();
+    //console.log('data');
+    //$('#moderator1').empty();
+
+         //$('#section_id1').append(' Please section_id one');
+         var arr = JSON.parse(data);
+         //console.log('data');
+         if(arr.length > 1) {
+              $('#username1').append('<option value="">Select A Teacher</option>');
+              for (var i = 0; i < arr.length; i+=2) {
+               $('#username1').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
+             console.log(arr[i]);
+             };
+
+            }
+            else {
+              for (var i = 0; i < arr.length; i+=2) {
+               $('#username1').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+             console.log(arr[i]);
+             };
+            }
   });
 
 });

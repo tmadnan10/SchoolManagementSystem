@@ -31,7 +31,7 @@ $classes = DB::table('section')
 			<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b></b></h2><br></center>
+							<center><h2>You are Currently Moderating <br><font color="black">{{$clb->club_name}}</font><b></b></h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
@@ -147,14 +147,133 @@ $classes = DB::table('section')
 
 
 
+
 						<div class="tab-pane" id="del">
 						Hello2
 						</div>
-						<div class="tab-pane" id="edit">
-						Hello3
+						
+
+
+
+            <div class="tab-pane" id="edit">
+            <br>
+						  <form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/club') }}">
+                            {!! csrf_field() !!}
+                          <div class="form-group{{ $errors->has('member_id') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">Member</label>
+
+                            <div class="col-md-6">
+                                <select class="form-control" name= "member_id" id="member_id">
+                                <option value="">Select One</option>
+
+                                </select>
+                                @if ($errors->has('membership_status'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('membership_status') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                          </div>
+                          </form>
+
+
 						</div>
-						<div class="tab-pane" id="event">
-						Hello4
+						
+
+
+            <div class="tab-pane" id="event">
+						<center></center>
+                <div class="panel-body">
+
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/addclubnotice') }}">
+                              {!! csrf_field() !!}
+                              <div class="form-group{{ $errors->has('class_id1') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Class</label>
+
+                              <div class="col-md-6">
+                                  <textarea rows="7" cols="45" placeholder = "comment" form="usrform" name="comment"></textarea>
+                                  
+                                  </select>
+                                  @if ($errors->has('class_id1'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('class_id1') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+
+
+
+
+                            <div class="form-group{{ $errors->has('class_id1') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Class</label>
+
+                              <div class="col-md-6">
+                                  <select class="form-control" name= "class_id1" id="class_id1">
+                                  <option value="">Select A Class</option>
+                                  
+                                  <option value="class->class_id}}">class->class_id}}</option>
+                                  
+                                  </select>
+                                  @if ($errors->has('class_id1'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('class_id1') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('section_id1') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Section</label>
+
+                              <div class="col-md-6">
+                                  <select class="form-control" name= "section_id1" id="section_id1">
+                                  <option value=""></option>
+
+                                  </select>
+                                  @if ($errors->has('section_id1'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('section_id1') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+
+                            <div class="form-group{{ $errors->has('username1') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Teacher</label>
+
+                              <div class="col-md-6">
+                                  <select class="form-control" name= "username1" id="username1">
+                                  <option value=""></option>
+
+                                  </select>
+                                  @if ($errors->has('username1'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('username1') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+
+
+
+
+
+
+
+                            <div class="form-group">
+                              <div class="col-md-6 col-md-offset-4">
+                                  <button type="submit" class="btn btn-primary">
+                                      <i class=""></i>Next
+                                  </button>
+                              </div>
+                          </div>
+                          </form>
+
+                </div>
 						</div>
 					</div>
 			</div>

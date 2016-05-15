@@ -64,7 +64,7 @@
                         </div>                        
 
                         <div class="form-group{{ $errors->has('class_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Class</label>
+                            <label class="col-md-4 control-label">Class<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
                                 <input type="text" class="form-control" name="class_id" value="{{ old('class_id') }}">
@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('section_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Section</label>
+                            <label class="col-md-4 control-label">Section<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
                                 <input type="text" class="form-control" name="section_id" value="{{ old('section_id') }}">
@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('student_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Student ID</label>
+                            <label class="col-md-4 control-label">Student ID<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
                                 <input type="text" class="form-control" name="student_id" value="{{ old('student_id') }}">
@@ -170,7 +170,7 @@
                         
 
                         <div class="form-group{{ $errors->has('admission_year') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Admisson Year</label>
+                            <label class="col-md-4 control-label">Admisson Year<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
                                 <select class="form-control"  name="admission_year" id="admission_year" value="{{ old('admission_year') }}">

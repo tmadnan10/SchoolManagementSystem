@@ -83,16 +83,16 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="snippets-index snippets-view snippets-add snippets-edit">
-                    <a href="{{ url('/').'/addnew' }}"> <span class="glyphicon glyphicon-user"></span> Add New User </a>
+                    <a href="{{ url('/').'/addnew' }}"> <span class="glyphicon glyphicon-user"></span><font color="black"> Add New User </font></a>
                 </li>
                 <li class="themes-index themes-view themes-add">
-                    <a href="{{url('/teacher_management')}}"> <span class="glyphicon glyphicon-briefcase"></span> Teacher Management </a>
+                    <a href="{{url('/teacher_management')}}"> <span class="glyphicon glyphicon-briefcase"></span> <font color="black"> Teacher Management </font></a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
-                    <a href="{{url('/exam_management')}}"> <span class="glyphicon glyphicon-book"></span> Examination Management </a>
+                    <a href="{{url('/exam_management')}}"> <span class="glyphicon glyphicon-book"></span> <font color="black">Examination Management </font></a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
-                    <a href="{{url('/club_management')}}"> <span class="glyphicon glyphicon-th-large"></span> Club Management </a>
+                    <a href="{{url('/club_management')}}"> <span class="glyphicon glyphicon-th-large"></span><font color="black"> Club Management </font></a>
                 </li>
             </ul>
 

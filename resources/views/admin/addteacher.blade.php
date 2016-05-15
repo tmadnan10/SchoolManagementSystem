@@ -1,6 +1,15 @@
-@extends('layouts.admin')
-@section('content')
 
+@extends('layouts.admin')
+<?php
+$dept = \DB::table('department')
+        ->select('dept_id', 'dept_name')
+        ->get();
+
+?>
+@section('content')
+<style>
+    .red-star{color:red;}
+</style>
 
 
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
@@ -96,10 +105,14 @@
 
 
                         <div class="form-group{{ $errors->has('dept_name') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Department Name</label>
-
+                            <label class="col-md-4 control-label">Department Name<span class="red-star">*</span></label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="dept_name" value="{{ old('dept_name') }}">
+                                <select class="form-control" name="dept_name">
+                                <option value="">Select A Department</option>
+                                    @foreach($dept as $class)
+                                  <option value="{{$class->dept_id}}">{{$class->dept_name}}</option>
+                                  @endforeach
+                                </select>
 
                                 @if ($errors->has('dept_name'))
                                     <span class="help-block">
@@ -128,7 +141,7 @@
 
 
                         <div class="form-group{{ $errors->has('join_date') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Join Date</label>
+                            <label class="col-md-4 control-label">Join Date<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
                                 <input type="text" id="datepicker" class="form-control" name="join_date" value="{{ old('join_date') }}">
@@ -144,10 +157,16 @@
                         
 
                         <div class="form-group{{ $errors->has('designation') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Designation</label>
+                            <label class="col-md-4 control-label">Designation<span class="red-star">*</span></label>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="designation" value="{{ old('designation') }}">
+                                <select class="form-control" name="designation">
+                                    <option value="">Select A Designation</option>
+                                    <option value="Junior Lecturer">Junior Lecturer</option>
+                                    <option value="Lecturer">Lecturer</option>
+                                    <option value="Senior Teacher">Senior Teacher</option>
+                                    <option value="Department Head">Department Head</option>
+                                </select>
 
                                 @if ($errors->has('designation'))
                                     <span class="help-block">

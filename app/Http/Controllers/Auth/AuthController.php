@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -78,7 +79,7 @@ class AuthController extends Controller
      * @return Response
      */
     
-
+/*
     public function postLogin(Request $request)
 {  
     // get our login input
@@ -110,5 +111,14 @@ class AuthController extends Controller
         ->withErrors([
             'login' => $this->getFailedLoginMessage(),
         ]);
-    }
+    }*/
+    /*
+    public function authenticate()
+    {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            // Authentication passed...
+            return redirect()->intended('dashboard');
+        }
+    }*/
+
 }

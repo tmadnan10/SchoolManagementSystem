@@ -54,11 +54,20 @@
 									
 										<div class="picture-container">
 											<div class="picture"> 
-												<img src="../../pro_pics/{{ Auth::user()->username }}.jpg" class="picture-src" id="output"> 
+                      @foreach($teacher as $t)
+												<img src="../../pro_pics/{{$t->profile_pic}}" class="picture-src" id="output"> 
+                        @endforeach
 												<input type="file" name="file" onchange="loadFile(event)" id="output">
-											</div>
 
+                        
+											</div>
+                      
 											<h6>Choose Picture</h6>
+                      @if ($errors->has('file'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('file') }}</strong>
+                                      </span>
+                        @endif
 										</div>
 
 										<div class="form-group">
@@ -69,6 +78,7 @@
                             				</div>
                         				</div>
                         				<input type="hidden", value="{{ csrf_token() }}" name="_token">
+
                         				</form>
      
 								</div>

@@ -8,6 +8,8 @@
                   ->where('section_id', $tchr->section_id)
                   ->first(); ?>
 <br><br><br>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../jquery-ui.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
@@ -198,19 +200,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('profile_pic') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Profile Picture</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="profile_pic" value="{{ $tchr->profile_pic }}">
-
-                                @if ($errors->has('profile_pic'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('profile_pic') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                        
                         <input type="hidden" name="username" value="{{ session('userName') }}">
                     <!--##################################Newly added Part##################################-->
 

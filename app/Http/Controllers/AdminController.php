@@ -8,6 +8,7 @@ use DB;
 use App\User;
 use App\Teacher;
 use App\Student;
+use App\Assigned_Subject;
 use App\Http\Requests;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -55,10 +56,10 @@ class AdminController extends Controller
         $newUser = new User;
         $newTeacher = new Teacher;
         $this->validate($request, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name' => 'max:255',
+            'last_name' => 'max:255',
             'dept_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'email|unique:users',
             'join_date' => 'required',
             'designation' => 'required',
             'blood_group' => 'max:15',
@@ -74,13 +75,13 @@ class AdminController extends Controller
 
 
 
-        $dept = DB::table('department')->where('dept_name', $request->dept_name)->first();
+        //$dept = DB::table('department')->where('dept_name', $request->dept_name)->first();
 
         $newTeacher->create([
         	'username' => $request->user,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'dept_id' => $dept->dept_id,
+            'dept_id' => $request->dept_name,
             'email' => $request->email,
             'join_date' => $request->join_date,
             'designation' => $request->designation,
@@ -90,10 +91,12 @@ class AdminController extends Controller
         ]);
 
         DB::table('department')
-            ->where('dept_id', $dept->dept_id)
+            ->where('dept_id', $request->dept_id)
             ->increment('total_teacher');
 
-        return redirect(url('/').'/admin');
+        return view('admin.redirect', ['msg' => 'Succesfully Added A New Teacher', 
+            'page' => 'Admin Portal', 'url' => 'admin'
+            ]);
     }
 
 
@@ -105,10 +108,9 @@ class AdminController extends Controller
             'class_id' => 'required',
             'section_id' => 'required',
             'student_id' => 'unique:student,student_id,NULL,username,class_id,'.$request->class_id.',section_id,'.$request->section_id.'|required',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'date_of_birth' => 'required',
+            'first_name' => 'max:255',
+            'last_name' => 'max:255',
+            'email' => 'email|unique:users',
             'admission_year' => 'required',
             'blood_group' => 'max:15',
             'address' => 'max:255',
@@ -126,7 +128,9 @@ class AdminController extends Controller
         $new_date_of_birth = date('Y-m-d',$date_of_birth);
         echo ($new_date_of_birth);
 */
-        
+        if ($request->profile_pic == '') {
+            $request->profile_pic = 'default_avatar.png';
+        }
 
         $newTeacher->create([
             'username' => $request->user,
@@ -148,7 +152,9 @@ class AdminController extends Controller
             ->where('section_id', $request->section_id)
             ->increment('total_students');
 
-        return redirect(url('/').'/admin');
+        return view('admin.redirect', ['msg' => 'Succesfully Added A New Student', 
+            'page' => 'Admin Portal', 'url' => 'admin'
+            ]);
     }
 
 
@@ -158,8 +164,96 @@ class AdminController extends Controller
             'dept_id' => 'required',
             'username' => 'required',
         ]);
+        $club = DB::table('club')
+            ->select('club_name')
+            ->where('club_id', $request->club_id)
+            ->get();
+        DB::table('club')
+            ->where('club_id', $request->club_id)
+            ->update(['moderator_id' => $request->username]);
+        foreach ($club as $key) {
+            $name = $key->club_name;
+        }
+        return view('admin.redirect', ['msg' => 'Succesfully Changed The Moderator of '.$name, 
+            'page' => 'Club Management', 'url' => 'club_management'
+            ]);
+        //echo ($request->club_id).($request->dept_id).($request->username);
+    }
 
-        echo ($request->club_id).($request->dept_id).($request->username);
+    public function addSubjectTeacher(Request $request){
+        $this->validate($request, [
+            'class_id' => 'required',
+            'section_id' => 'required',
+            'subject_id' => 'required',
+            'username' => 'required',
+            'duration' => 'required',
+            'classes_per_week' => 'required',
+        ]);
+        if ($request->moderator == '') {
+            $newAssigned = new Assigned_Subject;
+            $newAssigned->create([
+                'subject_id' => $request->subject_id,
+                'teacher_username' => $request->username,
+                'class_id' => $request->class_id,
+                'section_id' => $request->section_id,
+                'duration' => $request->duration,
+                'classes_per_week' => $request->classes_per_week,
+            ]);
+        }
+        else{
+            DB::table('assigned_subject')
+            ->where('class_id', $request->class_id)
+            ->where('section_id', $request->section_id)
+            ->where('subject_id', $request->subject_id)
+            ->update(['teacher_username' => $request->username]);
+        }
+/*
+        $club = DB::table('club')
+            ->select('club_name')
+            ->where('club_id', $request->club_id)
+            ->get();
+        DB::table('assigned_subject')
+            ->where('class_id', $request->club_id)
+            ->update(['moderator_id' => $request->username]);
+        foreach ($club as $key) {
+            $name = $key->club_name;
+        }
+        
+            */
+        //echo ($request->club_id).($request->dept_id).($request->username);
+        return view('admin.redirect', ['msg' => 'Succesfully Assigned Subject Teacher', 
+            'page' => 'Teacher Management', 'url' => 'teacher_management'
+            ]);
+    }
+
+    public function addClassTeacher(Request $request){
+        $this->validate($request, [
+            'class_id1' => 'required',
+            'section_id1' => 'required',
+            'username1' => 'required',
+        ]);
+        
+            DB::table('section')
+            ->where('class_id', $request->class_id1)
+            ->where('section_id', $request->section_id1)
+            ->update(['class_teacher' => $request->username1]);
+/*
+        $club = DB::table('club')
+            ->select('club_name')
+            ->where('club_id', $request->club_id)
+            ->get();
+        DB::table('assigned_subject')
+            ->where('class_id', $request->club_id)
+            ->update(['moderator_id' => $request->username]);
+        foreach ($club as $key) {
+            $name = $key->club_name;
+        }
+        
+            */
+        //echo ($request->club_id).($request->dept_id).($request->username);
+        return view('admin.redirect', ['msg' => 'Succesfully Assigned Class Teacher of Class '.$request->class_id1.'-'.$request->section_id1, 
+            'page' => 'Teacher Management', 'url' => 'teacher_management'
+            ]);
     }
 
 

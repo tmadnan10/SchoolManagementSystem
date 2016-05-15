@@ -70,7 +70,7 @@
                     <a href="#"> <span class="glyphicon glyphicon-book"></span> Exam Manageent </a>
                 </li>
                 <li class="themes-index themes-view themes-add">
-                    <a href="#"> <span class="glyphicon glyphicon-th-large"></span> Class Test Management </a>
+                    <a href="{{url('/teacher/class_test')}}"> <span class="glyphicon glyphicon-th-large"></span> Class Test Management </a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
                     <a href="{{url('/').'/teacher/club'}}"> <span class="glyphicon glyphicon-th-large"></span> Club Management </a>

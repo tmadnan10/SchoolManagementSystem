@@ -98,6 +98,101 @@ Route::group(['middleware' => ['web']], function () {
       return redirect(url('/').'/login');
     });    
 
+
+Route::get('/api/dept=', function(){
+  $arr = array();
+  array_push($arr, '');
+    echo json_encode($arr);
+});
+
+Route::get('/admin/club_id={id}', function($id){
+  $arr = array();
+  $username = \DB::table('club')
+            ->select('moderator_id')
+            ->where('club_id', $id)
+            ->get();
+
+    $moderator = null;
+    foreach ($username as $key) {
+        $moderator = \DB::table('teacher')
+            ->select('first_name', 'last_name')
+            ->where('username', $key->moderator_id)
+            ->get();
+    }
+    foreach ($moderator as $key) {
+
+        array_push($arr, $key->first_name." ".$key->last_name);
+    }
+    
+    echo json_encode($arr);
+});
+
+
+Route::get('/admin/club_id=', function(){
+  $arr = array();
+  array_push($arr, '');
+    echo json_encode($arr);
+});
+
+Route::get('/teacher=={id}={id2}', function($id,$id2){
+      $arr = array();
+  array_push($arr, '');
+    echo json_encode($arr);
+});
+
+Route::get('/teachers={id}', function($id){
+    $arr = array();
+    $dept = \DB::table('subject')
+            ->where('subject_id', $id)
+            ->get();
+    $teacher = null;
+    foreach ($dept as $key) {
+        $teacher = \DB::table('teacher')
+                    ->where('dept_id', $key->dept_id)
+                    ->get();
+    }
+    foreach ($teacher as $key) {
+        $name = $key->first_name." ".$key->last_name;
+        array_push($arr, $key->username);
+        array_push($arr, $name);
+    }
+    echo json_encode($arr);
+});
+
+Route::get('/teachers=', function(){
+      $arr = array();
+  array_push($arr, '');
+    echo json_encode($arr);
+});
+
+Route::get('/teacher={id}={id1}={id2}', function($id,$id1,$id2){
+$arr = array();
+ $username = \DB::table('assigned_subject')
+            ->select('teacher_username')
+            ->where('subject_id', $id)
+            ->where('class_id', $id1)
+            ->where('section_id', $id2)
+            ->get();
+
+    $teacher = null;
+    if (count($username)) {
+        foreach ($username as $key) {
+            $teacher = \DB::table('teacher')
+                        ->where('username', $key->teacher_username)
+                        ->get();
+        }
+    }
+    if (count($teacher)) {
+        foreach ($teacher as $key) {
+            $name = $key->first_name." ".$key->last_name;
+            array_push($arr, $name);
+        }
+    }
+    echo json_encode($arr);
+});
+
+
+
     Route::get('/api/dept={id}', function($id){
     $arr = array();
 
@@ -117,8 +212,71 @@ Route::group(['middleware' => ['web']], function () {
     echo json_encode($arr);
 });
 
-Route::post('/addclubmoderator', 'AdminController@addClubModerator');
 
+
+
+Route::get('/admin/subject_id=', function(){
+  $arr = array();
+  array_push($arr, '');
+    echo json_encode($arr);
+});
+
+Route::get('/class_teacher={id}={id1}', function($id,$id1){
+    $arr = array();
+    $class_teacher = \DB::table('section')
+                    ->where('class_id', $id)
+                    ->where('section_id', $id1)
+                    ->get();
+                    /*
+    foreach ($class_teacher as $key) {
+        $array = array();
+
+        array_push($array, $key->first_name." ".$key->last_name);
+        echo json_encode($array);
+    }*/
+    if (count($class_teacher)) {
+        foreach ($class_teacher as $key) {
+            $username = $key->class_teacher;
+            $teacher = \DB::table('teacher')
+                    ->where('username', $username)
+                    ->get();
+            foreach ($teacher as $key) {
+                array_push($arr, $key->first_name." ".$key
+                    ->last_name);
+            }
+            
+        }
+    }
+    echo json_encode($arr);
+});
+
+Route::get('/teacher_list={id}={id1}', function($id,$id1){
+    $arr = array();
+    $class_teacher = \DB::table('assigned_subject')
+                    ->where('class_id', $id)
+                    ->where('section_id', $id1)
+                    ->get();
+
+    if (count($class_teacher)) {
+        foreach ($class_teacher as $key) {
+            $username = $key->teacher_username;
+            $teacher = \DB::table('teacher')
+                    ->where('username', $username)
+                    ->get();
+            foreach ($teacher as $key) {
+                array_push($arr, $key->username);
+                array_push($arr, $key->first_name." ".$key
+                    ->last_name);
+            }
+            
+        }
+    }
+    echo json_encode($arr);
+});
+
+Route::post('/addclubmoderator', 'AdminController@addClubModerator');
+Route::post('/teacher_management/st', 'AdminController@addSubjectTeacher');
+Route::post('/teacher_management/ct', 'AdminController@addClassTeacher');
 
     Route::get('/addnew/student', function(){
         if (Auth::check()){
@@ -147,7 +305,7 @@ Route::post('/addclubmoderator', 'AdminController@addClubModerator');
     Route::post('/teacher/edit', 'TeacherController@editData');
 
     Route::post('/student/firstedit', 'StudentController@firstEdit');
-
+Route::get('/teacher/class_test', 'TeacherController@classTest');
 
     Route::get('teacher/club', 'TeacherController@club');
 /*
@@ -190,17 +348,18 @@ Route::get('/api/dropdown/steacher={id}', function($id){
     $arr = array();
 
     if ($id == '') {
-      $id = -1;
+      $id = 0;
     }
 
-    $sub = \DB::table('section')
-            ->select('section_id')
-            ->where('class_id', $id)
+    $sub = \DB::table('subject')
+            ->select('subject_id', 'subject_name')
+            ->where('subject_id', 'like', $id.'%')
             ->get();
     if (count($sub) != 0) {
-        array_push($arr, 'Select A Section');
+        //array_push($arr, 'Select A Subject');
         foreach ($sub as $subcat) {
-        array_push($arr, $subcat->section_id);
+        array_push($arr, $subcat->subject_id);
+        array_push($arr, $subcat->subject_name);
     }
 
     }
@@ -219,34 +378,7 @@ Route::post('/teacher/club', 'TeacherController@addClubMember');
 Route::get('/teacher/activities', 'TeacherController@myActivities');
 
 Route::get('/teacher/changepropic', 'TeacherController@changeProPic');
-Route::post('/teacher/changepropic', function(){
-    if (Input::hasFile('file')) {
-
-
-
-
-        echo "arg1";
-        $file = Input::file('file');
-        $image_name = time()."-".$file->getClientOriginalName();
-        $file->move('pro_pics', $image_name);
-        $image = Image::make(sprintf('pro_pics/%s', $image_name))
-                ->resize(null, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                    }
-                )
-                ->save();
-        $image = Image::make(sprintf('pro_pics/%s', $image_name))
-                ->crop(300,300)
-                ->save();
-        
-        DB::table('teacher')
-            ->where('username', Auth::user()->username)
-            ->update(['profile_pic' => $image_name]);
-        }
-        return redirect(url('/teacher'));
-        
-});
+Route::post('/teacher/changepropic', 'TeacherController@changeMyProPic');
 
 
 

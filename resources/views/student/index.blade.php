@@ -15,9 +15,24 @@
 
       ?>
 <br><br><br>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<!--<link rel="stylesheet" type="text/css" href="../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="../jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+  <script src="../js/bootstrap-datepicker.js"></script>
+  <script src="../bootstrap-colorpicker.min.js"></script>
+  <script src="../jquery-ui.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+  <script src="../js/bootstrap-datepicker.js"></script>
 @if($flag)
 <div class="container bootstrap snippet">
 <div class="row">
@@ -25,7 +40,7 @@
       <div class="panel">
           <div class="user-heading round">
               <a href="#">
-                  <img src="../pro_pics/{{ Auth::user()->username }}.jpg" alt="../pro_pics/default_avatar.png">
+                  <img src="../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
               </a>
               <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
               <p>{{ $tchr->email }}</p>
@@ -289,19 +304,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('profile_pic') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Profile Picture</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="profile_pic" value="{{ old('profile_pic') }}">
-
-                                @if ($errors->has('profile_pic'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('profile_pic') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                        
                         <input type="hidden" name="username" value="{{ session('userName') }}">
                     <!--##################################Newly added Part##################################-->
 

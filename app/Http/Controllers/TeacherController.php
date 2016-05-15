@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -176,7 +178,10 @@ class TeacherController extends Controller
      */
 
     public function myActivities(Request $request){
-
+      return view('teacher.activities',[
+        'teacher' => $this->teacher->forUser($request->user()),
+        'club' => $this->club->forTeacher($request->user()),
+        ]);
     }
 
 
@@ -194,17 +199,71 @@ class TeacherController extends Controller
 
 
     public function changeMyProPic(Request $request){
-      $txt = $this->request->hasFile('file');
-      echo($txt); 
+      $this->validate($request, [
+        'file' => 'image',
+        ]);
+
+      if (Input::hasFile('file')) {
+
+        
+
+
+       
+        $file = Input::file('file');
+        $extension = Input::file('file')->getClientOriginalExtension();
+        //echo($extension);
+        $image_name = time()."-".$file->getClientOriginalName();
+        $file->move('pro_pics', $image_name);
+        
+
+        $image = Image::make(sprintf('pro_pics/%s', $image_name))
+                ->resize(null, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                    }
+                )
+                ->save();
+        $a = Image::make(sprintf('pro_pics/%s', $image_name))->width(); //echo ($a);
+        $height = $width = null;
+        if ($a < 300) {
+          $width = $height = $a;
+
+        }
+        else {$height = $width = 300;}
+        
+        $image = Image::make(sprintf('pro_pics/%s', $image_name))
+                ->crop($height,$width)
+                ->save();
+        
+        DB::table('teacher')
+            ->where('username', Auth::user()->username)
+            ->update(['profile_pic' => $image_name]);
+        }
+        //return redirect(url('/teacher'));
+      /*$txt = $this->request->hasFile('file');
+      echo($txt); */
       //return $txt;
        //$file = Request::file('file');
         //$image_name = time()."-".$file->getClientOriginalName();
         //echo($image_name);
         //$file->move('uploads', $image_name);
         //$image = Image::make(sprintf('uploads/%s', $image_name))->resize(200, 200)->save();
+      return view('teacher.redirect', [
+        'msg' => 'Successfully Changed Your Profile Picture',
+        'page' => 'Your Portal',
+        'url' => 'teacher',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]);
       
     }
 
+
+    public function classTest(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+        return view('teacher.classTest', ['teacher' => $this->teacher->forUser($request->user())]);
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
     /**
      * Create a new teacher.
      *

@@ -55,9 +55,10 @@ $departments = DB::table('department')
 
 
 
-
+                              <h4><center>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspPlease Select A Club To See The Current Moderator</center></h4>
+                            <br>
                             <div class="form-group{{ $errors->has('club_id') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Class</label>
+                              <label class="col-md-4 control-label">Club</label>
 
                               <div class="col-md-6">
                                   <select class="form-control" name= "club_id" id="club_id">
@@ -74,6 +75,24 @@ $departments = DB::table('department')
                               </div>
                             </div>
 
+
+                            <div class="form-group{{ $errors->has('moderator') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Moderator</label>
+
+                              <div class="col-md-6">
+                                  
+                                  <input type="text" value="" name="moderator" id="moderator" readonly="" class="form-control"> 
+                                  @if ($errors->has('moderator'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('moderator') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+                            <br>
+                            <h4><center>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspPlease Select New Club Moderator</center></h4>
+                            <br>
                             <div class="form-group{{ $errors->has('dept_id') ? ' has-error' : '' }}">
                               <label class="col-md-4 control-label">Department</label>
 
@@ -235,6 +254,31 @@ $departments = DB::table('department')
 
 
 <script>
+
+  $('#club_id').on('change', function(e){
+    console.log(e);
+   
+    var club_id = e.target.value;
+    console.log(club_id);
+
+    $.get("{{ url('admin/club_id')}}=" + club_id, function(data){
+      console.log(data);
+      //$('#section_id').empty();
+      //console.log('data');
+
+        //   $('#section_id').append(' Please section_id one');
+           //console.log('data');
+          var arr = JSON.parse(data);
+           $('#moderator').val(arr[0]);
+          //console.log(arr.length);
+          //for (var i = 0; i < arr.length; i++) {
+             // $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            //console.log(arr[i]);
+      //      };
+    });
+
+});
+
   $('#class_id').on('change', function(e){
     console.log(e);
     var class_id = e.target.value;
@@ -294,7 +338,10 @@ $('#dept_id').on('change', function(e){
          //console.log('data');
          var arr = JSON.parse(data);
          console.log(arr.length);
-         $('#username').append('<option value="">Select A Teacher</option>');
+         if (arr.length > 1) {
+          $('#username').append('<option value="">Select A Teacher</option>');
+         };
+         
          for (var i = 1; i < arr.length; i +=2) {
             $('#username').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
           console.log(arr[i]);
