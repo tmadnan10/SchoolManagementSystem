@@ -496,6 +496,20 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/student/edit', 'StudentController@edit');
     Route::post('/student/edit', 'StudentController@editData');
 
+    Route::get('student/notification', 'StudentController@notification');
+    
+    Route::get('student/notifi={id}', function($id){
+        echo "     ".($id);
+        DB::table('notification')
+            ->where('id', $id)
+            ->update(['view' => 1]);
+        $not = DB::table('notification')
+            ->where('id', $id)
+            ->first();
+        $hlink = $not->hlink;
+        echo (url('/')).'/'.$hlink;
+    });
+
     Route::get('/student/club', 'StudentController@clubs');
 
 

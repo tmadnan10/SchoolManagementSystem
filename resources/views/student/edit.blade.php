@@ -7,7 +7,6 @@
                   ->where('class_id', $tchr->class_id)
                   ->where('section_id', $tchr->section_id)
                   ->first(); ?>
-<br><br><br>
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">

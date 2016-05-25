@@ -155,5 +155,16 @@ class StudentController extends Controller
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
 
+    public function notification(Request $request){
+      if (Auth::user()->account_type == 'student') {
+        $users = DB::table('notification')
+                  ->where('username', Auth::user()->username)
+                  ->paginate(5);
+
+        return view('student.notification', ['users' => $users, 'student' => $this->student->forUser($request->user()),]);
+  
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+    }
 
 }

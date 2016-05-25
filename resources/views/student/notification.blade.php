@@ -12,15 +12,15 @@
         $tchr->date_of_birth == "" | $tchr->Address == "" | $tchr->blood_group == "" ) {
         $flag = 0;
       }
-            foreach ($student as $std) {
-        $notif = DB::table('notification')
+      foreach ($student as $std) {
+      	$notif = DB::table('notification')
                   ->where('username', $std->username)
                   ->where('view', '0')
                   ->get();
       }
+      $eq = "=";
 
       ?>
-
 <!--<link rel="stylesheet" type="text/css" href="../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -31,14 +31,14 @@
   <script src="../js/bootstrap-datepicker.js"></script>
   <script src="../bootstrap-colorpicker.min.js"></script>
   <script src="../jquery-ui.js"></script>-->
-  <link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+  <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="../jquery-ui.js"></script>
+  <script src="../../jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
-  <script src="../js/bootstrap-datepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/datepicker.css">
+  <script src="../../js/bootstrap-datepicker.js"></script>
   
 @if($flag)
 <div class="container bootstrap snippet">
@@ -54,8 +54,8 @@
           </div>
 
           <ul class="nav nav-pills nav-stacked">
-              <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="{{url('student/notification')}}"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
+              <li><a href="{{url('/student')}}"> <i class="fa fa-user"></i> Profile</a></li>
+              <li class="active"><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
               <li><a href="{{url('/student/edit')}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>
       </div>
@@ -69,53 +69,18 @@
           </div>
           <div class="panel-body bio-graph-info">
               <h1>Bio Graph</h1>
-              <div class="row">
+              <div class="container">
+    @foreach ($users as $user)
+    @if($user->view == 0)
 
-                  <div class="bio-row">
-                      <p><span>Class </span>: {{ $tchr->class_id }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Section </span>: {{ $tchr->section_id }}</p>
-                  </div>
+       <a href="{{url('/student/notifi').$eq.$user->id}}"><b> {{ $user->date }} ----- {{ $user->details }}<br> </b></a>
+     @else
+     	<a href="{{url('/student/notifi').$eq.$user->id}}"><font color="black">{{ $user->date }} ----- {{ $user->details }}</font><br></a>
+     @endif
+    @endforeach
+</div>
 
-
-                  <div class="bio-row">
-                      <p><span>Roll No </span>: {{ $tchr->student_id }}</p>
-                  </div>
-                  <div class="bio-row">
-                    <p><span>Class Room</span>: {{ $class->room_no }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>First Name </span>: {{ $tchr->first_name }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Last Name </span>: {{ $tchr->last_name }}</p>
-                  </div>
-
-
-                  <div class="bio-row">
-                      <p><span>Date Of Birth </span>: {{ $tchr->date_of_birth }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>Blood Group </span>: {{ $tchr->admission_year }}</p>
-                  </div>
-
-                  <div class="bio-row">
-                      <p><span>Blood Group </span>: {{ $tchr->blood_group }}</p>
-                  </div>
-                  <div class="bio-row">
-                      <p><span>E-mail</span>: {{ $tchr->email }}</p>
-                  </div>
-
-
-                  <div class="bio-row1">
-                      <p><span>Address</span>: {{ $tchr->Address }}</p>
-                  </div>
-
-
-              </div>
+{!! $users->links() !!}
           </div>
       </div>
   </div>
@@ -139,8 +104,8 @@
 
           <ul class="nav nav-pills nav-stacked">
               <li><a href="{{url('/student')}}"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
-              <li class="active"><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
+              <li class="active"><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity"></span></a></li>
+              <li><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>
       </div>
   </div>
