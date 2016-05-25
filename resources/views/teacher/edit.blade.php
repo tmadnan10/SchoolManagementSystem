@@ -13,10 +13,15 @@
                   ->where('class_id', $tchr->class_id)
                   ->where('section_id', $tchr->section_id)
                   ->first();*/ ?>
-<br><br><br><br>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<br><br><br>
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../../jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" type="text/css" href="../../css/datepicker.css">
+  <script src="../../js/bootstrap-datepicker.js"></script>
 
 <div class="container bootstrap snippet">
 <div class="row">
@@ -24,14 +29,14 @@
       <div class="panel">
           <div class="user-heading round">
               <a href="#">
-                  <img src="../../pro_pics/{{ Auth::user()->username }}.jpg" alt="../pro_pics/default_avatar.png">
+                  <img src="../../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
               </a>
               <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
               <p>{{ $tchr->email }}</p>
           </div>
 
           <ul class="nav nav-pills nav-stacked">
-              <li><a href="{{url('/teacher')}}"> <i class="fa fa-user"></i> Profile</a></li>
+              <li><a href="{{url('/student')}}"> <i class="fa fa-user"></i> Profile</a></li>
               <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
               <li class="active"><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>

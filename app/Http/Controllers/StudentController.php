@@ -9,10 +9,12 @@ use App\Http\Controllers\Controller;
 use DB;
 use App\Teacher;
 use App\Student;
+use App\ClubMember;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\StudentRepository;
+use App\Repositories\ClubMemberRepository;
 
 class StudentController extends Controller
 {
@@ -23,6 +25,7 @@ class StudentController extends Controller
      * @var TeacherRepository
      */
     protected $student;
+    protected $clubMember;
 
     /**
      * Create a new controller instance.
@@ -30,11 +33,12 @@ class StudentController extends Controller
      * @param  TeacherRepository  $teacher
      * @return void
      */
-    public function __construct(StudentRepository $student)
+    public function __construct(StudentRepository $student, ClubMemberRepository $clubMember)
     {
         $this->middleware('auth');
 
         $this->student = $student;
+        $this->clubMember = $clubMember;
     }
 
     /**
@@ -141,7 +145,15 @@ class StudentController extends Controller
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
 
-
+    public function clubs(Request $request){
+      if (Auth::user()->account_type == 'student') {
+            return view('student.club', [
+                'student' => $this->student->forUser($request->user()),
+                'clubMember' => $this->clubMember->forUser($request->user())
+            ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+    }
 
 
 }

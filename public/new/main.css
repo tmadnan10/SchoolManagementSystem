@@ -2433,7 +2433,7 @@ fieldset[disabled] .form-control:hover {
 
 .navbar .navbar-nav .active a {
   background: none;
-  color: #111;
+  color: "white";
   -webkit-transition: color 0.5s;
           transition: color 0.5s;
 }
@@ -2597,11 +2597,11 @@ fieldset[disabled] .form-control:hover {
 }
 
 .navbar-trans .navbar-logo {
-  content: url(../images/logo-light.png);
+  content: url(../img/logo-light.png);
 }
 
 .navbar-trans .navbar-logo-dark {
-  content: url(../images/logo.png);
+  content: url(../img/logo.png);
 }
 
 .navbar-trans:not(.navbar-inverse) .navbar-nav li a:focus,
@@ -7918,7 +7918,7 @@ form .input-error-2:focus {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: url(../images/hero/landing.jpg);
+  background: url(../img/1.jpg);
   background-size: cover;
   background-position: 40%;
   background-attachment: fixed;

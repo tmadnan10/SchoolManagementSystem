@@ -8,19 +8,17 @@
         <title>School Management System</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="1.ico" />
-    
-
-        <link rel="stylesheet" href="../css/jquery-ui.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link href="hello.css" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/reg.css">
         <link rel="stylesheet" href="css/bootstrap1.css">
-        <!--<link href="css/font-awesome.min.css" rel="stylesheet">-->
+        <link href="css/font-awesome.min.css" rel="stylesheet">
         <link href="css/prettyPhoto.css" rel="stylesheet">
         <link href="css/animate.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <link rel="stylesheet" href="css/style2.css">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
         <link href="css/prettyPhoto.css" rel="stylesheet">
         <link href="css/animate.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
@@ -31,20 +29,12 @@
         <script src="js/bootstrap.min.js"></script>
 
     <!-- Fonts -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-    <script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../../app.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
 
 
     <style>
@@ -89,10 +79,10 @@
                     <a href="{{url('/teacher_management')}}"> <span class="glyphicon glyphicon-briefcase"></span> <font color="black"> Teacher Management </font></a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
-                    <a href="{{url('/exam_management')}}"> <span class="glyphicon glyphicon-book"></span> <font color="black">Examination Management </font></a>
+                    <a href="{{url('admin/exam_management')}}"> <span class="glyphicon glyphicon-book"></span> <font color="black">Examination Management </font></a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
-                    <a href="{{url('/club_management')}}"> <span class="glyphicon glyphicon-th-large"></span><font color="black"> Club Management </font></a>
+                    <a href="{{url('admin/club_management')}}"> <span class="glyphicon glyphicon-th-large"></span><font color="black"> Club Management </font></a>
                 </li>
             </ul>
 

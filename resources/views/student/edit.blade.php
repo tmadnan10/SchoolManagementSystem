@@ -8,11 +8,14 @@
                   ->where('section_id', $tchr->section_id)
                   ->first(); ?>
 <br><br><br>
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="../jquery-ui.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../../jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" type="text/css" href="../../css/datepicker.css">
+  <script src="../../js/bootstrap-datepicker.js"></script>
 
 <div class="container bootstrap snippet">
 <div class="row">
@@ -20,7 +23,7 @@
       <div class="panel">
           <div class="user-heading round">
               <a href="#">
-                  <img src="../../pro_pics/{{ Auth::user()->username }}.jpg" alt="../pro_pics/default_avatar.png">
+                  <img src="../../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
               </a>
               <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
               <p>{{ $tchr->email }}</p>

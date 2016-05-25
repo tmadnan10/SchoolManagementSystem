@@ -2,6 +2,26 @@
 
 @section('content')
 
+<br><br><br>
+<!--<link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="../jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+  <script src="../js/bootstrap-datepicker.js"></script>
+  <script src="../bootstrap-colorpicker.min.js"></script>
+  <script src="../jquery-ui.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+  <script src="../js/bootstrap-datepicker.js"></script>
+
 @if (count($teacher) > 0)
 @foreach ($teacher as $tchr)
 
@@ -15,17 +35,8 @@
     }
     ?>
 
-@endforeach
-@endif
 
-<br><br><br><br>
 
-<!--<META http-equiv="refresh" content="3;URL=http://www.indiana.edu/~account/new-directory">-->
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 @if($flag)
 <div class="container bootstrap snippet">
 <div class="row">
@@ -47,8 +58,6 @@
       </div>
   </div>
   <div class="profile-info col-md-9">
-    @if (count($teacher) > 0)
-		@foreach ($teacher as $tchr)
       <div class="panel">
           <div class="bio-graph-heading">
               <font size="4", style="italic"><i>Welcome</i></font> <font size="6" weight=900>
@@ -94,17 +103,10 @@
               </div>
           </div>
       </div>
-@endforeach
-@endif
-
 
 
 @else
-@foreach ($teacher as $tchr)
-<br><br><br><br>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
+
 
 <div class="container bootstrap snippet">
 <div class="row">
@@ -267,9 +269,9 @@
               </div>
           </div>
       </div>
+@endif
+
 @endforeach
-
-
 @endif
 
 <br><br><br><br><br>

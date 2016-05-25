@@ -5,7 +5,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
-
+use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -178,9 +178,17 @@ class TeacherController extends Controller
      */
 
     public function myActivities(Request $request){
+      $assigned_subject = \DB::table('assigned_subject')
+                              ->where('teacher_username', Auth::user()->username)
+                              ->get();
+      $class_teacher = \DB::table('section')
+                              ->where('class_teacher', Auth::user()->username)
+                              ->get();
       return view('teacher.activities',[
         'teacher' => $this->teacher->forUser($request->user()),
         'club' => $this->club->forTeacher($request->user()),
+        'assigned_subject' => $assigned_subject,
+        'class_teacher' => $class_teacher,
         ]);
     }
 
@@ -264,22 +272,44 @@ class TeacherController extends Controller
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
-    /**
-     * Create a new teacher.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    /*public function store(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-        ]);
 
-        $request->user()->tasks()->create([
-            'name' => $request->name,
-        ]);
 
-        return redirect('/tasks');
-    }*/
+    public function addClassTest(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+        $assigned = \DB::table('assigned_subject') 
+                    ->where('teacher_username', Auth::user()->username)
+                    ->get();
+        return view('teacher.addClassTest', ['teacher' => $this->teacher->forUser($request->user()),
+          'assigned_subject'=>$assigned,
+          ]);
+
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function exam(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+        $date = date("Y-m-d");
+        return view('teacher.exam', ['teacher' => $this->teacher->forUser($request->user()),
+          'date' => $date,
+          ]);
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function firstTerminal(Request $request){
+      echo "he";
+    }
+
+    public function check(Request $request){
+      if (\Hash::check($request->password, Auth::user()->password)) {
+        echo "The passwords match...";
+      }
+      else {
+        echo  "code...";
+        return redirect()->back()->with(['error' => 'password not matched']);
+      }
+    }
+
+
 }

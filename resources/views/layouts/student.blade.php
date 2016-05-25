@@ -74,7 +74,7 @@
                     <a href="#"> <span class="glyphicon glyphicon-download-alt"></span> Download Section </a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add"> 
-                    <a href="{{url('/').'/teacher/club'}}"> <span class="glyphicon glyphicon-th-large"></span> My Clubs </a>
+                    <a href="{{url('/student/club')}}"> <span class="glyphicon glyphicon-th-large"></span> My Clubs </a>
                 </li>
             </ul>
 

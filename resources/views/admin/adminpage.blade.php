@@ -1,5 +1,13 @@
 @extends('layouts.admin')
 @section('content')
+<link rel="stylesheet" type="text/css" href="../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="../jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+  <script src="../js/bootstrap-datepicker.js"></script>
 <!--<div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

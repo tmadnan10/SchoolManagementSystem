@@ -174,11 +174,47 @@ class AdminController extends Controller
         foreach ($club as $key) {
             $name = $key->club_name;
         }
-        return view('admin.redirect', ['msg' => 'Succesfully Changed The Moderator of '.$name, 
-            'page' => 'Club Management', 'url' => 'club_management'
+        return view('admin.redirect1', ['msg' => 'Succesfully Changed The Moderator of '.$name, 
+            'page' => 'Club Management', 'url' => 'admin/club_management'
             ]);
         //echo ($request->club_id).($request->dept_id).($request->username);
     }
+
+    public function addClubNotice(Request $request){
+        //if ($request->has('notes')) {
+        //    echo "string";
+        //}
+        //else echo "string2";
+        //echo "in";
+        $this->validate($request, [
+            'club_id' => 'required',
+            'type' => 'required',
+            'date' => 'required',
+            'notes' => 'required',
+        ]);
+        $club = DB::table('club')
+            ->where('club_id', $request->club_id)
+            ->first();
+        //echo "in";
+        /*$club = DB::table('club')
+            ->select('club_name')
+            ->where('club_id', $request->club_id)
+            ->get();
+        DB::table('club')
+            ->where('club_id', $request->club_id)
+            ->update(['moderator_id' => $request->username]);
+        foreach ($club as $key) {
+            $name = $key->club_name;
+        }
+        return view('admin.redirect', ['msg' => 'Succesfully Changed The Moderator of '.$name, 
+            'page' => 'Club Management', 'url' => 'club_management'
+            ]);*/
+        echo ($request->club_id).($request->type).($request->date).($request->notes);
+        return view('admin.redirect1', ['msg' => 'Succesfully Added A New Event of '.$club->club_name, 
+            'page' => 'Club Management', 'url' => 'admin/club_management'
+            ]);
+    }
+
 
     public function addSubjectTeacher(Request $request){
         $this->validate($request, [
@@ -224,6 +260,28 @@ class AdminController extends Controller
         return view('admin.redirect', ['msg' => 'Succesfully Assigned Subject Teacher', 
             'page' => 'Teacher Management', 'url' => 'teacher_management'
             ]);
+    }
+
+    public function classTeacher(Request $request){
+        if (Auth::user()->account_type == 'admin') {
+            return view('admin.addClassTeacher');
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+/*
+        $club = DB::table('club')
+            ->select('club_name')
+            ->where('club_id', $request->club_id)
+            ->get();
+        DB::table('assigned_subject')
+            ->where('class_id', $request->club_id)
+            ->update(['moderator_id' => $request->username]);
+        foreach ($club as $key) {
+            $name = $key->club_name;
+        }
+        
+            */
+        //echo ($request->club_id).($request->dept_id).($request->username);
+        
     }
 
     public function addClassTeacher(Request $request){

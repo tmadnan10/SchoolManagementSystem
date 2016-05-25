@@ -67,7 +67,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="snippets-index snippets-view snippets-add snippets-edit">
-                    <a href="#"> <span class="glyphicon glyphicon-book"></span> Exam Manageent </a>
+                    <a href="{{url('/teacher/exam')}}"> <span class="glyphicon glyphicon-book"></span> Exam Manageent </a>
                 </li>
                 <li class="themes-index themes-view themes-add">
                     <a href="{{url('/teacher/class_test')}}"> <span class="glyphicon glyphicon-th-large"></span> Class Test Management </a>

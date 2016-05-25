@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
   <script src="../js/bootstrap-datepicker.js"></script>
+  
 @if($flag)
 <div class="container bootstrap snippet">
 <div class="row">

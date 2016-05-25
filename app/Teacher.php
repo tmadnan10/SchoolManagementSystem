@@ -32,10 +32,4 @@ class Teacher extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function club()
-    {
-        return $this->hasOne(Club::class);
-    }
-
-
 }

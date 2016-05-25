@@ -4,6 +4,7 @@ namespace App;
 
 use App\Task;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -40,6 +41,11 @@ class User extends Authenticatable
     public function teacher()
     {
         return $this->hasOne(Teacher::class);
+    }
+
+    public function clubMember()
+    {
+        return $this->hasOne(ClubMember::class);
     }
     /**
      * Get the student row for the user.
