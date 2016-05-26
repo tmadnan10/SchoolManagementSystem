@@ -1,10 +1,5 @@
-@extends('layouts.admin')
-<?php
-$classes = DB::table('section')
-			->select('class_id')
-			->distinct()
-			->get();
-?>
+@extends('layouts.teacher')
+
 
 @section('content')
 
@@ -28,12 +23,12 @@ $classes = DB::table('section')
 			<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b></b></h2><br></center>
+							<center><h2>Select One of Your Subject and Upload a File<br><b></b></h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
 						<li class="active" style="width: 100%;">
-							<a href="#st" data-toggle="tab" aria-expanded="true">Assign A Subject Teacher</a>
+							<a href="#st" data-toggle="tab" aria-expanded="true">Study Materials</a>
 						</li>
 					</ul>
 					<div class="tab-content">
@@ -41,10 +36,9 @@ $classes = DB::table('section')
               <center></center>
   							<div class="panel-body">
 
-  							<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher_management/st') }}">
-                          		{!! csrf_field() !!}
+  							
 
-
+                {!! Form::open(array('class' => 'form-horizontal', 'url'=>'/teacher/marks','method'=>'POST', 'files'=>true)) !!}
 
 
 
@@ -98,31 +92,19 @@ $classes = DB::table('section')
                               </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('moderator') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Current Teacher</label>
+                            
+
+                            <div class="form-group{{ $errors->has('class_test_id') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Class Test</label>
 
                               <div class="col-md-6">
-                                  
-                                  <input type="text" value="" name="moderator" id="moderator" readonly="" class="form-control"> 
-                                  @if ($errors->has('moderator'))
-                                      <span class="help-block">
-                                          <strong>{{ $errors->first('moderator') }}</strong>
-                                      </span>
-                                  @endif
-                              </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">New Teacher</label>
-
-                              <div class="col-md-6">
-                                  <select class="form-control" name= "username" id="username">
+                                  <select class="form-control" name= "class_test_id" id="class_test_id">
                                   <option value=""></option>
 
                                   </select>
-                                  @if ($errors->has('username'))
+                                  @if ($errors->has('class_test_id'))
                                       <span class="help-block">
-                                          <strong>{{ $errors->first('username') }}</strong>
+                                          <strong>{{ $errors->first('class_test_id') }}</strong>
                                       </span>
                                   @endif
                               </div>
@@ -130,39 +112,16 @@ $classes = DB::table('section')
 
 
 
-                            <div class="form-group{{ $errors->has('duration') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Class duration</label>
+                            
+
+                            <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">File</label>
 
                               <div class="col-md-6">
-                                  <select class="form-control" name= "duration" id="duration">
-                                  <option value="">Select A Duration</option>
-                                  <option value="45:00:00">45 mins</option>
-                                  <option value="40:00:00">40 mins</option>
-                                  <option value="35:00:00">35 mins</option> 
-                                  </select>
-                                  @if ($errors->has('duration'))
+                                  <input type="file", name="file", class="form-control">
+                                  @if ($errors->has('file'))
                                       <span class="help-block">
-                                          <strong>{{ $errors->first('duration') }}</strong>
-                                      </span>
-                                  @endif
-                              </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('classes_per_week') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Classes Per Week</label>
-
-                              <div class="col-md-6">
-                                  <select class="form-control" name= "classes_per_week" id="classes_per_week">
-                                  <option value="">Select Number of Classes</option>
-                                  <option value="6">6 Classes</option>
-                                  <option value="5">5 Classes</option>
-                                  <option value="4">4 Classes</option>
-                                  <option value="3">3 Classes</option>
-                                  <option value="2">2 Classes</option> 
-                                  </select>
-                                  @if ($errors->has('classes_per_week'))
-                                      <span class="help-block">
-                                          <strong>{{ $errors->first('classes_per_week') }}</strong>
+                                          <strong>{{ $errors->first('file') }}</strong>
                                       </span>
                                   @endif
                               </div>
@@ -174,11 +133,11 @@ $classes = DB::table('section')
                           	<div class="form-group">
                               <div class="col-md-6 col-md-offset-4">
                                   <button type="submit" class="btn btn-primary">
-                                      <i class=""></i>Assign
+                                      <i class=""></i>Upload
                                   </button>
                               </div>
                           </div>
-                          </form>
+                           {!! Form::close() !!}
 
   							</div>
   						</div>
@@ -294,7 +253,7 @@ $classes = DB::table('section')
     var class_id = e.target.value;
     console.log(class_id);
 
-    $.get("{{ url('api/dropdown')}}=" + class_id, function(data){
+    $.get("{{ url('study')}}=" + class_id, function(data){
       console.log(data);
       $('#section_id').empty();
       //console.log('data');
@@ -311,10 +270,36 @@ $classes = DB::table('section')
 
 });
 
+  $('#section_id').on('change', function(e){
+    console.log(e);
+    var section_id = e.target.value;
+    console.log(section_id);
+    var class_id = ($('#class_id').val());
+
+    $.get("{{ url('study1')}}=" + class_id + "="+ section_id, function(data){
+      console.log(data);
+      $('#subject_id').empty();
+      //console.log('data');
+
+           $('#subject_id').append(' Please section_id one');
+
+
+           
+           var arr = JSON.parse(data);
+           if (arr.length) {$('#subject_id').append('<option value="">Select A Subject</option>');};
+           if (arr.length == 0) {$('#subject_id').append('<option value=""> </option>');};
+           console.log(arr.length);
+           for (var i = 0; i < arr.length; i+=2) {
+              $('#subject_id').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
+            console.log(arr[i]);
+            };
+    });
+
+});
   
 
 
-
+/*
 $('#class_id').on('change', function(e){
      console.log(e);
      var class_id = e.target.value;
@@ -345,8 +330,8 @@ $('#class_id').on('change', function(e){
             }
             
       });
-});
-
+});*/
+/*
 $('#subject_id').on('change', function(e){
     console.log(e);
    
@@ -521,7 +506,7 @@ $('#section_id1').on('change', function(e){
   });
 
 });
-
+*/
   </script>
 
 

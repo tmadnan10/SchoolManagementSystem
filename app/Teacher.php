@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
@@ -31,5 +31,19 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function updateAll($username, $array)
+    {
+        DB::table('teacher')
+            ->where('username', $username)
+            ->update($array);
+    }
+
+    public function updateProPic($username, $image_name){
+        DB::table('teacher')
+            ->where('username', $username)
+            ->update(['profile_pic' => $image_name]);    
+    }
+    
 
 }

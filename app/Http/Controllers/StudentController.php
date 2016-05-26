@@ -10,6 +10,7 @@ use DB;
 use App\Teacher;
 use App\Student;
 use App\ClubMember;
+use App\Notification;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -101,11 +102,11 @@ class StudentController extends Controller
         'Address' => $request->address,
         'profile_pic' => $request->profile_pic
       );
-      Student::where('username', '=', Auth::user()->username)->update($array);
+      $student = new Student;
+      $student->updateAll(Auth::user()->username, $array);  
       if ($request->email != "") {
-        DB::table('users')
-            ->where('username', Auth::user()->username)
-            ->update(['email' => $request->email]);
+        $user = new User;
+        $user->updateEmail(Auth::user()->username, $request->email);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
@@ -136,11 +137,11 @@ class StudentController extends Controller
         'Address' => $request->address,
         'profile_pic' => $request->profile_pic
       );
-      Student::where('username', '=', Auth::user()->username)->update($array);
+      $student = new Student;
+      $student->updateAll(Auth::user()->username, $array);  
       if ($request->email != "") {
-        DB::table('users')
-            ->where('username', Auth::user()->username)
-            ->update(['email' => $request->email]);
+        $user = new User;
+        $user->updateEmail(Auth::user()->username, $request->email);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
@@ -157,11 +158,13 @@ class StudentController extends Controller
 
     public function notification(Request $request){
       if (Auth::user()->account_type == 'student') {
+        //$users = Notification::getAll(Auth::user()->username);
+        $notif = new Notification;
         $users = DB::table('notification')
                   ->where('username', Auth::user()->username)
                   ->paginate(5);
 
-        return view('student.notification', ['users' => $users, 'student' => $this->student->forUser($request->user()),]);
+        return view('student.notification', ['users' => $notif->getAll(Auth::user()->username), 'student' => $this->student->forUser($request->user()),]);
   
         }
         return redirect(url('/').'/'.Auth::user()->account_type);

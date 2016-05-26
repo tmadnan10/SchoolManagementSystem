@@ -8,8 +8,15 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\User;
 use App\Teacher;
+use App\Section;
+use App\Subject;
+use App\Student;
+use App\ClubMember;
+use App\Class_Test;
+use App\Notification;
+use App\assigned_subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\TeacherRepository;
@@ -64,7 +71,7 @@ class TeacherController extends Controller
     public function club(Request $request)
     {
         if (Auth::user()->account_type == 'teacher') {
-            return view('teacher.club1', [
+            return view('teacher.club', [
                 'teacher' => $this->teacher->forUser($request->user()),
                 'club' => $this->club->forTeacher($request->user()),
             ]);
@@ -72,7 +79,22 @@ class TeacherController extends Controller
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
 
-
+    public function viewClubMembers(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+            $club = $this->club->forTeacher($request->user());
+            foreach ($club as $key) {
+              $members = new ClubMember;
+              $member = $members->getAll($key->club_id);
+              return view('teacher.members', [
+                'teacher' => $this->teacher->forUser($request->user()),
+                'club' => $this->club->forTeacher($request->user()),
+                'members' => $member
+            ]);
+            }
+            
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type); 
+    }
 
     public function addClubMember(Request $request){
 
@@ -126,11 +148,11 @@ class TeacherController extends Controller
         'blood_group' => $request->blood_group,
         'Address' => $request->Address,
       );
-      Teacher::where('username', '=', Auth::user()->username)->update($array);
+      $teacher = new Teacher;
+      $teacher->updateAll(Auth::user()->username, $array);  
       if ($request->email != "") {
-        DB::table('users')
-            ->where('username', Auth::user()->username)
-            ->update(['email' => $request->email]);
+        $user = new User;
+        $user->updateEmail(Auth::user()->username, $request->email);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
@@ -161,11 +183,11 @@ class TeacherController extends Controller
         'Address' => $request->address,
         'profile_pic' => $request->profile_pic
       );
-      Student::where('username', '=', Auth::user()->username)->update($array);
+      $teacher = new Teacher;
+      $teacher->updateAll(Auth::user()->username, $array);  
       if ($request->email != "") {
-        DB::table('users')
-            ->where('username', Auth::user()->username)
-            ->update(['email' => $request->email]);
+        $user = new User;
+        $user->updateEmail(Auth::user()->username, $request->email);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
@@ -178,17 +200,16 @@ class TeacherController extends Controller
      */
 
     public function myActivities(Request $request){
-      $assigned_subject = \DB::table('assigned_subject')
-                              ->where('teacher_username', Auth::user()->username)
-                              ->get();
-      $class_teacher = \DB::table('section')
-                              ->where('class_teacher', Auth::user()->username)
-                              ->get();
+
+      $assigned_subject = new assigned_subject;
+
+      $class_teacher = new Section;
+
       return view('teacher.activities',[
         'teacher' => $this->teacher->forUser($request->user()),
         'club' => $this->club->forTeacher($request->user()),
-        'assigned_subject' => $assigned_subject,
-        'class_teacher' => $class_teacher,
+        'assigned_subject' => $assigned_subject->getAll(Auth::user()->username),
+        'class_teacher' => $class_teacher->getClassTeacher(Auth::user()->username),
         ]);
     }
 
@@ -242,10 +263,11 @@ class TeacherController extends Controller
         $image = Image::make(sprintf('pro_pics/%s', $image_name))
                 ->crop($height,$width)
                 ->save();
-        
-        DB::table('teacher')
+        $teacher = new Teacher;
+        $teacher->updateProPic(Auth::user()->username, $image_name);
+        /*DB::table('teacher')
             ->where('username', Auth::user()->username)
-            ->update(['profile_pic' => $image_name]);
+            ->update(['profile_pic' => $image_name]);*/
         }
         //return redirect(url('/teacher'));
       /*$txt = $this->request->hasFile('file');
@@ -268,7 +290,14 @@ class TeacherController extends Controller
 
     public function classTest(Request $request){
       if (Auth::user()->account_type == 'teacher') {
-        return view('teacher.classTest', ['teacher' => $this->teacher->forUser($request->user())]);
+        $assigned_subject = new assigned_subject;
+        $upcoming = new Class_Test;
+        $done = new Class_Test;
+        return view('teacher.classTest', ['teacher' => $this->teacher->forUser($request->user()),
+            'assigned_subject' => $assigned_subject->getAll(Auth::user()->username),
+            'upcoming' => $upcoming->getUpcoming(Auth::user()->username),
+            'done' => $done->getDone(Auth::user()->username)
+          ]);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
@@ -276,16 +305,165 @@ class TeacherController extends Controller
 
     public function addClassTest(Request $request){
       if (Auth::user()->account_type == 'teacher') {
-        $assigned = \DB::table('assigned_subject') 
+        $assigned_subject = new assigned_subject;
+        /*$assigned = \DB::table('assigned_subject') 
                     ->where('teacher_username', Auth::user()->username)
-                    ->get();
+                    ->get();*/
         return view('teacher.addClassTest', ['teacher' => $this->teacher->forUser($request->user()),
-          'assigned_subject'=>$assigned,
+          'assigned_subject'=>$assigned_subject->getAll(Auth::user()->username),
+          'assigned' => $assigned_subject->getUnique(Auth::user()->username)
           ]);
 
       }
       return redirect(url('/').'/'.Auth::user()->account_type);
     }
+
+    public function addNewClassTest(Request $request)
+    {
+      
+    
+      $this->validate($request, [
+          'class_id' => 'required|max:255',
+          'section_id' => 'required|max:255',
+          'subject_id' => 'required|max:255',
+          'date' => 'required',
+          'syllabus' => 'max:255',
+      ]);
+      $class_test = new Class_Test;
+      $class_test->create([
+          'username' => $request->username,
+          'class_id' => $request->class_id,
+          'section_id' => $request->section_id,
+          'subject_id' => $request->subject_id,
+          'date' => $request->date,
+          'syllabus' => $request->syllabus,
+        ]);
+
+      $subject = new Subject;
+      $subjectName = $subject->getSubjectName($request->subject_id);
+
+      $students = new Student;
+      $student = $students->getAll($request->class_id, $request->section_id);
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'class_test',
+          'hlink' => 'student/class_test/marks',
+          'details' => 'A New Class Test on '.$subjectName->subject_name.' is coming up on '.$request->date.'......',
+          'uploader' => Auth::user()->username,
+          'date' => $request->date,
+        ]);
+      }
+      
+
+      return view('teacher.redirect1', [
+        'msg' => 'Successfully Added a New Class Test',
+        'page' => 'Class Test Management',
+        'url' => 'teacher/class_test',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+      
+    }
+    public function editClassTest(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+        $class_test = new Class_Test;
+        /*$assigned = \DB::table('assigned_subject') 
+                    ->where('teacher_username', Auth::user()->username)
+                    ->get();*/
+        return view('teacher.editClassTest', ['teacher' => $this->teacher->forUser($request->user()),
+          'class_test_dist'=>$class_test->getUpcomingDist(Auth::user()->username),
+          'class_test'=>$class_test->getUpcoming(Auth::user()->username),
+          ]);
+
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function editAClassTest(Request $request)
+    {
+      
+    
+      $this->validate($request, [
+          'class_id' => 'required|max:255',
+          'section_id' => 'required|max:255',
+          'subject_id' => 'required|max:255',
+          'date' => 'required',
+          'syllabus' => 'max:255',
+      ]);
+      $class_test = new Class_Test;
+      if ($request->date != '' && $request->syllabus != '') {
+        $array = array(
+        'date' => $request->date,
+        'syllabus' => $request->syllabus,
+      );
+      }
+      elseif ($request->date != '') {
+        $array = array(
+        'date' => $request->date,
+      );
+      }
+      elseif ($request->syllabus != '') {
+        $array = array(
+        'syllabus' => $request->syllabus,
+      );
+      }
+      $class_test->updateAll(Auth::user()->username, $request->class_id, $request->section_id, $request->subject_id, $request->cd, $array);  
+      /*
+      $class_test->create([
+          'username' => $request->username,
+          'class_id' => $request->class_id,
+          'section_id' => $request->section_id,
+          'subject_id' => $request->subject_id,
+          'date' => $request->date,
+          'syllabus' => $request->syllabus,
+        ]);
+  */
+      return view('teacher.redirect1', [
+        'msg' => 'Successfully Edited a Class Test',
+        'page' => 'Class Test Management',
+        'url' => 'teacher/class_test',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+      
+    }
+
+    public function uploadClassTestMarks(Request $request)
+    {
+      if (Auth::user()->account_type == 'teacher') {
+        $class_test = new Class_Test;
+        return view('teacher.uploadMarks', ['teacher' => $this->teacher->forUser($request->user()),
+          'class_done_dist'=>$class_test->getDoneDist(Auth::user()->username),
+          'class_done'=>$class_test->getDone(Auth::user()->username),
+          ]);
+
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function uploadAClassTestMarks(Request $request)
+    {
+      $this->validate($request, [
+          'file' => 'mimes:pdf,doc,docx,xls|required',
+          'class_id' => 'required|max:255',
+          'section_id' => 'required|max:255',
+          'subject_id' => 'required|max:255',
+          'cd' => 'required',
+      ]);
+      $file = $request->file('file');
+      $date = date("Y-m-d-h:m:s");
+      $name = $date.$file->getClientOriginalName();
+      $file->move('files/', $name);
+      $class_test = new Class_Test;
+      $class_test->uploadMarks(($request->class_id), ($request->section_id),($request->subject_id),($request->cd),(Auth::user()->username), 'files/'.$name);
+      return view('teacher.redirect1', [
+        'msg' => 'Successfully Uploaded Class Test Marks',
+        'page' => 'Class Test Management',
+        'url' => 'teacher/class_test',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+    }
+
 
     public function exam(Request $request){
       if (Auth::user()->account_type == 'teacher') {
@@ -301,6 +479,39 @@ class TeacherController extends Controller
       echo "he";
     }
 
+    public function upload(Request $request){
+      if (Auth::user()->account_type == 'teacher') {
+        $assigned_subject = new assigned_subject;
+        return view('teacher.upload', ['teacher' => $this->teacher->forUser($request->user()),
+          'classes' => $assigned_subject->getAll(Auth::user()->username)
+          ]);
+      }
+      return redirect(url('/').'/'.Auth::user()->account_type);
+
+    }
+
+    public function marks(Request $request)
+    {
+      $this->validate($request, [
+          'file' => 'mimes:pdf,doc,docx,xls|required',
+      ]);
+      $file = $request->file('file');
+      echo $request->class_id.$file->getMimeType();
+      $date = date("Y-m-d-h:m:s");
+      $name = $date.$file->getClientOriginalName();
+      $file->move('img/', $name);
+      echo $date;
+    }
+
+    public function doSomething($id)
+    {
+      $data['id'] = $id;
+      //return View::make('simple', $data);
+       $arr = array();
+        array_push($arr, $data['id']);
+        return json_encode($arr);
+    }
+
     public function check(Request $request){
       if (\Hash::check($request->password, Auth::user()->password)) {
         echo "The passwords match...";
@@ -310,6 +521,21 @@ class TeacherController extends Controller
         return redirect()->back()->with(['error' => 'password not matched']);
       }
     }
+
+    public function categoryDropDownData()
+{
+
+   $cat_id = Input::get('cat_id');
+
+
+   $subcategories = array();
+
+   array_push($subcategories, 'var');
+
+   return Response::json_encode($subcategories);
+
+
+}
 
 
 }

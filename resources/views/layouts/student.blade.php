@@ -68,10 +68,13 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="snippets-index snippets-view snippets-add snippets-edit"> 
-                    <a href="#"> <span class="glyphicon glyphicon-th"></span> Result Section </a>
+                    <a href="{{url('/student/result')}}"> <span class="glyphicon glyphicon-th"></span> Result Section </a>
+                </li>
+                <li class="snippets-index snippets-view snippets-add snippets-edit"> 
+                    <a href="{{url('/student/class_test')}}"> <span class="glyphicon glyphicon-th-list"></span> Class Tests </a>
                 </li>
                 <li class="themes-index themes-view themes-add"> 
-                    <a href="#"> <span class="glyphicon glyphicon-download-alt"></span> Download Section </a>
+                    <a href="{{url('/student/download')}}"> <span class="glyphicon glyphicon-download-alt"></span> Download Section </a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add"> 
                     <a href="{{url('/student/club')}}"> <span class="glyphicon glyphicon-th-large"></span> My Clubs </a>

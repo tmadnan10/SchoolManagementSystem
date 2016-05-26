@@ -1,385 +1,125 @@
 @extends('layouts.teacher')
-<?php
-$classes = DB::table('section')
-			->select('class_id')
-			->distinct()
-			->get();
-?>
 @section('content')
-@if(count($club))
-@foreach($club as $clb)
-<!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
-<script src="//www.google-analytics.com/ga.js"></script>
-
-
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
 <script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
 <link rel="stylesheet" type="text/css" href="../../app.css">
 
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//www.google-analytics.com/ga.js"></script>
 <style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
 <style type="text/css">.header-color{background: #ff3b31;}</style>
+<script type="text/javascript" src="../../new/jquery.magnific-popup.min.js"></script>
+<script type="text/javascript" src="../../new/smoothscroll.js"></script>
+<script type="text/javascript" src="../../new/marker.js"></script>
 
+<link rel="stylesheet" type="text/css" href="../../new/magnific-popup.css">
+<link rel="stylesheet" type="text/css" href="../../new/animate.css">
+<link rel="stylesheet" type="text/css" href="../../new/responsive.css">
+<link rel="stylesheet" type="text/css" href="../../new/slick.css">
+<link rel="stylesheet" type="text/css" href="../../new/style.css">
+<link rel="stylesheet" type="text/css" href="../../new/linea-font.css">
+<link rel="stylesheet" type="text/css" href="../../new/flow.css">
+<div class="gray-bg">
+          <section id="blog" class="section container blog-columns blog-preview">
+            <div class="row">
+              
+              <header class="sec-heading">
+                <h2>Manage The Clubs</h2>
+                <span class="subheading">Currently you are moderating <b> @foreach($club as $cl) {{$cl->club_name}} @endforeach </b></span>
+              </header>
 
-<div class="principal-container page-users-edit_profile" role="main">
-<div class="container">
-	<div class="row">
-		<div class="col-sm-8 col-sm-offset-2">
-			<div class="wizard-container">
-					<div class="card wizard-card ct-wizard-info" id="wizard">
-						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b>{{$clb->club_name}}</b></h2><br></center>
-						</div>
+              
+              <!-- Blog Post 1 -->
+              <div class="col-lg-4 col-md-6 mb-sm-50">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
 
-					<ul class="nav nav-pills">
-						<li class="active" style="width: 25%;">
-							<a href="#add" data-toggle="tab" aria-expanded="true">Add A Member</a>
-						</li>
-						<li style="width: 25%;">
-							<a href="#del" data-toggle="tab">Delete A Member</a>
-						</li>
-						<li style="width: 25%;">
-							<a href="#edit" data-toggle="tab">Change Status</a>
-						</li>
-						<li style="width: 24%;">
-							<a href="#event" data-toggle="tab">Add Event</a>
-						</li>
-					</ul>
-					<div class="tab-content">
-						<div class="tab-pane active" id="add">
-            <center></center>
-							<div class="panel-body">
+                  <!-- Image -->
+              
 
-							<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/club') }}">
-                        		{!! csrf_field() !!}
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      
+                    </div><!-- / .meta -->
 
+                    <!-- Post Title -->
+                    <a href="{{url('/teacher/club_management/add')}}" class="post-title"><h4>Add A New Club Member</h4></a>
 
+                    <!-- Blurb -->
+                    <p>Here can select one of ypur clubs and add a new member. The corresponding student will get a confirmation
+                    as soon as you add him to your club.</p>
 
+                    <!-- Link -->
+                    <a href="{{url('/teacher/club_management/add')}}" class="btn btn-small">Enter</a>
 
+                  </div><!-- / .bp-content -->
 
-                          <div class="form-group{{ $errors->has('class_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Class</label>
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
+              <!-- Blog Post 1 -->
+              <div class="col-lg-4 col-md-6 mb-sm-50">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
 
-                            <div class="col-md-6">
-                                <select class="form-control" name= "class_id" id="class_id">
-                                <option value="">Select A Class</option>
-                                @foreach($classes as $class)
-                                <option value="{{ $class->class_id }}">{{ $class->class_id }}</option>
-                                @endforeach
-                                </select>
-                                @if ($errors->has('class_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('class_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                          </div>
+                  <!-- Image -->
+              
 
-                          <div class="form-group{{ $errors->has('section_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Section</label>
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      
+                    </div><!-- / .meta -->
 
-                            <div class="col-md-6">
-                                <select class="form-control" name= "section_id" id="section_id">
-                                <option value=""></option>
+                    <!-- Post Title -->
+                    <a href="{{url('/teacher/club_management/view')}}" class="post-title"><h4>View Club Members</h4></a>
 
-                                </select>
-                                @if ($errors->has('section_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('section_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                          </div>
+                    <!-- Blurb -->
+                    <p>Here You can watch out the members of your clubs. You can change their membership status and
+                    can remove them. The student will be notified of every actions.</p>
 
-                          <div class="form-group{{ $errors->has('student_id') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Roll</label>
+                    <!-- Link -->
+                    <a href="{{url('/teacher/club_management/view')}}" class="btn btn-small">Enter</a>
 
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="student_id" value="{{old('student_id')}}">
-                                @if ($errors->has('student_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('student_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                          </div>
+                  </div><!-- / .bp-content -->
 
-                          <div class="form-group{{ $errors->has('membership_status') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Membership Status</label>
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
+               <!-- Blog Post 1 -->
+              <div class="col-lg-4 col-md-6 mb-sm-50">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
 
-                            <div class="col-md-6">
-                                <select class="form-control" name= "membership_status" id="membership_status">
-                                <option value="">Select One</option>
-                                <option value="Member">Member</option>
-                                <option value="Member">Member</option>
-                                <option value="Vice-President">Vice-President</option>
-                                <option value="President">President</option>
-                                <option value="Honorable Mention">Honorable Mention</option>
+                  <!-- Image -->
+              
 
-                                </select>
-                                @if ($errors->has('membership_status'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('membership_status') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                          </div>
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      
+                    </div><!-- / .meta -->
 
+                    <!-- Post Title -->
+                    <a href="{{url('/teacher/club_management/notices')}}" class="post-title"><h4>Event Management</h4></a>
 
+                    <!-- Blurb -->
+                    <p>Here you can add any club event.
+                    You also can change an upcoming club event. The members of the corresponding club 
+                    will be notified
+                    as soon as you add a new event</p>
 
+                    <!-- Link -->
+                    <a href="{{url('/teacher/club_management/notices')}}" class="btn btn-small">Enter</a>
 
-                        	<div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class=""></i>Next
-                                </button>
-                            </div>
-                        </div>
-                        </form>
+                  </div><!-- / .bp-content -->
 
-							</div>
-						</div>
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
 
-
-
-						<div class="tab-pane" id="del">
-						Hello2
-						</div>
-						<div class="tab-pane" id="edit">
-						Hello3
-						</div>
-						<div class="tab-pane" id="event">
-						Hello4
-						</div>
-					</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<script>
-  $('#class_id').on('change', function(e){
-    console.log(e);
-    var class_id = e.target.value;
-    console.log(class_id);
-    $.get("{{ url('api/dropdown')}}=" + class_id, function(data){
-      console.log(data);
-      $('#section_id').empty();
-      //console.log('data');
-
-           $('#section_id').append(' Please section_id one');
-           //console.log('data');
-           var arr = JSON.parse(data);
-           console.log(arr.length);
-           for (var i = 0; i < arr.length; i++) {
-              $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
-            console.log(arr[i]);
-            };
-});
-
-
-   });
-  </script>
-
-
-<script>
-            function getXMLHTTPRequest() {
-                var req = false;
-                try {
-                    /* for Firefox */
-                    req = new XMLHttpRequest();
-                } catch (err) {
-                    try {
-                        /* for some versions of IE */
-                        req = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (err) {
-                        try {
-                        /* for some other versions of IE */
-                            req = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (err) {
-                            req = false;
-                        }
-                    }
-                }
-                return req;
-            }
-
-            function loadOptions() {
-                var opt = document.getElementById("second");
-                var opt2 = document.getElementById("third");
-                var selected = opt.options[opt.selectedIndex].value;
-                console.log(selected);
-                if(selected == "-1")  {
-                  opt2.innerHTML = "Select a Section";
-                  return;
-                }
-
-                var ajaxRequest = getXMLHTTPRequest();
-                ajaxRequest.open("POST", "../../../app/Http/Controllers/temp.php", true);
-                ajaxRequest.onreadystatechange = response;
-                ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                ajaxRequest.send("select1=" + selected);
-
-                function response() {
-                    if(ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
-                        console.log("response: " + ajaxRequest.responseText);
-
-                        if(ajaxRequest.responseText != null || ajaxRequest.responseText != "") {
-                            var arr = JSON.parse(ajaxRequest.responseText);
-                            console.log("response: " + arr);
-                            opt2.innerHTML = "Select a Class";
-                                for(var i = 0; i < arr.length; i++) {
-                                    opt2.innerHTML += "<option>" + arr[i] + "</option>";
-                                }
-                        }
-                    }
-                }
-
-            }
-
-
-</script>
-
-
-
-
-<script type="text/javascript">/*<![CDATA[*/$('#wizard-picture').bind('change', function() {
-      var size = this.files[0].size/1024/1024;
-      size = Math.floor(size);
-      if(size>1) {
-        bootbox.alert('<div class="alert alert-info">The selected image is too large</div>');
-        $('#wizard-picture').val('');
-        return false;
-      }
-  });
-  $(function(){
-    $('.modal').on('hidden.bs.modal', function (e) {
-      if($('#wizardPicturePreview').attr('src').indexOf('default-avatar.png')!=-1) {
-        $('.popImg').popover('show');
-      }
-    });
-    $('.btn-next').click(function(){
-      $('.popImg').popover('hide');
-    })
-    $('.color-input').colorpicker();
-    $("#UserColor").click(function(){
-      $(this).closest('.color-input').find('span').click();
-    });
-    $('input[value="Develop"]').attr('checked','checked');
-    $('input[value="Develop"]').closest('.choice').addClass('active');
-    $('.btn-save-form').click(function(){
-      if($("#UserFirstName").val().trim()=="") {
-        $("#UserFirstName").val('');
-      }
-      if($("#UserLastName").val().trim()=="") {
-        $("#UserLastName").val('');
-      }
-      if($("#UserSkills").val().trim()=="") {
-        $("#UserSkills").val('');
-      }
-      if($("#UserDescription").val().trim()=="") {
-        $("#UserDescription").val('');
-      }
-      if($("#UserFirstName").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please enter a first name in the NAME tab</div>");
-      }
-      if($("#UserLastName").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please enter a last name in the NAME tab</div>");
-      }
-      if($("#UserEmail").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please enter an email in the NAME tab</div>");
-      }
-      if($("#UserSkills").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please enter a Skills</div>");
-      }
-      if($("#UserColor").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please select a cover color</div>");
-      }
-      if($("#UserDescription").val()=="") {
-        return bootbox.alert("<div class='alert alert-danger'>Please write something about you</div>");
-      }
-    });
-  });/*]]>*/</script> </div>
-<footer class="footer row" role="contentinfo">
-      <div class="bs-docs-social">
-        <ul class="bs-docs-social-buttons">
-          <li class="follow-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
-             <i class="fa fa-facebook"></i> Like ILS </a></li>
-          <li class="tweet-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
-              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
-          </ul>
+            </div><!-- / .row -->
+          </section><!-- / .container -->
         </div>
-
-        <ul class="footer-links text-muted">
-          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
-          <li>.</li>
-          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
-          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
-          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
-        </ul>
-      </footer>
-<script type="text/javascript">/*<![CDATA[*/APPBASE = '';
-      ISLOGIN = '1';
-      $('.users-edit_profile').addClass('active');
-                   /*-- google an ---*/
-          var _gaq = [
-            ['_setAccount', 'UA-49755460-1'],
-            ['_trackPageview']
-          ];
-          (function (d, t) {
-            var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g, s)
-          }(document, 'script'));/*]]>*/</script> <style type="text/css">/*Css style generated dynamically using the app configuracion*/
-	.image-graphic {
-		width: 340px;
-		height: 650px;
-    	background: url("/img/hero-graphic.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
-    }
-    .page-users-login,
-    .page-users-add,
-    .home-masthead {
-		background-color: #39bbdb;
-		background-image: -webkit-gradient(linear,left top,left bottom,from(#39bbdb),to(#39bbdb));
-		background-image: -webkit-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
-		background-image: -o-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
-		background-image: linear-gradient(to bottom,#39bbdb 0,#39bbdb 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#39bbdb', endColorstr='#39bbdb', GradientType=0);
-	}
-	.page-pages-display,
-	.page-pages-home,
-	.page-users-login,
-    .page-users-add {margin-top: 0px !important;}
-	.navbar-app {border-bottom: 1px solid #eee;}
-	.booticon{background: transparent;}
-	.navbar-default .navbar-nav>li>a {color: #39bbdb;}
-	.page-pages-display p {line-height: 0.928571;}
-	.page-pages-home {min-height: 600px;}
-	</style>
-			<div class="colorpicker dropdown-menu colorpicker-hidden">
-			<div class="colorpicker-saturation" style="background-color: rgb(255, 14, 0);">
-			<i style="top: 0px; left: 81.17647058823529px;"><b></b></i></div>
-			<div class="colorpicker-hue"><i style="top: 99.11433172302773px;"></i></div>
-			<div class="colorpicker-alpha" style="background-color: rgb(255, 59, 48);"><i style="top: 0px;"></i></div>
-			<div class="colorpicker-color" style="background-color: rgb(255, 59, 48);"><div style="background-color: rgb(255, 59, 48);"></div></div>
-
-@endforeach
-@else
-@endif
-
-
-
-
-
 @endsection

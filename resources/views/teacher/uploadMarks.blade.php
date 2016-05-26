@@ -1,20 +1,6 @@
 @extends('layouts.teacher')
+
 @section('content')
-@if(count($assigned_subject))
-
-
-
-
-<script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../../../app.css">
-
-<link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="//www.google-analytics.com/ga.js"></script>
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
-<style type="text/css">.header-color{background: #ff3b31;}</style>
 
 <link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
@@ -23,29 +9,33 @@
   <script src="../../../jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" type="text/css" href="../../../css/datepicker.css">
-  <script src="../../../js/bootstrap-datepicker.js"></script>
+<script src="../../../js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../../app.css">
+<link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
 
 <div class="principal-container page-users-edit_profile" role="main">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-8 col-sm-offset-2">
-				<div class="wizard-container">
-					<div class="card wizard-card ct-wizard-info" id="wizard">
-						<div class="wizard-header">	
-							<center><h2>Currently You Have <br><b>{{count($assigned_subject)}}</b> Assigned Subject(s)</h2><br></center>
-						</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <div class="wizard-container">
+          <div class="card wizard-card ct-wizard-info" id="wizard">
+            <div class="wizard-header"> 
+              <center><h2>Currently You Have <br><b>{{count($class_done)}}</b> Class Test(s) to Upload Marks</h2><br></center>
+            </div>
 
-					<ul class="nav nav-pills">
-						<li class="active" style="width: 100%;">
-							<a href="#st" data-toggle="tab" aria-expanded="true">Schedule a New Class Test</a>
-						</li>
-					
-					</ul>
-					<div class="tab-pane" id="ct">
-                	<div class="panel-body">
+          <ul class="nav nav-pills">
+            <li class="active" style="width: 100%;">
+              <a href="#st" data-toggle="tab" aria-expanded="true">Schedule a New Class Test</a>
+            </li>
+          
+          </ul>
+          <div class="tab-pane" id="ct">
+                  <div class="panel-body">
 
-                		<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/class_test/addClassTest') }}">
-                              {!! csrf_field() !!}
+                   {!! Form::open(array('class' => 'form-horizontal', 'url'=>'/teacher/class_test/uploadMarks','method'=>'POST', 'files'=>true)) !!}
 
 
 
@@ -57,7 +47,7 @@
                               <div class="col-md-6">
                                   <select class="form-control" name= "class_id" id="class_id">
                                   <option value="">Select A Class</option>
-                                  @foreach($assigned as $as)
+                                  @foreach($class_done_dist as $as)
                                   <option value="{{$as->class_id}}">{{$as->class_id}}</option>
                                   @endforeach
                                   </select>
@@ -101,36 +91,51 @@
                               </div>
                         </div>
 
-
-                        <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Date</label>
-
-                            <div class="col-md-6">
-                                <input type="text" id="datepicker" class="form-control" name="date" value="{{ old('date') }}">
-
-                                @if ($errors->has('date'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('date') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                         <div class="form-group{{ $errors->has('syllabus') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Syllabus</label>
+                        <div class="form-group{{ $errors->has('cd') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Date</label>
 
                               <div class="col-md-6">
-                                 {{ Form::textarea('syllabus', null, ['size' => '46x5']) }}
                                   
-                        
-                                  @if ($errors->has('syllabus'))
+                                  <select name="cd" class="form-control" id="cd">
+                                    <option value=""></option>
+                                  </select>
+                                  @if ($errors->has('cd'))
                                       <span class="help-block">
-                                          <strong>{{ $errors->first('syllabus') }}</strong>
+                                          <strong>{{ $errors->first('cd') }}</strong>
                                       </span>
                                   @endif
                               </div>
                             </div>
 
+
+                        <div class="form-group{{ $errors->has('cs') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Syllabus</label>
+
+                              <div class="col-md-6">
+                                  
+                                  <textarea value="" name="cs" id="cs" readonly="" class="form-control" cols="5" rows="5"> </textarea>
+                                  @if ($errors->has('cs'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('cs') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+                                
+                         <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">File</label>
+
+                              <div class="col-md-6">
+                                  <input type="file", name="file", class="form-control">
+                                  @if ($errors->has('file'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('file') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+                         
                         <input type="hidden" value="{{Auth::user()->username}}" name="username" id="username">
 
 
@@ -141,18 +146,18 @@
                         <div class="form-group">
                               <div class="col-md-6 col-md-offset-4">
                                   <button type="submit" class="btn btn-primary">
-                                      <i class=""></i>Next
+                                      <i class=""></i>Upload
                                   </button>
                               </div>
                         </div>
-                    	</form>
-                	</div>
-					</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                     {!! Form::close() !!}
+                  </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -168,7 +173,7 @@
     var arr;
     var username = $('#username').val();
     console.log(username);
-    $.get("{{ url('/ct')}}=" + class_id + "=" + username, function(data){
+    $.get("{{ url('/ct/ct')}}=" + class_id + "=" + username, function(data){
       console.log(data);
       $('#section_id').empty();
       //console.log('data');
@@ -193,7 +198,7 @@
     var username = $('#username').val();
     var class_id = $('#class_id').val();
     console.log(username);
-    $.get("{{ url('/ct/sub')}}=" + class_id + "=" + section_id + "=" + username, function(data){
+    $.get("{{ url('/new')}}=" + class_id + "=" + section_id + "=" + username, function(data){
       console.log(data);
       $('#subject_id').empty();
       //console.log('data');
@@ -211,8 +216,62 @@
 
 });
 
+$('#subject_id').on('change', function(e){
+    console.log(e);
+    var subject_id = e.target.value;
+    console.log(section_id);
+    var class_id = $('#class_id').val();
+    var section_id = $('#section_id').val();
+    console.log(username);
+    $.get("{{ url('/ctedit2')}}=" + class_id + "=" + section_id + "=" + subject_id, function(data){
+      console.log(data);
+      $('#cd').empty();$('#cs').empty();
+      //console.log('data');
 
+           //$('#subject_id').append(' Please section_id one');
+           //console.log('data');
+           
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           if (arr[0] != '') {$('#cd').append('<option value=" ">Please Select A Date</option>');};
+           for (var i = 0; i < arr.length; i+=2) {
+              $('#cd').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            console.log(arr[i]);
+            };
+    });
 
+});
+
+$('#cd').on('change', function(e){
+    console.log(e);
+    var date = e.target.value;
+    console.log(section_id);
+    var class_id = $('#class_id').val();
+    var section_id = $('#section_id').val();
+    var subject_id = $('#subject_id').val();
+    var values=date.split('-');
+  var year=values[0];
+  var mn=values[1];
+  var day = values[2];
+  date = year+mn+day;
+    $.get("{{ url('/ctedit3')}}=" + class_id + "=" + section_id + "=" + subject_id + "=" +date, function(data){
+
+      //$('#subject_id').empty();
+
+           //$('#subject_id').append(' Please section_id one');
+           //console.log('data');
+           //$('#subject_id').append('<option value=" ">Please Select A Date</option>');
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           console.log(arr);
+           $('#cs').val(arr[0]);
+           /*for (var i = 0; i < arr.length; i+=2) {
+              $('#cd').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            console.log(arr[i]);
+            };*/
+    });
+
+});
 
 </script>
 
@@ -307,99 +366,40 @@
             g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g, s)
           }(document, 'script'));/*]]>*/</script> <style type="text/css">/*Css style generated dynamically using the app configuracion*/
-	.image-graphic {
-		width: 340px;
-		height: 650px;
-    	background: url("/img/hero-graphic.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
+  .image-graphic {
+    width: 340px;
+    height: 650px;
+      background: url("/img/hero-graphic.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
     }
     .page-users-login,
     .page-users-add,
     .home-masthead {
-		background-color: #39bbdb;
-		background-image: -webkit-gradient(linear,left top,left bottom,from(#39bbdb),to(#39bbdb));
-		background-image: -webkit-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
-		background-image: -o-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
-		background-image: linear-gradient(to bottom,#39bbdb 0,#39bbdb 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#39bbdb', endColorstr='#39bbdb', GradientType=0);
-	}
-	.page-pages-display,
-	.page-pages-home,
-	.page-users-login,
+    background-color: #39bbdb;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#39bbdb),to(#39bbdb));
+    background-image: -webkit-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
+    background-image: -o-linear-gradient(top,#39bbdb 0,#39bbdb 100%);
+    background-image: linear-gradient(to bottom,#39bbdb 0,#39bbdb 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#39bbdb', endColorstr='#39bbdb', GradientType=0);
+  }
+  .page-pages-display,
+  .page-pages-home,
+  .page-users-login,
     .page-users-add {margin-top: 0px !important;}
-	.navbar-app {border-bottom: 1px solid #eee;}
-	.booticon{background: transparent;}
-	.navbar-default .navbar-nav>li>a {color: #39bbdb;}
-	.page-pages-display p {line-height: 0.928571;}
-	.page-pages-home {min-height: 600px;}
-	</style>
-			<div class="colorpicker dropdown-menu colorpicker-hidden">
-			<div class="colorpicker-saturation" style="background-color: rgb(255, 14, 0);">
-			<i style="top: 0px; left: 81.17647058823529px;"><b></b></i></div>
-			<div class="colorpicker-hue"><i style="top: 99.11433172302773px;"></i></div>
-			<div class="colorpicker-alpha" style="background-color: rgb(255, 59, 48);"><i style="top: 0px;"></i></div>
-			<div class="colorpicker-color" style="background-color: rgb(255, 59, 48);"><div style="background-color: rgb(255, 59, 48);"></div></div>
+  .navbar-app {border-bottom: 1px solid #eee;}
+  .booticon{background: transparent;}
+  .navbar-default .navbar-nav>li>a {color: #39bbdb;}
+  .page-pages-display p {line-height: 0.928571;}
+  .page-pages-home {min-height: 600px;}
+  </style>
+      <div class="colorpicker dropdown-menu colorpicker-hidden">
+      <div class="colorpicker-saturation" style="background-color: rgb(255, 14, 0);">
+      <i style="top: 0px; left: 81.17647058823529px;"><b></b></i></div>
+      <div class="colorpicker-hue"><i style="top: 99.11433172302773px;"></i></div>
+      <div class="colorpicker-alpha" style="background-color: rgb(255, 59, 48);"><i style="top: 0px;"></i></div>
+      <div class="colorpicker-color" style="background-color: rgb(255, 59, 48);"><div style="background-color: rgb(255, 59, 48);"></div></div>
 
 
 
-
-
-@else
-<script type="text/javascript" src="../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../app.css">
-
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="//www.google-analytics.com/ga.js"></script>
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
-<style type="text/css">.header-color{background: #ff3b31;}</style>
-
-
-<style>
-  .title{
-    font-size: 36px;
-  }
-
-  .subtitle{
-    font-size: 20px;
-  }
-
-
-</style>
-<br><br><br><br>
-<div class="title">
-  <center>Currently You Are Not Assigned to Take Any Class</center>
-</div>
-
-<div class="subtitle">
-  <center>Please Contact the Authority if You Are Highly Interested</center>
-</div>
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-<footer class="footer row" role="contentinfo">
-      <div class="bs-docs-social">
-        <ul class="bs-docs-social-buttons">
-          <li class="follow-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
-             <i class="fa fa-facebook"></i> Like ILS </a></li>
-          <li class="tweet-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
-              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
-          </ul>
-        </div>
-
-        <ul class="footer-links text-muted">
-          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
-          <li>.</li>
-          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
-          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
-          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
-        </ul>
-      </footer>
-
-      @endif
 
 
 

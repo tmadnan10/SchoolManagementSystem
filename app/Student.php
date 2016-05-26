@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
@@ -30,5 +30,15 @@ class Student extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function updateAll($username, $array)
+    {
+        DB::table('student')
+            ->where('username', $username)
+            ->update($array);
+    }
+    public function getAll($class_id, $section_id)
+    {
+        return Student::where('class_id', $class_id)->where('section_id', $section_id)->get();
     }
 }

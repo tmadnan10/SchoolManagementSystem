@@ -238,6 +238,33 @@ Route::group(['middleware' => ['web']], function () {
         echo json_encode($arr);
     });
 
+    Route::get('/api/department={id}', function($id){
+        $arr = array();
+
+        $teacher = \DB::table('teacher')
+                ->select('username', 'first_name', 'last_name')
+                ->where('dept_id', $id)
+                ->get();
+
+        if (count($teacher) != 0) {
+            array_push($arr, 'Select A Teacher');
+            foreach ($teacher as $subcat) {
+                $mod = NULL;
+                $mod = \DB::table('club')
+                ->select('moderator_id')->where('moderator_id', $subcat->username)
+                ->get();
+                if ($mod == NULL) {
+                    $name = $subcat->first_name." ".$subcat->last_name;
+                    array_push($arr, $subcat->username);
+                    array_push($arr, $name);
+                }
+                
+        }
+
+        }
+        echo json_encode($arr);
+    });
+
 
 
 
@@ -330,7 +357,7 @@ Route::group(['middleware' => ['web']], function () {
 /********************************************************************************
 *********************************************************************************
 *
-********************************  Student Part  *********************************
+********************************  Teacher Part  *********************************
 *
 *********************************************************************************
 *********************************************************************************/
@@ -348,7 +375,189 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/student/firstedit', 'StudentController@firstEdit');
     Route::get('/teacher/class_test', 'TeacherController@classTest');
-    Route::get('/addClassTest', 'TeacherController@addClassTest');
+
+    Route::get('/teacher/class_test/addClassTest', 'TeacherController@addClassTest');
+    Route::post('/teacher/class_test/addClassTest', 'TeacherController@addNewClassTest');
+
+    Route::get('/teacher/class_test/editClassTest', 'TeacherController@editClassTest');
+    Route::post('/teacher/class_test/editClassTest', 'TeacherController@editAClassTest');
+
+    Route::get('/ctedit={id}={id1}={id2}', function($id,$id1,$id2){
+    $arr = array();
+    $today = date('Y-m-d');
+     $username = \DB::table('class_test')
+                ->select('date','syllabus')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('subject_id', $id2)
+                ->where('date', '>', $today)
+                ->get();
+
+        /*$teacher = null;
+        if (count($username)) {
+            foreach ($username as $key) {
+                $teacher = \DB::table('teacher')
+                            ->where('username', $key->teacher_username)
+                            ->get();
+            }
+        }
+        if (count($teacher)) {
+            foreach ($teacher as $key) {
+                $name = $key->first_name." ".$key->last_name;
+                array_push($arr, $name);
+            }
+        }*/
+
+        if (count($username)) {
+            foreach ($username as $key) {
+                
+                array_push($arr, $key->date);
+                array_push($arr, $key->syllabus);
+            }
+        }        
+
+        echo json_encode($arr);
+    });
+
+Route::get('/ctedit2={id}={id1}={id2}', function($id,$id1,$id2){
+    $arr = array();
+    $today = date('Y-m-d');
+     $username = \DB::table('class_test')
+                ->select('date','syllabus')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('subject_id', $id2)
+                ->where('date', '<', $today)
+                ->get();
+
+        /*$teacher = null;
+        if (count($username)) {
+            foreach ($username as $key) {
+                $teacher = \DB::table('teacher')
+                            ->where('username', $key->teacher_username)
+                            ->get();
+            }
+        }
+        if (count($teacher)) {
+            foreach ($teacher as $key) {
+                $name = $key->first_name." ".$key->last_name;
+                array_push($arr, $name);
+            }
+        }*/
+
+        if (count($username)) {
+            foreach ($username as $key) {
+                
+                array_push($arr, $key->date);
+                array_push($arr, $key->syllabus);
+            }
+        }        
+
+        echo json_encode($arr);
+    });
+
+
+    Route::get('/ctedit={id}={id1}=', function($id,$id1){
+    $arr = array();
+     array_push($arr, '');
+
+        echo json_encode($arr);
+    });
+
+    Route::get('/ctedit1={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
+    $arr = array(); 
+    $today = date('Y-m-d');
+    
+    $str1 = substr($id3, 0, 4);
+    $str2 = substr($id3, 4, 2);
+    $str3 = substr($id3, 6, 2);
+    $date = $str1.'-'.$str2.'-'.$str3;
+    //array_push($arr, $date);
+    //echo $date;
+     $username = \DB::table('class_test')
+                ->select('date','syllabus')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('subject_id', $id2)
+                ->where('date', $date)
+                ->where('date', '>', $today)
+                ->get();
+
+        /*$teacher = null;
+        if (count($username)) {
+            foreach ($username as $key) {
+                $teacher = \DB::table('teacher')
+                            ->where('username', $key->teacher_username)
+                            ->get();
+            }
+        }
+        if (count($teacher)) {
+            foreach ($teacher as $key) {
+                $name = $key->first_name." ".$key->last_name;
+                array_push($arr, $name);
+            }
+        }*/
+
+        if (count($username)) {
+            foreach ($username as $key) {
+                array_push($arr, $key->syllabus);
+            }
+        }        
+
+        echo json_encode($arr);
+    });
+
+Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
+    $arr = array(); 
+    $today = date('Y-m-d');
+    
+    $str1 = substr($id3, 0, 4);
+    $str2 = substr($id3, 4, 2);
+    $str3 = substr($id3, 6, 2);
+    $date = $str1.'-'.$str2.'-'.$str3;
+    //array_push($arr, $date);
+    //echo $date;
+     $username = \DB::table('class_test')
+                ->select('date','syllabus')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('subject_id', $id2)
+                ->where('date', $date)
+                ->where('date', '<', $today)
+                ->get();
+
+        /*$teacher = null;
+        if (count($username)) {
+            foreach ($username as $key) {
+                $teacher = \DB::table('teacher')
+                            ->where('username', $key->teacher_username)
+                            ->get();
+            }
+        }
+        if (count($teacher)) {
+            foreach ($teacher as $key) {
+                $name = $key->first_name." ".$key->last_name;
+                array_push($arr, $name);
+            }
+        }*/
+
+        if (count($username)) {
+            foreach ($username as $key) {
+                array_push($arr, $key->syllabus);
+            }
+        }        
+
+        echo json_encode($arr);
+    });
+
+    Route::get('/ctedit1={id}={id1}={id2}=', function($id,$id1,$id2){
+        $arr = array();
+        array_push($arr, '');
+
+        echo json_encode($arr);
+    });
+    Route::get('/teacher/class_test/uploadMarks', 'TeacherController@uploadClassTestMarks');
+    Route::post('/teacher/class_test/uploadMarks', 'TeacherController@uploadAClassTestMarks');
     Route::get('teacher/club', 'TeacherController@club');
 
 
@@ -372,6 +581,7 @@ Route::group(['middleware' => ['web']], function () {
                 ->select('section_id')
                 ->where('class_id', $id)
                 ->where('teacher_username', $id1)
+                ->orderBy('section_id', 'asc')
                 ->get();
         if (count($sub) != 0) {
             array_push($arr, 'Select A Section');
@@ -478,8 +688,180 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/teacher/changepropic', 'TeacherController@changeMyProPic');
     Route::get('/1stTerminal', 'TeacherController@firstTerminal');
 
+    Route::get('/teacher/upload', 'TeacherController@upload');
+    Route::post('/teacher/marks', 'TeacherController@marks');
+
+    Route::get('/ct/ct={id}={id1}', function($id, $id1){
+        $arr = array();
+        $today = date('Y-m-d');
+        if ($id == '') {
+          $id = -1;
+        }
+
+        $sub = \DB::table('class_test')
+                ->where('class_id', $id)
+                ->where('username', $id1)
+                ->where('date', '>', $today)
+                ->orderBy('section_id', 'asc')
+                ->distinct()->get();
+        if (count($sub) != 0) {
+            array_push($arr, 'Select A Section');
+            foreach ($sub as $subcat) {
+                $flag = 1;
+                foreach ($arr as $key) {
+                    if ($key == $subcat->section_id) {
+                        $flag = 0;
+                    }
+                }
+                
+                if(($subcat->date > $today) && $flag){
+                    array_push($arr, $subcat->section_id);
+                }
+            }
+
+        }
+        echo json_encode($arr);
+    });
+    Route::get('/ct/ct/sub={id}={id1}={id2}', function($id, $id1,$id2){
+        $arr = array(); 
+        $today = date('Y-m-d');
+
+        if ($id == '') {
+          $id = -1;
+        }
+
+        $sub = \DB::table('class_test')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('username', $id2)
+                ->where('date', '>', $today)
+                ->get();
+        if (count($sub) != 0) {
+            //array_push($arr, 'Select A Section');
+            foreach ($sub as $subcat) {
+                $flag = 1;
+                foreach ($arr as $key) {
+                    if ($key == $subcat->subject_id) {
+                        $flag = 0;
+                    }
+                }
+                if($flag){
+                    array_push($arr, $subcat->subject_id);
+                    $name = \DB::table('subject')
+                        ->select('subject_name')
+                        ->where('subject_id', $subcat->subject_id)
+                        ->first();
+                    array_push($arr, $name->subject_name);
+                }         
+            }
+        }
+        echo json_encode($arr);
+    });
+
+    Route::get('/new={id}={id1}={id2}', function($id, $id1,$id2){
+        $arr = array(); 
+        $today = date('Y-m-d');
+
+        if ($id == '') {
+          $id = -1;
+        }
+
+        $sub = \DB::table('class_test')
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->where('username', $id2)
+                ->where('date', '<', $today)
+                ->get();
+        if (count($sub) != 0) {
+            //array_push($arr, 'Select A Section');
+            foreach ($sub as $subcat) {
+                $flag = 1;
+                foreach ($arr as $key) {
+                    if ($key == $subcat->subject_id) {
+                        $flag = 0;
+                    }
+                }
+                if($flag){
+                    array_push($arr, $subcat->subject_id);
+                    $name = \DB::table('subject')
+                        ->select('subject_name')
+                        ->where('subject_id', $subcat->subject_id)
+                        ->first();
+                    array_push($arr, $name->subject_name);
+                }         
+            }
+        }
+        echo json_encode($arr);
+    });
+
+    Route::get('/study={id}', function($id){
+        $arr = array();
+
+        if ($id == '') {
+          $id = 0;
+        }
+
+        $sub = \DB::table('assigned_subject')
+                ->where('teacher_username', Auth::user()->username)
+                ->where('class_id', $id)
+                ->get();
+        if (count($sub) != 0) {
+            array_push($arr, 'Select A Subject');
+            foreach ($sub as $subcat) {
+            array_push($arr, $subcat->section_id);
+        }
+
+        }
+        echo json_encode($arr);
+    });
+
+    Route::get('/study=', function(){
+        $arr = array();
+
+        array_push($arr, '');
+        
+        echo json_encode($arr);
+    });
+
+    Route::get('/study1={id}={id1}', function($id, $id1){
+        $arr = array();
+
+        if ($id == '') {
+          $id = 0;
+        }
+
+        $sub = \DB::table('assigned_subject')
+                ->select('subject_id')
+                ->where('teacher_username', Auth::user()->username)
+                ->where('class_id', $id)
+                ->where('section_id', $id1)
+                ->get();
+        if (count($sub) != 0) {
+            foreach ($sub as $subcat) {
+            array_push($arr, $subcat->subject_id);
+            $s = \DB::table('subject')
+                ->select('subject_name')
+                ->where('subject_id', $subcat->subject_id)
+                ->first();
+                array_push($arr, $s->subject_name);
+        }
+
+        }
+        echo json_encode($arr);
+    });
+
+    Route::get('/study=', function(){
+        $arr = array();
+
+        array_push($arr, '');
+        
+        echo json_encode($arr);
+    });
+
+    Route::get('api/category-dropdown', 'TeacherController@categoryDropDownData');
 
 
+    Route::get('/teacher/club_management/view', 'TeacherController@viewClubMembers');
 
 /********************************************************************************
 *********************************************************************************

@@ -19,4 +19,8 @@ class ClubMember extends Model
     {
         return $this->hasOne(Club::class);
     }
+    public function getAll($club_id)
+    {
+        return ClubMember::where('club_id', $club_id)->get();
+    }
 }

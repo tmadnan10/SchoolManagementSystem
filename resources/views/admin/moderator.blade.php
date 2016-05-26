@@ -329,7 +329,7 @@ $('#dept_id').on('change', function(e){
   var dept_id = e.target.value;
   console.log(dept_id);
 
-  $.get("{{ url('api/dept')}}=" + dept_id, function(data){
+  $.get("{{ url('api/department')}}=" + dept_id, function(data){
     console.log(data);
     $('#username').empty();
     //console.log('data');

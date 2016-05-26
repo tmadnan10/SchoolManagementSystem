@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use DB;
 use App\Task;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -26,13 +26,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /**
-     * Get all of the tasks for the user.
-     */
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
 
     /**
      * Get the teacher row for the user.
@@ -75,4 +68,14 @@ class User extends Authenticatable
     {
         return $this->account_type;
     }
+
+
+    public function updateEmail($username, $email)
+    {
+        DB::table('users')
+            ->where('username', $username)
+            ->update(['email' => $email]);
+    }
+
+
 }

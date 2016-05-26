@@ -49,8 +49,9 @@
                 <div class="ft-item wow fadeInUp" data-wow-duration="1s" style="visibility: visible; animation: fadeInUp 1s; -webkit-animation: fadeInUp 1s;">
                   <span class="linea-basic-pencil-ruler"></span>
                   <h4>Add New Class Test</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur elit adipisicing , sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minimv</p>
-                  <a href="{{url('/addClassTest')}}">Explore <span class="linea-arrows-slim-right"></span></a>
+                  <p>You are assigned to take classes on {{count($assigned_subject)}} subjects. Just select one of them and add a new date and syllabus of upcoming class test. 
+                  All the students from the corresponding section will be notified.....</p>
+                  <a href="{{url('/teacher/class_test/addClassTest')}}">Explore <span class="linea-arrows-slim-right"></span></a>
                 </div>
               </div>
 
@@ -59,8 +60,9 @@
                 <div class="ft-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s" style="visibility: visible; animation: fadeInUp 1s 0.3s; -webkit-animation: fadeInUp 1s 0.3s;">
                   <span class="linea-basic-cards-diamonds"></span>
                   <h4>Change An Upcoming One</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur elit adipisicing , sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minimv</p>
-                  <a href="#">Explore <span class="linea-arrows-slim-right"></span></a>
+                  <p>You already have {{count($upcoming)}} class tests. Just select one of your upcoming class test and change the class test date and syllabus. 
+                  All the students from the corresponding section will be notified.....</p>
+                  <a href="{{url('/teacher/class_test/editClassTest')}}">Explore <span class="linea-arrows-slim-right"></span></a>
                 </div>
               </div>
 
@@ -69,8 +71,9 @@
                 <div class="ft-item wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s" style="visibility: visible; animation: fadeInUp 1s 0.6s; -webkit-animation: fadeInUp 1s 0.6s;">
                   <span class="linea-basic-star"></span>
                   <h4>Class Test Marks</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur elit adipisicing , sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minimv</p>
-                  <a href="#">Explore <span class="linea-arrows-slim-right"></span></a>
+                  <p>You have taken {{count($done)}} class test. Just select one of them and upload the marks as a document file in format pdf, doc, docx, xls. 
+                  All the students from the corresponding section will be notified.....</p>
+                  <a href="{{url('/teacher/class_test/uploadMarks')}}">Explore <span class="linea-arrows-slim-right"></span></a>
                 </div>
               </div>
 

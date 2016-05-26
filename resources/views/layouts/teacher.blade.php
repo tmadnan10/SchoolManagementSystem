@@ -78,6 +78,9 @@
                 <li class="utilities-index utilities-view utilities-add">
                     <a href="{{url('/').'/teacher/activities'}}"> <span class="glyphicon glyphicon-th-large"></span> Present Activities </a>
                 </li>
+                 <li class="utilities-index utilities-view utilities-add">
+                    <a href="{{url('/').'/teacher/upload'}}"> <span class="glyphicon glyphicon-upload"></span> Study Materials </a>
+                </li>
             </ul>
 
 

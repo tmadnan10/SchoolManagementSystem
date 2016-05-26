@@ -1,20 +1,6 @@
 @extends('layouts.teacher')
+
 @section('content')
-@if(count($assigned_subject))
-
-
-
-
-<script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../../../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../../../app.css">
-
-<link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="//www.google-analytics.com/ga.js"></script>
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
-<style type="text/css">.header-color{background: #ff3b31;}</style>
 
 <link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
@@ -23,7 +9,12 @@
   <script src="../../../jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" type="text/css" href="../../../css/datepicker.css">
-  <script src="../../../js/bootstrap-datepicker.js"></script>
+<script src="../../../js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../../app.css">
+<link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
 
 <div class="principal-container page-users-edit_profile" role="main">
 	<div class="container">
@@ -32,7 +23,7 @@
 				<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">	
-							<center><h2>Currently You Have <br><b>{{count($assigned_subject)}}</b> Assigned Subject(s)</h2><br></center>
+							<center><h2>Currently You Have <br><b>{{count($class_test)}}</b> Upcoming Class Test(s)</h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
@@ -44,7 +35,7 @@
 					<div class="tab-pane" id="ct">
                 	<div class="panel-body">
 
-                		<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/class_test/addClassTest') }}">
+                		<form class="form-horizontal" role="form" method="POST" action="{{ url('/teacher/class_test/editClassTest') }}">
                               {!! csrf_field() !!}
 
 
@@ -57,7 +48,7 @@
                               <div class="col-md-6">
                                   <select class="form-control" name= "class_id" id="class_id">
                                   <option value="">Select A Class</option>
-                                  @foreach($assigned as $as)
+                                  @foreach($class_test_dist as $as)
                                   <option value="{{$as->class_id}}">{{$as->class_id}}</option>
                                   @endforeach
                                   </select>
@@ -101,9 +92,39 @@
                               </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('cd') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Date</label>
 
+                              <div class="col-md-6">
+                                  
+                                  <select name="cd" class="form-control" id="cd">
+                                  	<option value=""></option>
+                                  </select>
+                                  @if ($errors->has('cd'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('cd') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+
+
+                        <div class="form-group{{ $errors->has('cs') ? ' has-error' : '' }}">
+                              <label class="col-md-4 control-label">Current Syllabus</label>
+
+                              <div class="col-md-6">
+                                  
+                                  <textarea value="" name="cs" id="cs" readonly="" class="form-control" cols="5" rows="5"> </textarea>
+                                  @if ($errors->has('cs'))
+                                      <span class="help-block">
+                                          <strong>{{ $errors->first('cs') }}</strong>
+                                      </span>
+                                  @endif
+                              </div>
+                            </div>
+                                
                         <div class="form-group{{ $errors->has('date') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Date</label>
+                            <label class="col-md-4 control-label">New Date</label>
 
                             <div class="col-md-6">
                                 <input type="text" id="datepicker" class="form-control" name="date" value="{{ old('date') }}">
@@ -117,7 +138,7 @@
                         </div>
 
                          <div class="form-group{{ $errors->has('syllabus') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Syllabus</label>
+                              <label class="col-md-4 control-label">New Syllabus</label>
 
                               <div class="col-md-6">
                                  {{ Form::textarea('syllabus', null, ['size' => '46x5']) }}
@@ -168,7 +189,7 @@
     var arr;
     var username = $('#username').val();
     console.log(username);
-    $.get("{{ url('/ct')}}=" + class_id + "=" + username, function(data){
+    $.get("{{ url('/ct/ct')}}=" + class_id + "=" + username, function(data){
       console.log(data);
       $('#section_id').empty();
       //console.log('data');
@@ -193,7 +214,7 @@
     var username = $('#username').val();
     var class_id = $('#class_id').val();
     console.log(username);
-    $.get("{{ url('/ct/sub')}}=" + class_id + "=" + section_id + "=" + username, function(data){
+    $.get("{{ url('/ct/ct/sub')}}=" + class_id + "=" + section_id + "=" + username, function(data){
       console.log(data);
       $('#subject_id').empty();
       //console.log('data');
@@ -211,8 +232,62 @@
 
 });
 
+$('#subject_id').on('change', function(e){
+    console.log(e);
+    var subject_id = e.target.value;
+    console.log(section_id);
+    var class_id = $('#class_id').val();
+    var section_id = $('#section_id').val();
+    console.log(username);
+    $.get("{{ url('/ctedit')}}=" + class_id + "=" + section_id + "=" + subject_id, function(data){
+      console.log(data);
+      $('#cd').empty();$('#cs').empty();
+      //console.log('data');
 
+           //$('#subject_id').append(' Please section_id one');
+           //console.log('data');
+           
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           if (arr[0] != '') {$('#cd').append('<option value=" ">Please Select A Date</option>');};
+           for (var i = 0; i < arr.length; i+=2) {
+              $('#cd').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            console.log(arr[i]);
+            };
+    });
 
+});
+
+$('#cd').on('change', function(e){
+    console.log(e);
+    var date = e.target.value;
+    console.log(section_id);
+    var class_id = $('#class_id').val();
+    var section_id = $('#section_id').val();
+    var subject_id = $('#subject_id').val();
+    var values=date.split('-');
+	var year=values[0];
+	var mn=values[1];
+	var day = values[2];
+	date = year+mn+day;
+    $.get("{{ url('/ctedit1')}}=" + class_id + "=" + section_id + "=" + subject_id + "=" +date, function(data){
+
+      //$('#subject_id').empty();
+
+           //$('#subject_id').append(' Please section_id one');
+           //console.log('data');
+           //$('#subject_id').append('<option value=" ">Please Select A Date</option>');
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           console.log(arr);
+           $('#cs').val(arr[0]);
+           /*for (var i = 0; i < arr.length; i+=2) {
+              $('#cd').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            console.log(arr[i]);
+            };*/
+    });
+
+});
 
 </script>
 
@@ -343,64 +418,6 @@
 
 
 
-@else
-<script type="text/javascript" src="../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../app.css">
 
-<link rel="stylesheet" type="text/css" href="../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../css/temp.min.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="//www.google-analytics.com/ga.js"></script>
-<style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
-<style type="text/css">.header-color{background: #ff3b31;}</style>
-
-
-<style>
-  .title{
-    font-size: 36px;
-  }
-
-  .subtitle{
-    font-size: 20px;
-  }
-
-
-</style>
-<br><br><br><br>
-<div class="title">
-  <center>Currently You Are Not Assigned to Take Any Class</center>
-</div>
-
-<div class="subtitle">
-  <center>Please Contact the Authority if You Are Highly Interested</center>
-</div>
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-<footer class="footer row" role="contentinfo">
-      <div class="bs-docs-social">
-        <ul class="bs-docs-social-buttons">
-          <li class="follow-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
-             <i class="fa fa-facebook"></i> Like ILS </a></li>
-          <li class="tweet-btn">
-            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
-              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
-          </ul>
-        </div>
-
-        <ul class="footer-links text-muted">
-          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
-          <li>.</li>
-          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
-          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
-          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
-        </ul>
-      </footer>
-
-      @endif
-
-
-
+{{count($class_test)}}
 @endsection

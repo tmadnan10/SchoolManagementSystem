@@ -68,7 +68,7 @@
                {{ $tchr->first_name }} {{ $tchr->last_name }}</font>
           </div>
           <div class="panel-body bio-graph-info">
-              <h1>Bio Graph</h1>
+              <h1>Notifications</h1>
               <div class="container">
     @foreach ($users as $user)
     @if($user->view == 0)
