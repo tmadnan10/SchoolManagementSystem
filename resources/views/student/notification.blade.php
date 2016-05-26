@@ -31,7 +31,10 @@
   <script src="../js/bootstrap-datepicker.js"></script>
   <script src="../bootstrap-colorpicker.min.js"></script>
   <script src="../jquery-ui.js"></script>-->
+
   <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
+  <link rel="stylesheet" type="text/css" href="../../AdminLTE.css">
+
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -47,7 +50,7 @@
       <div class="panel">
           <div class="user-heading round">
               <a href="#">
-                  <img src="../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
+                  <img src="../../pro_pics/{{ $tchr->profile_pic }}" alt="../pro_pics/default_avatar.png">
               </a>
               <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
               <p>{{ $tchr->email }}</p>
@@ -70,14 +73,41 @@
           <div class="panel-body bio-graph-info">
               <h1>Notifications</h1>
               <div class="container">
-    @foreach ($users as $user)
-    @if($user->view == 0)
 
-       <a href="{{url('/student/notifi').$eq.$user->id}}"><b> {{ $user->date }} ----- {{ $user->details }}<br> </b></a>
+                @foreach ($users as $user)
+                @if($user->view == 0)
+                <div class="alert alert-info alert-dismissible"> 
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <a href="{{url('/student/notifi').$eq.$user->id}}"><b> {{ $user->date }} ----- {{ $user->details }}<br> </b></a>
+              </div>
+       
      @else
-     	<a href="{{url('/student/notifi').$eq.$user->id}}"><font color="black">{{ $user->date }} ----- {{ $user->details }}</font><br></a>
+     <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <a href="{{url('/student/notifi').$eq.$user->id}}"><font color="black">{{ $user->date }} ----- {{ $user->details }}</font><br></a>
+              </div>
+      
      @endif
     @endforeach
+
+
+             <!-- <div class="alert alert-teal alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-info"></i> Alert!</h4>
+                Info alert preview. This alert is dismissable.
+              </div>
+              <div class="alert alert-warning alert-dismissible"> 
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                Warning alert preview. This alert is dismissable.
+              </div>
+              <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i> Alert!</h4>
+                Success alert preview. This alert is dismissable.
+              </div>-->
+
+    
 </div>
 
 {!! $users->links() !!}

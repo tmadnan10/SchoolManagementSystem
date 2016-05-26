@@ -41,4 +41,8 @@ class Student extends Model
     {
         return Student::where('class_id', $class_id)->where('section_id', $section_id)->get();
     }
+    public function updateProPic($username, $image_name){
+        return Student::where('username', $username)
+            ->update(['profile_pic' => $image_name]);    
+    }
 }

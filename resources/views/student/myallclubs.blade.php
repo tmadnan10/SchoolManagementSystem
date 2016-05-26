@@ -1,4 +1,4 @@
-@extends('layouts.teacher')
+@extends('layouts.student')
 @section('content')
 <?php $x = 0;?>
 <script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
@@ -27,10 +27,10 @@
             <div class="row">
               
               <header class="sec-heading">
-                <h2>Manage You Club</h2>
-                <span class="subheading">Select Any Member to Change or Delete</span>
+                <h2>All Your Clubs</h2>
+                <span class="subheading">Currently you are member of {{count($clubs)}} club(s)</span>
               </header>
-@if (count($members) > 0)
+@if (count($clubs) > 0)
 
 
 
@@ -39,42 +39,32 @@
                             
                             <thead class="thin-border-bottom">
 				                <th width="100" >#</th>
-				                <th width="280" >Member Name</th>
+				                <th width="280" >Club Name</th>
 				                <th width="280" >Membership Status</th>
 				                <th width="200" >Member Since</th>
-				                <th width="3" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action</th>
+				                
 
 
 				            </thead>
                             <tbody>
-                                @foreach ($members as $task)
+                                @foreach ($clubs as $task)
                                     <tr>
                                     	<td class="table-text"><div> <?php echo $x = $x+1; ?></div></td>
-                                        <td class="table-text"><div><?php $name = \DB::table('student')->select('first_name', 'last_name')->where('username', $task->member_username)->first(); echo $name->first_name." ".$name->last_name; ?></div></td>
+                                        <td class="table-text"><div>
+                                        <?php 
+                                          foreach ($list as $key) {
+                                            if ($key->club_id == $task->club_id) {
+                                              echo($key->club_name);
+                                              break;
+                                            }
+                                          }
+                                        ?>
+
+                                        </div></td>
                                         <td class="table-text"><div>{{ $task->membership_status }}</div></td>
                                         <td class="table-text"><div>{{ $task->created_at }}</div></td>
                                         <!-- Task Delete Button -->
-                                        <td>
-                                            <form action="{{url('member/delete/')}}={{ $task->member_username }}" method="POST">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-
-                                                <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-danger">
-                                                    <i class="fa fa-btn fa-trash"></i>Delete
-                                                </button>
-                                            </form>
-                                            </td>
-                                            <td>
-                                            <form action="{{url('member/edit/')}}={{ $task->member_username }}" method="POST">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-
-                                                <button type="submit" id="delete-task-{{ $task->id }}" class="btn btn-info">
-                                                    <i class="fa fa-btn fa-trash"></i>Edit
-                                                </button>
-                                            </form>
-
-                                        </td>
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>

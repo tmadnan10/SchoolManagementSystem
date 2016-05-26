@@ -89,10 +89,13 @@
                         <i class="fa fa-user"> </i>&nbsp{{ Auth::user()->username }} <span class="caret"></span> 
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <!--<li> 
-                            <a href="/users/edit_profile"> <i class="fa fa-gear"></i> Edit profile </a>
-                        </li>-->
-                        <li> 
+                        <li>
+                            <a href="{{url('/student/changepropic')}}"> <i class="fa fa-camera"></i> Change Profile Picture </a>
+                        </li>
+                        <li>
+                            <a href="/student/changepass"> <i class="fa fa-gear"></i> Change Password </a>
+                        </li>
+                        <li>
                             <a href="{{ url('/logout') }}"> <i class="fa fa-power-off"></i> Logout </a>
                         </li>
                     </ul>

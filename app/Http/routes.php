@@ -329,6 +329,9 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/addclubmoderator', 'AdminController@addClubModerator');
     Route::post('/addclubnotice' ,'AdminController@addClubNotice');
+    Route::delete('/member/delete={username}', 'TeacherController@deleteMember');
+    Route::delete('/member/edit={username}', 'TeacherController@deleteMember');
+    Route::get('teacher/club_management/add', 'TeacherController@clubAddPage');
 
 /**************************** end ******************************
 ************************  Club Management  ***********************
@@ -895,7 +898,10 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
     Route::get('/student/club', 'StudentController@clubs');
 
 
-
+    Route::get('/student/changepropic', 'StudentController@changeProPic');
+    Route::post('/student/changepropic', 'StudentController@changeMyProPic');
+    Route::get('/student/club/events', 'StudentController@myClubEvent');
+    Route::get('/student/club/myclubs', 'StudentController@myAllClubs');
 
     
 

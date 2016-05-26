@@ -22,45 +22,72 @@
 <link rel="stylesheet" type="text/css" href="../../new/linea-font.css">
 <link rel="stylesheet" type="text/css" href="../../new/flow.css">
 
-<div id="home" class="landing-hero">
-          <div class="bg-overlay">
-            <div class="hero-wrapper">
-              <div class="hero-content">
-                <div class="container">
-                  <div class="row">
+<div class="gray-bg">
+          <section id="blog" class="section container blog-columns blog-preview">
+            <div class="row">
+              
+              <header class="sec-heading">
+                <h2>Manage The Clubs</h2>
+                <span class="subheading">Select A Task and Explore</span>
+              </header>
 
-                    <!-- Heading -->
-                    <div class="col-md-5 heading-wrapper wow fadeInLeft" data-wow-duration="1.5s" style="visibility: visible; animation: fadeInLeft 1.5s; -webkit-animation: fadeInLeft 1.5s;">
-                      <h1 class="lead">Reach the top</h1>
-                      <h4 class="h-alt subheading">Catchy Subheading</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita neque praesentium eum earum aperiam quas impedit commodi hic, architecto, error, quae. Commodi, similique! Voluptatum iste necessitatibus eum aut temporibus, alias!</p>
-                      <a href="#features" class="cta-btn">Learn more</a>
-                    </div>
+              
+              <!-- Blog Post 1 -->
+              <div class="col-lg-6 col-md-6 mb-sm-50">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
 
-                    <!-- Signup Form -->
-                    <div class="col-md-offset-3 col-md-4 form-wrapper wow fadeInRight" data-wow-duration="1.5s" style="visibility: visible; animation: fadeInRight 1.5s; -webkit-animation: fadeInRight 1.5s;">
-                      <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {!! csrf_field() !!}
-                        <input class="form-control" type="text" placeholder="Full Name">
-                        <input class="form-control" type="password" placeholder="Password">
-                        <input class="form-control" type="email" placeholder="Email">
-                        <input class="btn-ghost-light" type="submit" value="Start free trial">
-                      </form>
-                    </div>
+                  <!-- Image -->
+              
 
-                  </div><!-- / .row -->
-                </div><!-- / .container -->
-              </div><!-- / .hero-content -->
-            </div><!-- / .hero-wrapper -->
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      
+                    </div><!-- / .meta -->
 
-            <!-- Scroller -->
-          <a href="#features" class="scroller">
-            <span class="scroller-text">scroll down</span>
-            <span class="linea-basic-magic-mouse"></span>
-          </a>
+                    <!-- Post Title -->
+                    <a href="{{url('/student/club/myclubs')}}" class="post-title"><h4>Add or Change Club Moderator</h4></a>
 
-          </div><!-- / .bg-overlay -->
+                    <!-- Blurb -->
+                    <p>Currently you are connected with {{count($clubs)}} Clubs. Here can select any club and view your recent activities and membership status.</p>
+
+                    <!-- Link -->
+                    <a href="{{url('/student/club/myclubs')}}" class="btn btn-small">Enter</a>
+
+                  </div><!-- / .bp-content -->
+
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
+               <!-- Blog Post 1 -->
+              <div class="col-lg-6 col-md-6 mb-sm-50">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
+
+                  <!-- Image -->
+              
+
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      
+                    </div><!-- / .meta -->
+
+                    <!-- Post Title -->
+                    <a href="{{url('/student/club/events')}}" class="post-title"><h4>Event Management</h4></a>
+
+                    <!-- Blurb -->
+                    <p>Currently you are connected with {{count($clubs)}} Clubs. Here can see any upcomiing events of your different clubs. Enter to learn more.</p>
+
+                    <!-- Link -->
+                    <a href="{{url('/student/club/events')}}" class="btn btn-small">Enter</a>
+
+                  </div><!-- / .bp-content -->
+
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
+
+            </div><!-- / .row -->
+          </section><!-- / .container -->
         </div>
-
-{{count($clubMember)}}
 @endsection

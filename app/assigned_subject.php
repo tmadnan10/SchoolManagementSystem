@@ -10,7 +10,7 @@ class assigned_subject extends Model
     protected $table = 'assigned_subject';
 
     protected $fillable = [
-        'subject_id', 'teacher_username', 'class_id', 'section_id', 'duration', 'cassed_per_week',
+        'subject_id', 'teacher_username', 'class_id', 'section_id', 'duration', 'classes_per_week',
     ];
 
     public function getAll($username)

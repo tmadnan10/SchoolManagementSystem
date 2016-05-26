@@ -131,7 +131,7 @@
       <div class="panel">
           <div class="user-heading round">
               <a href="#">
-                  <img src="../../pro_pics/{{ Auth::user()->username }}.jpg" alt="../pro_pics/default_avatar.png">
+                  <img src="../pro_pics/{{ $tchr->profile_pic }}.jpg" alt="../pro_pics/default_avatar.png">
               </a>
               <h1>{{ $tchr->first_name }} {{ $tchr->last_name }}</h1>
               <p>{{ $tchr->email }}</p>

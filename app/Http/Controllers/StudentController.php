@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
@@ -12,6 +13,7 @@ use App\Student;
 use App\ClubMember;
 use App\Notification;
 use App\User;
+use App\Club;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\StudentRepository;
@@ -148,12 +150,40 @@ class StudentController extends Controller
 
     public function clubs(Request $request){
       if (Auth::user()->account_type == 'student') {
+        
             return view('student.club', [
                 'student' => $this->student->forUser($request->user()),
-                'clubMember' => $this->clubMember->forUser($request->user())
+                'clubs' => $this->clubMember->forUser($request->user())
             ]);
         }
         return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function myAllClubs(Request $request)
+    {
+      if (Auth::user()->account_type == 'student') {
+        $clb = new Club;
+            return view('student.myallclubs', [
+                'student' => $this->student->forUser($request->user()),
+                'clubs' => $this->clubMember->forUser($request->user()),
+                'list' => $clb->all(),
+            ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function myClubEvent(Request $request)
+    {
+      if (Auth::user()->account_type == 'student') {
+        $clubevent = new Club;
+        $joined = $clubevent->joined(Auth::user()->username);
+            return view('student.clubevents', [
+                'student' => $this->student->forUser($request->user()),
+                'clubs' => $this->clubMember->forUser($request->user()),
+                'joined' => $joined
+            ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type); 
     }
 
     public function notification(Request $request){
@@ -168,6 +198,79 @@ class StudentController extends Controller
   
         }
         return redirect(url('/').'/'.Auth::user()->account_type);
+    }
+
+    public function changeProPic(Request $request){
+      if (Auth::check()) {
+        if (Auth::user()->account_type == 'student') {
+          return view('student.propicchange', [
+            'student' => $this->student->forUser($request->user()),
+          ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+      }
+      return redirect(url('/login'));
+    }
+
+
+    public function changeMyProPic(Request $request){
+      $this->validate($request, [
+        'file' => 'image',
+        ]);
+
+      if (Input::hasFile('file')) {
+
+        
+
+
+       
+        $file = Input::file('file');
+        $extension = Input::file('file')->getClientOriginalExtension();
+        //echo($extension);
+        $image_name = time()."-".$file->getClientOriginalName();
+        $file->move('pro_pics', $image_name);
+        
+
+        $image = Image::make(sprintf('pro_pics/%s', $image_name))
+                ->resize(null, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                    }
+                )
+                ->save();
+        $a = Image::make(sprintf('pro_pics/%s', $image_name))->width(); //echo ($a);
+        $height = $width = null;
+        if ($a < 300) {
+          $width = $height = $a;
+
+        }
+        else {$height = $width = 300;}
+        
+        $image = Image::make(sprintf('pro_pics/%s', $image_name))
+                ->crop($height,$width)
+                ->save();
+        $student = new Student;
+        $student->updateProPic(Auth::user()->username, $image_name);
+        /*DB::table('teacher')
+            ->where('username', Auth::user()->username)
+            ->update(['profile_pic' => $image_name]);*/
+        }
+        //return redirect(url('/teacher'));
+      /*$txt = $this->request->hasFile('file');
+      echo($txt); */
+      //return $txt;
+       //$file = Request::file('file');
+        //$image_name = time()."-".$file->getClientOriginalName();
+        //echo($image_name);
+        //$file->move('uploads', $image_name);
+        //$image = Image::make(sprintf('uploads/%s', $image_name))->resize(200, 200)->save();
+      return view('student.redirect', [
+        'msg' => 'Successfully Changed Your Profile Picture',
+        'page' => 'Your Portal',
+        'url' => 'student',
+        'student' => $this->student->forUser($request->user()),
+        ]);
+      
     }
 
 }

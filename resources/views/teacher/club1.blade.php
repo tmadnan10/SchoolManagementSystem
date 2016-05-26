@@ -10,12 +10,12 @@ $classes = DB::table('section')
 @if(count($club))
 @foreach($club as $clb)
 
-<script type="text/javascript" src="../../bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../../bootstrap-colorpicker.min.css">
-<link rel="stylesheet" type="text/css" href="../../app.css">
+<script type="text/javascript" src="../../../bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type="text/css" href="../../../app.css">
 
-<link rel="stylesheet" type="text/css" href="../../css/app.min.css">
-<link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
+<link rel="stylesheet" type="text/css" href="../../../css/app.min.css">
+<link rel="stylesheet" type="text/css" href="../../../css/temp.min.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//www.google-analytics.com/ga.js"></script>
 <style type="text/css"></style> <!--[if lt IE 9]> <script type="text/javascript" src="/min-js?f=js/lib/html5shiv.min.js,js/lib/respond.min.js"></script> <![endif]-->
@@ -35,18 +35,10 @@ $classes = DB::table('section')
 						</div>
 
 					<ul class="nav nav-pills">
-						<li class="active" style="width: 25%;">
+						<li class="active" style="width: 100%;">
 							<a href="#add" data-toggle="tab" aria-expanded="true">Add A Member</a>
 						</li>
-						<li style="width: 25%;">
-							<a href="#del" data-toggle="tab">Delete A Member</a>
-						</li>
-						<li style="width: 25%;">
-							<a href="#edit" data-toggle="tab">Change Status</a>
-						</li>
-						<li style="width: 24%;">
-							<a href="#event" data-toggle="tab">Add Event</a>
-						</li>
+			
 					</ul>
 					<div class="tab-content">
 

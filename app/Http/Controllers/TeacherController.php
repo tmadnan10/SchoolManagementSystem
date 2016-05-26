@@ -79,6 +79,16 @@ class TeacherController extends Controller
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
 
+    public function clubAddPage(Request $request)
+    {
+        if (Auth::user()->account_type == 'teacher') {
+            return view('teacher.club1', [
+                'teacher' => $this->teacher->forUser($request->user()),
+                'club' => $this->club->forTeacher($request->user()),
+            ]);
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+    }
     public function viewClubMembers(Request $request){
       if (Auth::user()->account_type == 'teacher') {
             $club = $this->club->forTeacher($request->user());
@@ -94,6 +104,12 @@ class TeacherController extends Controller
             
         }
         return redirect(url('/').'/'.Auth::user()->account_type); 
+    }
+
+    public function deleteMember(Request $request)
+    {
+      $id = $request->username;
+      echo $id;
     }
 
     public function addClubMember(Request $request){
