@@ -121,8 +121,8 @@ $classes = DB::table('section')
                             </div>
                           </div>
 
-
-
+                          <input type="hidden" name="club_id" value="{{$clb->club_id}}">
+                          <input type="hidden" name="club_name" value="{{$clb->club_name}}">
 
                         	<div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

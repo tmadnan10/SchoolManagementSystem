@@ -47,7 +47,7 @@
                     </div><!-- / .meta -->
 
                     <!-- Post Title -->
-                    <a href="{{url('/student/club/myclubs')}}" class="post-title"><h4>Add or Change Club Moderator</h4></a>
+                    <a href="{{url('/student/club/myclubs')}}" class="post-title"><h4>View Your Club Memberships</h4></a>
 
                     <!-- Blurb -->
                     <p>Currently you are connected with {{count($clubs)}} Clubs. Here can select any club and view your recent activities and membership status.</p>
@@ -74,10 +74,10 @@
                     </div><!-- / .meta -->
 
                     <!-- Post Title -->
-                    <a href="{{url('/student/club/events')}}" class="post-title"><h4>Event Management</h4></a>
+                    <a href="{{url('/student/club/events')}}" class="post-title"><h4>Upcoming Club Events</h4></a>
 
                     <!-- Blurb -->
-                    <p>Currently you are connected with {{count($clubs)}} Clubs. Here can see any upcomiing events of your different clubs. Enter to learn more.</p>
+                    <p>Currently you are connected with {{count($clubs)}} Clubs. Here can see any upcoming events of your different clubs. Enter to learn more.</p>
 
                     <!-- Link -->
                     <a href="{{url('/student/club/events')}}" class="btn btn-small">Enter</a>

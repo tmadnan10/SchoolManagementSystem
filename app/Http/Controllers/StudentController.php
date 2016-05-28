@@ -11,6 +11,7 @@ use DB;
 use App\Teacher;
 use App\Student;
 use App\ClubMember;
+use App\Club_Event;
 use App\Notification;
 use App\User;
 use App\Club;
@@ -93,7 +94,6 @@ class StudentController extends Controller
           'date_of_birth' => 'date',
           'blood_group' => 'max:15',
           'address' => 'max:255',
-          'profile_pic' => 'max:200',
       ]);
       $array = array(
         'first_name' => $request->first_name,
@@ -102,7 +102,6 @@ class StudentController extends Controller
         'date_of_birth' => $request->date_of_birth,
         'blood_group' => $request->blood_group,
         'Address' => $request->address,
-        'profile_pic' => $request->profile_pic
       );
       $student = new Student;
       $student->updateAll(Auth::user()->username, $array);  
@@ -137,7 +136,6 @@ class StudentController extends Controller
         'date_of_birth' => $request->date_of_birth,
         'blood_group' => $request->blood_group,
         'Address' => $request->address,
-        'profile_pic' => $request->profile_pic
       );
       $student = new Student;
       $student->updateAll(Auth::user()->username, $array);  
@@ -175,8 +173,8 @@ class StudentController extends Controller
     public function myClubEvent(Request $request)
     {
       if (Auth::user()->account_type == 'student') {
-        $clubevent = new Club;
-        $joined = $clubevent->joined(Auth::user()->username);
+        $clubevent = new Club_Event;
+        $joined = $clubevent->getStudentEvents(Auth::user()->username);
             return view('student.clubevents', [
                 'student' => $this->student->forUser($request->user()),
                 'clubs' => $this->clubMember->forUser($request->user()),

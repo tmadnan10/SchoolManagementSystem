@@ -220,7 +220,7 @@
 
 
 
-
+<input type="hidden" value="{{Auth::user()->username}}" name="username" id="username">
 
 
 
@@ -248,6 +248,57 @@
 
 
 <script>
+$('#class_id').on('change', function(e){
+    console.log(e);
+    var class_id = e.target.value;
+    console.log(class_id);
+    var arr;
+    var username = $('#username').val();
+    console.log(username);
+    $.get("{{ url('/ct')}}=" + class_id + "=" + username, function(data){
+      console.log(data);
+      $('#section_id').empty();
+      //console.log('data');
+
+           $('#section_id').append(' Please section_id one');
+           //console.log('data');
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           for (var i = 0; i < arr.length; i++) {
+              $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
+            console.log(arr[i]);
+            };
+    });
+
+});
+
+
+  $('#section_id').on('change', function(e){
+    console.log(e);
+    var section_id = e.target.value;
+    console.log(section_id);
+    var username = $('#username').val();
+    var class_id = $('#class_id').val();
+    console.log(username);
+    $.get("{{ url('/ct/sub')}}=" + class_id + "=" + section_id + "=" + username, function(data){
+      console.log(data);
+      $('#subject_id').empty();
+      //console.log('data');
+
+           //$('#subject_id').append(' Please section_id one');
+           //console.log('data');
+           $('#subject_id').append('<option value=" ">Please Select A Subject</option>');
+           var arr = JSON.parse(data);
+           console.log(arr.length);
+           for (var i = 0; i < arr.length; i+=2) {
+              $('#subject_id').append('<option value="'+arr[i]+'">'+arr[i+1]+'</option>');
+            console.log(arr[i]);
+            };
+    });
+
+});
+
+/*
   $('#class_id').on('change', function(e){
     console.log(e);
     var class_id = e.target.value;
@@ -297,7 +348,7 @@
 
 });
   
-
+*/
 
 /*
 $('#class_id').on('change', function(e){

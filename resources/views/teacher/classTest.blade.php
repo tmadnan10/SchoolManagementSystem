@@ -79,7 +79,10 @@
 
             </div><!-- / .row -->
           </section>
-          <footer class="footer row" role="contentinfo">
+          
+        </div>
+
+<footer class="footer row" role="contentinfo">
       <div class="bs-docs-social">
         <ul class="bs-docs-social-buttons">
           <li class="follow-btn">
@@ -99,7 +102,4 @@
           <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
         </ul>
       </footer>
-        </div>
-
-
 @endsection

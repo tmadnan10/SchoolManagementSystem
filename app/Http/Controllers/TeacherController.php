@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Club;
 use App\Teacher;
 use App\Section;
 use App\Subject;
@@ -67,6 +68,11 @@ class TeacherController extends Controller
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
 
+//**********************************************************************************************
+//**********************************************************************************************
+//******************************************  Club  ********************************************
+//**********************************************************************************************
+//**********************************************************************************************
 
     public function club(Request $request)
     {
@@ -89,6 +95,41 @@ class TeacherController extends Controller
         }
         return redirect(url('/').'/'.Auth::user()->account_type);
     }
+
+    public function addClubMember(Request $request){
+
+        $this->validate($request, [
+            'class_id' => 'required|max:2',
+            'section_id' => 'required|max:4',
+            'student_id' => 'required',
+            'membership_status' => 'required',
+        ]);
+        $clubMember = new ClubMember;
+        
+        $std = new Student;
+        $userid =  $std->getID($request->class_id, $request->section_id, $request->student_id);
+        $clubMember->create([
+            'member_username' => $userid->username,
+            'club_id' => $request->club_id,
+            'membership_status' => $request->membership_status,
+        ]);
+        $notif = new Notification;
+        $notif->create([
+          'username' => $userid->username,
+          'type' => 'club',
+          'hlink' => 'student/club/myclubs',
+          'details' => 'You have been added to the '.$request->club_name.' by moderator',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+    return view('teacher.redirect', [
+        'msg' => 'Successfully Added a New Club Member',
+        'page' => 'Club Management',
+        'url' => 'teacher/club_management/view',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+    }    
+
     public function viewClubMembers(Request $request){
       if (Auth::user()->account_type == 'teacher') {
             $club = $this->club->forTeacher($request->user());
@@ -101,29 +142,77 @@ class TeacherController extends Controller
                 'members' => $member
             ]);
             }
-            
         }
         return redirect(url('/').'/'.Auth::user()->account_type); 
     }
-
-    public function deleteMember(Request $request)
+    public function destroy1(Request $request, ClubMember $task)
     {
-      $id = $request->username;
-      echo $id;
-    }
+      $club = new Club;
+      $club = $club->getClub($task->club_id);
+      $this->authorize('destroy', $club);
+      return view('teacher.clubedit', [
+        'teacher' => $this->teacher->forUser($request->user()),
+        'member' => $task,
 
-    public function addClubMember(Request $request){
-
-        $this->validate($request, [
-            'class_id' => 'required|max:2',
-            'section_id' => 'required|max:4',
-            'student_id' => 'required',
-            'membership_status' => 'required',
         ]);
-        echo ($request->class_id);
-        /*return redirect(url('/').'/addnew/'.$request->account_type)
-                        ->with(['userName' => $request->username, 'passWord' => bcrypt($request->password), 'account' => $request->account_type]);*/
     }
+
+    public function editMemberStatus(Request $request)
+    { 
+      $this->validate($request, [
+            'new' => 'required',
+      ]);
+      $clubMember = new ClubMember;
+      $clubMember->editMemberStatus($request->a, $request->new);
+      
+      $club = new Club;
+      $club = $club->getClub($request->club_id);
+      $notif = new Notification;
+        $notif->create([
+          'username' => $request->member_username,
+          'type' => 'club',
+          'hlink' => 'student/club/myclubs',
+          'details' => 'Your membership status of '.$club->club_name.' has been updated',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+        return view('teacher.redirect5', [
+        'msg' => 'Successfully Edited a Club Member',
+        'page' => 'Club Management',
+        'url' => 'teacher/club_management/view',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+    }
+
+    public function destroy(Request $request, ClubMember $task)
+    {
+      $club = new Club;
+      $club = $club->getClub($task->club_id);
+      $this->authorize('destroy', $club);
+
+      $notif = new Notification;
+        $notif->create([
+          'username' => $task->member_username,
+          'type' => 'club',
+          'hlink' => 'student/club/myclubs',
+          'details' => 'Your membership status of '.$club->club_name.' has been removed',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+      $task->delete();
+      return view('teacher.redirect', [
+        'msg' => 'Successfully Deleted a Club Member',
+        'page' => 'Club Management',
+        'url' => 'teacher/club_management/view',
+        'teacher' => $this->teacher->forUser($request->user()),
+        ]); 
+    }
+
+//**********************************************************************************************
+//**********************************************************************************************
+//******************************************  Club  ********************************************
+//**********************************************************************************************
+//**********************************************************************************************
 
     /**
      * Edit Student profile of the user.
@@ -304,6 +393,13 @@ class TeacherController extends Controller
     }
 
 
+//**********************************************************************************************
+//**********************************************************************************************
+//***************************************  Class Test  *****************************************
+//**********************************************************************************************
+//**********************************************************************************************
+
+
     public function classTest(Request $request){
       if (Auth::user()->account_type == 'teacher') {
         $assigned_subject = new assigned_subject;
@@ -365,7 +461,7 @@ class TeacherController extends Controller
         $notif->create([
           'username' => $std->username,
           'type' => 'class_test',
-          'hlink' => 'student/class_test/marks',
+          'hlink' => 'student/class_test',
           'details' => 'A New Class Test on '.$subjectName->subject_name.' is coming up on '.$request->date.'......',
           'uploader' => Auth::user()->username,
           'date' => $request->date,
@@ -425,16 +521,22 @@ class TeacherController extends Controller
       );
       }
       $class_test->updateAll(Auth::user()->username, $request->class_id, $request->section_id, $request->subject_id, $request->cd, $array);  
-      /*
-      $class_test->create([
-          'username' => $request->username,
-          'class_id' => $request->class_id,
-          'section_id' => $request->section_id,
-          'subject_id' => $request->subject_id,
+      $subject = new Subject;
+      $subjectName = $subject->getSubjectName($request->subject_id);
+
+      $students = new Student;
+      $student = $students->getAll($request->class_id, $request->section_id);
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'class_test',
+          'hlink' => 'student/class_test',
+          'details' => 'A Class Test on '.$subjectName->subject_name.' has been updated ',
+          'uploader' => Auth::user()->username,
           'date' => $request->date,
-          'syllabus' => $request->syllabus,
         ]);
-  */
+      }
       return view('teacher.redirect1', [
         'msg' => 'Successfully Edited a Class Test',
         'page' => 'Class Test Management',
@@ -472,6 +574,24 @@ class TeacherController extends Controller
       $file->move('files/', $name);
       $class_test = new Class_Test;
       $class_test->uploadMarks(($request->class_id), ($request->section_id),($request->subject_id),($request->cd),(Auth::user()->username), 'files/'.$name);
+        
+      $subject = new Subject;
+      $subjectName = $subject->getSubjectName($request->subject_id);
+
+      $students = new Student;
+      $student = $students->getAll($request->class_id, $request->section_id);
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'class_test',
+          'hlink' => 'student/class_test',
+          'details' => 'Class Test Marks on '.$subjectName->subject_name.' of date '.$request->cd.' has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => $request->cd,
+        ]);
+      }
+
       return view('teacher.redirect1', [
         'msg' => 'Successfully Uploaded Class Test Marks',
         'page' => 'Class Test Management',
@@ -479,7 +599,11 @@ class TeacherController extends Controller
         'teacher' => $this->teacher->forUser($request->user()),
         ]); 
     }
-
+//**********************************************************************************************
+//**********************************************************************************************
+//***************************************  Class Test  *****************************************
+//**********************************************************************************************
+//**********************************************************************************************
 
     public function exam(Request $request){
       if (Auth::user()->account_type == 'teacher') {
@@ -499,7 +623,7 @@ class TeacherController extends Controller
       if (Auth::user()->account_type == 'teacher') {
         $assigned_subject = new assigned_subject;
         return view('teacher.upload', ['teacher' => $this->teacher->forUser($request->user()),
-          'classes' => $assigned_subject->getAll(Auth::user()->username)
+          'classes' => $assigned_subject->getUnique(Auth::user()->username)
           ]);
       }
       return redirect(url('/').'/'.Auth::user()->account_type);

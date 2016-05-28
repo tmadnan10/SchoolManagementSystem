@@ -329,8 +329,9 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::post('/addclubmoderator', 'AdminController@addClubModerator');
     Route::post('/addclubnotice' ,'AdminController@addClubNotice');
-    Route::delete('/member/delete={username}', 'TeacherController@deleteMember');
-    Route::delete('/member/edit={username}', 'TeacherController@deleteMember');
+    Route::delete('/deletemember/{task}', 'TeacherController@destroy');
+    Route::delete('/deletemember1/{task}', 'TeacherController@destroy1');
+    Route::post('/edit', 'TeacherController@editMemberStatus');
     Route::get('teacher/club_management/add', 'TeacherController@clubAddPage');
 
 /**************************** end ******************************
@@ -907,7 +908,7 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
 
     Route::get('/tasks', 'TaskController@index');
     Route::post('/task', 'TaskController@store');
-    Route::delete('/task/{task}', 'TaskController@destroy');
+    Route::delete('/delete/{task}', 'TeacherController@destroy');
 
 
 

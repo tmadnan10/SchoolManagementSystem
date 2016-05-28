@@ -40,7 +40,7 @@ class Class_Test extends Model
     	$date = date('Y-m-d');
     	return Class_Test::where('username', $username)
     					   ->select('class_id')
-    					   ->where('date', '>', $date)
+    					   ->where('date', '<', $date)
     					   ->orderBy('date', 'asc')
     					   ->distinct()->get();
     }

@@ -27,7 +27,7 @@
             <div class="row">
               
               <header class="sec-heading">
-                <h2>Manage You Club</h2>
+                <h2>@foreach($club as $c){{$c->club_name}}@endforeach</h2>
                 <span class="subheading">Select Any Member to Change or Delete</span>
               </header>
 @if (count($members) > 0)
@@ -55,7 +55,7 @@
                                         <td class="table-text"><div>{{ $task->created_at }}</div></td>
                                         <!-- Task Delete Button -->
                                         <td>
-                                            <form action="{{url('member/delete/')}}={{ $task->member_username }}" method="POST">
+                                             <form action="{{url('deletemember')}}/{{$task->id}}" method="POST">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
 
@@ -63,9 +63,10 @@
                                                     <i class="fa fa-btn fa-trash"></i>Delete
                                                 </button>
                                             </form>
+
                                             </td>
                                             <td>
-                                            <form action="{{url('member/edit/')}}={{ $task->member_username }}" method="POST">
+                                           <form action="{{url('deletemember1')}}/{{$task->id}}" method="POST">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
 
