@@ -8,12 +8,17 @@
 
 
 		$dept = DB::table('department')->where('dept_id', $tchr->dept_id)->first();
-
+        foreach ($teacher as $std) {
+        $notif = DB::table('notification')
+                  ->where('username', $std->username)
+                  ->where('view', '0')
+                  ->get();
+      }
     /*php $class = DB::table('section')
                   ->where('class_id', $tchr->class_id)
                   ->where('section_id', $tchr->section_id)
                   ->first();*/ ?>
-<br><br><br>
+
 <link rel="stylesheet" type="text/css" href="../../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -36,8 +41,8 @@
           </div>
 
           <ul class="nav nav-pills nav-stacked">
-              <li><a href="{{url('/student')}}"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
+              <li><a href="{{url('/teacher')}}"> <i class="fa fa-user"></i> Profile</a></li>
+              <li><a href="{{url('teacher/notification')}}"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
               <li class="active"><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>
       </div>
@@ -175,7 +180,7 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" name="save">
                                     <i class="fa fa-btn fa-user"></i>Save
                                 </button>
                             </div>

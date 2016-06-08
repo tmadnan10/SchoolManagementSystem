@@ -44,7 +44,7 @@
 				                <th width="100" >Event Type</th>
 				                <th width="100" >Date</th>
 				                <th width="400" >Details</th>
-				                <th width="200" >De By</th>
+				                <th width="200" >Announced By</th>
 
 
 				            </thead>

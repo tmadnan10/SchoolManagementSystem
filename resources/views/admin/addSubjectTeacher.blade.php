@@ -28,7 +28,7 @@ $classes = DB::table('section')
 			<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b></b></h2><br></center>
+							<center><h2>Teacher Management<br><b></b></h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
@@ -178,6 +178,7 @@ $classes = DB::table('section')
                                   </button>
                               </div>
                           </div>
+                          <input type="hidden" value="" name="moderatorid" id="moderatorid" readonly="" class="form-control"> 
                           </form>
 
   							</div>
@@ -363,7 +364,8 @@ $('#subject_id').on('change', function(e){
         //   $('#section_id').append(' Please section_id one');
            //console.log('data');
           var arr = JSON.parse(data);
-           $('#moderator').val(arr[0]);
+           $('#moderator').val(arr[1]);
+           $('#moderatorid').val(arr[0]);
           //console.log(arr.length);
           //for (var i = 0; i < arr.length; i++) {
              // $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');

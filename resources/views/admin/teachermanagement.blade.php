@@ -34,7 +34,7 @@ $classes = DB::table('section')
             <div class="row">
               
               <header class="sec-heading">
-                <h2>Manage The Clubs</h2>
+                <h2>Teacher Management</h2>
                 <span class="subheading">Select A Task and Explore</span>
               </header>
 
@@ -44,7 +44,7 @@ $classes = DB::table('section')
                 <div class="blog-post wow fadeIn" data-wow-duration="2s" style="visibility: visible; animation: fadeIn 2s; -webkit-animation: fadeIn 2s;">
 
                   <!-- Image -->
-              <a href="pages/blog/blog-post.html" class="post-img"><img src="http://www.octarinethemes.com/demos/definity/assets/images/blog-post-img-1.4.jpg" alt="Blog Post 1"></a>
+              <a href="{{url('/teacher_management/st')}}" class="post-img"><img src="http://www.octarinethemes.com/demos/definity/assets/images/blog-post-img-1.4.jpg" alt="Blog Post 1"></a>
 
                   <div class="bp-content">
                     
@@ -54,12 +54,12 @@ $classes = DB::table('section')
                     </div><!-- / .meta -->
 
                     <!-- Post Title -->
-                    <a href="{{url('/teacher_management/st')}}" class="post-title"><h4>Add or Change Club Moderator</h4></a>
+                    <a href="{{url('/teacher_management/st')}}" class="post-title"><h4>Add or Change Any Subject Teacher</h4></a>
 
                     <!-- Blurb -->
-                    <p>We have  Clubs. Here can select any club and assign a club moderator. Moreover
-                    you can cahnge an ongoing moderator and assign a new one. The Teacher will be notified
-                    as soon as he is assigned to moderate any club......</p>
+                    <p>Here can select any class, section and subject then assign a subject teacher. Moreover
+                    you can cahnge an ongoing teacher of a particular subject and assign a new one. The Teacher will be notified
+                    as soon as he is assigned to take a class and also if he is released from this responsibility......</p>
 
                     <!-- Link -->
                     <a href="{{url('/teacher_management/st')}}" class="btn btn-small">Enter</a>
@@ -83,13 +83,12 @@ $classes = DB::table('section')
                     </div><!-- / .meta -->
 
                     <!-- Post Title -->
-                    <a href="{{url('/teacher_management/ct')}}" class="post-title"><h4>Event Management</h4></a>
+                    <a href="{{url('/teacher_management/ct')}}" class="post-title"><h4>Add or Change Any Class Teacher</h4></a>
 
                     <!-- Blurb -->
-                    <p>We have Clubs. Here can select any club and add any club event. Moreover
-                    you can cahnge an already declared club event. The Moderator of the corresponding club and the club members
-                    will be notified
-                    as soon as you add a new event......</p>
+                     <p>Here can select any class and section and then assign a subject teacher. Moreover
+                    you can change an ongoing class teacher of a particular section and assign a new one. The Teacher will be notified
+                    as soon as he is assigned as a class teacher and also if he is released from this responsibility......</p>
 
                     <!-- Link -->
                     <a href="{{url('/teacher_management/ct')}}" class="btn btn-small">Enter</a>
@@ -102,4 +101,24 @@ $classes = DB::table('section')
             </div><!-- / .row -->
           </section><!-- / .container -->
         </div>
+         <footer class="footer row" role="contentinfo">
+      <div class="bs-docs-social">
+        <ul class="bs-docs-social-buttons">
+          <li class="follow-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
+             <i class="fa fa-facebook"></i> Like ILS </a></li>
+          <li class="tweet-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
+              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
+          </ul>
+        </div>
+
+        <ul class="footer-links text-muted">
+          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
+          <li>.</li>
+          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
+          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
+          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
+        </ul>
+      </footer>
 @endsection

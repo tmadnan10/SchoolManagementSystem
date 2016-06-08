@@ -2,7 +2,7 @@
 
 @section('content')
 
-<br><br><br>
+
 <!--<link rel="stylesheet" type="text/css" href="../css/app.min.css">
 <link rel="stylesheet" type="text/css" href="../css/temp.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -33,6 +33,12 @@
        $tchr->Address == "" | $tchr->blood_group == "" ) {
         $flag = 0;
     }
+    foreach ($teacher as $std) {
+        $notif = DB::table('notification')
+                  ->where('username', $std->username)
+                  ->where('view', '0')
+                  ->get();
+      }
     ?>
 
 
@@ -52,7 +58,7 @@
 
           <ul class="nav nav-pills nav-stacked">
               <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
+              <li><a href="{{url('teacher/notification')}}"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
               <li><a href="{{url('/teacher/edit')}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>
       </div>
@@ -122,7 +128,7 @@
 
           <ul class="nav nav-pills nav-stacked">
               <li><a href="{{url('/teacher')}}"> <i class="fa fa-user"></i> Profile</a></li>
-              <li><a href="#"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">9</span></a></li>
+              <li><a href="{{url('teacher/notification')}}"> <i class="fa fa-calendar"></i> Recent Notification <span class="label label-warning pull-right r-activity">{{count($notif)}}</span></a></li>
               <li class="active"><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
           </ul>
       </div>

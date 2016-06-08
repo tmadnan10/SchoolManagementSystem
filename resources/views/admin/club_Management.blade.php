@@ -105,4 +105,24 @@ $departments = DB::table('department')
             </div><!-- / .row -->
           </section><!-- / .container -->
         </div>
+            <footer class="footer row" role="contentinfo">
+      <div class="bs-docs-social">
+        <ul class="bs-docs-social-buttons">
+          <li class="follow-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://www.facebook.com/ils" class="btn btn-primary btn-xs">
+             <i class="fa fa-facebook"></i> Like ILS </a></li>
+          <li class="tweet-btn">
+            <a itemprop="sameAs" rel="nofollow" href="https://twitter.com/ils" class="btn btn-info btn-xs">
+              <i class="fa fa-twitter"></i> Follow @ILS </a></li>
+          </ul>
+        </div>
+
+        <ul class="footer-links text-muted">
+          <li><span class="glyphicon glyphicon-globe"></span> School Management System © 2016</li><li>.</li><li>Created by&nbsp;&nbsp;&nbsp;<a href="#" class="label label-info">ILS</a></li>
+          <li>.</li>
+          <li> <span class="glyphicon glyphicon-list-alt"></span> <a href="#"> Site Privacy policy </a></li>
+          <li>.</li><li> <span class="fa fa-facebook"></span> <a class="isTooltip" title="" href="https://www.facebook.com/ils/" data-original-title="send us a message using facebook">Contact us</a></li>
+          <li>.</li><li> <i class="fa fa-google-plug"></i> <a itemprop="sameAs" rel="nofollow" href="https://plus.google.com/+ils/posts">Google +</a></li>
+        </ul>
+      </footer>
 @endsection

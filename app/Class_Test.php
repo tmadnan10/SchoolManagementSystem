@@ -61,4 +61,42 @@ class Class_Test extends Model
     					 ->where('date', $cd)
     					 ->update(['marks'=>$name, 'marks_uploaded' => 1]);
     }
+    
+    public function getUpcomingCTs($class_id, $section_id)
+    {
+        $date = date('Y-m-d');
+        return Class_Test::where('class_id', $class_id)
+                           ->where('section_id', $section_id)
+                           ->where('date', '>', $date)
+                           ->orderBy('date', 'asc')
+                           ->get();
+    }
+
+    public function getUpcomingCTsJoined($class_id, $section_id){
+        $date = date('Y-m-d');
+        $CTs = \DB::table('class_test')
+                   ->join('subject', 'class_test.subject_id', '=', 'subject.subject_id')
+                   ->select('class_test.*','subject.subject_name')
+                   ->where('class_id', $class_id)
+                   ->where('section_id', $section_id)
+                   ->where('date', '>', $date)
+                   ->orderBy('date', 'asc')
+                   ->get();
+        return $CTs;
+    }
+
+    public function getCTsWithMarks($class_id, $section_id)
+    {
+        $date = date('Y-m-d');
+        $CTs = \DB::table('class_test')
+                   ->join('subject', 'class_test.subject_id', '=', 'subject.subject_id')
+                   ->select('class_test.*','subject.subject_name')
+                   ->where('class_id', $class_id)
+                   ->where('section_id', $section_id)
+                   ->where('date', '<', $date)
+                   ->where('marks_uploaded', '1')
+                   ->orderBy('date', 'desc')
+                   ->get();
+        return $CTs;
+    }
 }

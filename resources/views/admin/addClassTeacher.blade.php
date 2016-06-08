@@ -28,7 +28,7 @@ $classes = DB::table('section')
 			<div class="wizard-container">
 					<div class="card wizard-card ct-wizard-info" id="wizard">
 						<div class="wizard-header">
-							<center><h2>You are Currently Moderating <br><b></b></h2><br></center>
+							<center><h2>Teacher Management<br><b></b></h2><br></center>
 						</div>
 
 					<ul class="nav nav-pills">
@@ -126,11 +126,12 @@ $classes = DB::table('section')
 
                             <div class="form-group">
                               <div class="col-md-6 col-md-offset-4">
-                                  <button type="submit" class="btn btn-primary">
+                                  <button type="submit" class="btn btn-primary"  name="next">
                                       <i class=""></i>Next
                                   </button>
                               </div>
                           </div>
+                          <input type="hidden" value="" name="moderator2" id="moderator2" readonly="" class="form-control"> 
                           </form>
 
                 </div>
@@ -350,6 +351,8 @@ $('#section_id1').on('change', function(e){
     $('#moderator1').empty();
     var arr = JSON.parse(data);
     $('#moderator1').val(arr[0]);
+    $('#moderator2').val(arr[1]);
+
 
   });
   $.get("{{ url('teacher_list')}}=" + class_id + "=" + section_id, function(data){

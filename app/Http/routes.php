@@ -103,29 +103,19 @@ Route::group(['middleware' => ['web']], function () {
       return redirect(url('/').'/login');
     });    
 
-    Route::get('admin/club_management/moderator', function(){
-      if (Auth::check()) {
-        if (Auth::user()->account_type == 'admin') {
-          return view('admin.moderator');
-        }
-        return redirect(url('/').'/'.Auth::user()->account_type);
-      }
-      return redirect(url('/').'/login');
-    });
+    Route::get('admin/club_management/moderator', 'AdminController@clubModeratorPage');
 
 
 
-    Route::get('admin/club_management/notices', function(){
-      if (Auth::check()) {
-        if (Auth::user()->account_type == 'admin') {
-          return view('admin.clubNotice');
-        }
-        return redirect(url('/').'/'.Auth::user()->account_type);
-      }
-      return redirect(url('/').'/login');
-    });
+    Route::get('admin/club_management/notices', 'AdminController@clubEventPage');
 
     Route::get('/api/dept=', function(){
+      $arr = array();
+      array_push($arr, '');
+        echo json_encode($arr);
+    });
+
+        Route::get('/api/department=', function(){
       $arr = array();
       array_push($arr, '');
         echo json_encode($arr);
@@ -211,7 +201,8 @@ Route::group(['middleware' => ['web']], function () {
         if (count($teacher)) {
             foreach ($teacher as $key) {
                 $name = $key->first_name." ".$key->last_name;
-                array_push($arr, $name);
+                array_push($arr, $key->username);array_push($arr, $name);
+
             }
         }
         echo json_encode($arr);
@@ -296,6 +287,7 @@ Route::group(['middleware' => ['web']], function () {
                 foreach ($teacher as $key) {
                     array_push($arr, $key->first_name." ".$key
                         ->last_name);
+                    array_push($arr, $key->username);
                 }
                 
             }
@@ -327,12 +319,21 @@ Route::group(['middleware' => ['web']], function () {
         echo json_encode($arr);
     });
 
+    Route::get('/admin/exam/addnew', 'AdminController@addNewExamPage');
+    Route::post('/addexam', 'AdminController@addNewExam');
     Route::post('/addclubmoderator', 'AdminController@addClubModerator');
     Route::post('/addclubnotice' ,'AdminController@addClubNotice');
     Route::delete('/deletemember/{task}', 'TeacherController@destroy');
     Route::delete('/deletemember1/{task}', 'TeacherController@destroy1');
     Route::post('/edit', 'TeacherController@editMemberStatus');
-    Route::get('teacher/club_management/add', 'TeacherController@clubAddPage');
+    Route::get('/admin/class_routine', 'AdminController@classRoutinePage');
+    Route::post('/admin/class_routine', 'AdminController@classRoutineAdd');
+    Route::get('/admin/exam/seat', 'AdminController@seatPlanPage');
+    Route::post('/seatplan', 'AdminController@seatPlan');
+    Route::get('/admin/exam/rout', 'AdminController@examRoutinePage');
+    Route::post('/routine', 'AdminController@examRoutine');
+    Route::get('/admin/resultpublish', 'AdminController@examResult');
+    Route::post('/publish', 'AdminController@publish');
 
 /**************************** end ******************************
 ************************  Club Management  ***********************
@@ -685,15 +686,25 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
 
     Route::post('/teacher/club', 'TeacherController@addClubMember');
 
-    Route::get('/teacher/activities', 'TeacherController@myActivities');
-    Route::get('/teacher/exam', 'TeacherController@exam');
+    Route::get('/teacher/changepass','TeacherController@changePassPage');
+    Route::get('/student/changepass','StudentController@changePassPage');
 
+    Route::post('/teacher/passchange', 'TeacherController@changepassword');
+
+     Route::get('/teacher/activities', 'TeacherController@myActivities');
+    ////////////////////////////////////////////////////////////////////////////////////
+    Route::get('/teacher/assignedclasses', 'TeacherController@assignedclasses');
+    ////////////////////////////////////////////////////////////////////////////
+    Route::get('/teacher/exam', 'TeacherController@exam');
+    Route::get('/teacher/uploadResult', 'TeacherController@uploadResult');
+    Route::post('/teacher/uploadResult/results', 'TeacherController@resultUploadPage');
+    Route::post('/teacher/addResults', 'TeacherController@addMarks');
     Route::get('/teacher/changepropic', 'TeacherController@changeProPic');
     Route::post('/teacher/changepropic', 'TeacherController@changeMyProPic');
     Route::get('/1stTerminal', 'TeacherController@firstTerminal');
 
     Route::get('/teacher/upload', 'TeacherController@upload');
-    Route::post('/teacher/marks', 'TeacherController@marks');
+    Route::post('/teacher/files', 'TeacherController@files');
 
     Route::get('/ct/ct={id}={id1}', function($id, $id1){
         $arr = array();
@@ -866,6 +877,25 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
 
 
     Route::get('/teacher/club_management/view', 'TeacherController@viewClubMembers');
+    Route::get('/teacher/club_management/add', 'TeacherController@clubAddPage');
+    Route::get('/teacher/club_management/notices', 'TeacherController@clubEventPage');
+    Route::post('/teacher/club_management/notices', 'TeacherController@addClubNotice');
+    Route::get('/teacher/notification', 'TeacherController@notification');
+    Route::get('teacher/notifi={id}', function($id){
+        //echo "     ".($id);
+        DB::table('notification')
+            ->where('id', $id)
+            ->update(['view' => 1]);
+        $not = DB::table('notification')
+            ->where('id', $id)
+            ->first();
+        $hlink = $not->hlink;
+        $hlink = (url('/')).'/'.$hlink;
+        return redirect($hlink);
+    });
+    Route::get('/teacher/notices', 'TeacherController@notices');
+    Route::get('/teacher/club_management/show', 'TeacherController@myClubEvent');
+
 
 /********************************************************************************
 *********************************************************************************
@@ -885,7 +915,7 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
     Route::get('student/notification', 'StudentController@notification');
     
     Route::get('student/notifi={id}', function($id){
-        echo "     ".($id);
+        //echo "     ".($id);
         DB::table('notification')
             ->where('id', $id)
             ->update(['view' => 1]);
@@ -893,7 +923,8 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
             ->where('id', $id)
             ->first();
         $hlink = $not->hlink;
-        echo (url('/')).'/'.$hlink;
+        $hlink = (url('/')).'/'.$hlink;
+        return redirect($hlink);
     });
 
     Route::get('/student/club', 'StudentController@clubs');
@@ -903,8 +934,16 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
     Route::post('/student/changepropic', 'StudentController@changeMyProPic');
     Route::get('/student/club/events', 'StudentController@myClubEvent');
     Route::get('/student/club/myclubs', 'StudentController@myAllClubs');
-
-    
+    Route::get('/student/download', 'StudentController@downloadPage');
+    Route::get('/student/download/study_materials', 'StudentController@studyMaterialPage');
+    Route::get('/student/class_test', 'StudentController@classTestPage');
+    Route::get('/student/class_test/upcomings', 'StudentController@upcomingCTs');
+    Route::get('/student/class_test/marks', 'StudentController@CTMarks');
+    Route::get('/student/download/class_routine', 'StudentController@classRoutineDownload');
+    Route::get('/student/result', 'StudentController@result');
+    Route::get('student/firstTerminal', 'StudentController@firstTermResult');
+    Route::get('student/secondTerminal', 'StudentController@secondTermResult');
+    Route::get('student/termFinal', 'StudentController@termFinalResult');
 
     Route::get('/tasks', 'TaskController@index');
     Route::post('/task', 'TaskController@store');
@@ -933,5 +972,7 @@ Route::get('/ctedit3={id}={id1}={id2}={id3}', function($id,$id1,$id2,$id3){
         return view('temp1', ['info' => session('none'), 'info1' => session('ntwo')]);
     });
     Route::post('/temp1', 'AdminController@get');
+
+    Route::post('/search', 'StudentController@search');
 
 });

@@ -38,7 +38,7 @@
 
   							
 
-                {!! Form::open(array('class' => 'form-horizontal', 'url'=>'/teacher/marks','method'=>'POST', 'files'=>true)) !!}
+                {!! Form::open(array('class' => 'form-horizontal', 'url'=>'/teacher/files','method'=>'POST', 'files'=>true)) !!}
 
 
 
@@ -92,27 +92,20 @@
                               </div>
                             </div>
 
-                            
+                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">Name</label>
 
-                            <div class="form-group{{ $errors->has('class_test_id') ? ' has-error' : '' }}">
-                              <label class="col-md-4 control-label">Class Test</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="name" value="{{ old('username') }}">
 
-                              <div class="col-md-6">
-                                  <select class="form-control" name= "class_test_id" id="class_test_id">
-                                  <option value=""></option>
-
-                                  </select>
-                                  @if ($errors->has('class_test_id'))
-                                      <span class="help-block">
-                                          <strong>{{ $errors->first('class_test_id') }}</strong>
-                                      </span>
-                                  @endif
-                              </div>
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
                             </div>
+                        </div>
 
-
-
-                            
 
                             <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
                               <label class="col-md-4 control-label">File</label>
@@ -264,7 +257,8 @@ $('#class_id').on('change', function(e){
            //console.log('data');
            var arr = JSON.parse(data);
            console.log(arr.length);
-           for (var i = 0; i < arr.length; i++) {
+           $('#section_id').append('<option value="">Please Select A Section</option>');
+           for (var i = 1; i < arr.length; i++) {
               $('#section_id').append('<option value="'+arr[i]+'">'+arr[i]+'</option>');
             console.log(arr[i]);
             };

@@ -15,4 +15,8 @@ class Subject extends Model
     {	
 		return Subject::where('subject_id', $subject_id)->first();	
     }
+    public function subjectList($class_id)
+    {
+    	return Subject::where('subject_id', 'like', $class_id.'%')->get();
+    }
 }

@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" type="text/css" href="../css/datepicker.css">
   <script src="../js/bootstrap-datepicker.js"></script>
+
+
 <!--<div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">

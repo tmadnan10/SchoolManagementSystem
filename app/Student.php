@@ -41,6 +41,11 @@ class Student extends Model
     {
         return Student::where('class_id', $class_id)->where('section_id', $section_id)->get();
     }
+
+    public function getAllS($class_id, $section_id)
+    {
+        return Student::where('class_id', $class_id)->where('section_id', $section_id)->orderBy('student_id')->get();
+    }
     public function updateProPic($username, $image_name){
         return Student::where('username', $username)
             ->update(['profile_pic' => $image_name]);    
@@ -48,5 +53,22 @@ class Student extends Model
     public function getID($class_id, $section_id, $student_id)
     {
         return Student::where('class_id', $class_id)->where('section_id', $section_id)->where('student_id', $student_id)->first();
+    }
+    public function getClassID($username)
+    {   
+        return Student::where('username', $username)->first();
+    }
+    public function getEntire(){
+        return Student::select('username')->get();
+    }
+    public function getIDs($username){
+        return Student::where('username', $username)->first();
+    }
+    public function search($key)
+    {
+        return Student::where('first_name', 'like', '%'.$key.'%')
+                      ->orWhere('last_name', 'like', '%'.$key.'%')
+                      ->select('first_name', 'last_name')
+                      ->get();
     }
 }

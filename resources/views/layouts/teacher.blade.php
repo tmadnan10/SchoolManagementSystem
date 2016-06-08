@@ -67,10 +67,10 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="snippets-index snippets-view snippets-add snippets-edit">
-                    <a href="{{url('/teacher/exam')}}"> <span class="glyphicon glyphicon-book"></span> Exam Manageent </a>
+                    <a href="{{url('/teacher/exam')}}"> <span class="glyphicon glyphicon-book"></span> Upload Result </a>
                 </li>
                 <li class="themes-index themes-view themes-add">
-                    <a href="{{url('/teacher/class_test')}}"> <span class="glyphicon glyphicon-th-large"></span> Class Test Management </a>
+                    <a href="{{url('/teacher/class_test')}}"> <span class="glyphicon glyphicon-th-large"></span> Class Tests  </a>
                 </li>
                 <li class="utilities-index utilities-view utilities-add">
                     <a href="{{url('/').'/teacher/club'}}"> <span class="glyphicon glyphicon-th-large"></span> Club Management </a>
@@ -95,7 +95,7 @@
                             <a href="{{url('/teacher/changepropic')}}"> <i class="fa fa-camera"></i> Change Profile Picture </a>
                         </li>
                         <li>
-                            <a href="/changepass"> <i class="fa fa-gear"></i> Change Password </a>
+                            <a href="{{url('/teacher/changepass')}}"> <i class="fa fa-gear"></i> Change Password </a>
                         </li>
                         <li>
                             <a href="{{ url('/logout') }}"> <i class="fa fa-power-off"></i> Logout </a>

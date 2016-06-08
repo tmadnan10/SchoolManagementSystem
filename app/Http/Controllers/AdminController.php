@@ -10,9 +10,13 @@ use App\Teacher;
 use App\Student;
 use App\Section;
 use App\Club;
+use App\Club_Event;
 use App\Department;
+use App\Subject;
+use App\Exam;
 use App\Assigned_Subject;
 use App\Http\Requests;
+use App\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,15 +28,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    //
-    public static $data = 'yo';
-    public $d;
-
+    ////***********************************************************************////
+    ////*****************************  Constructor  ***************************////
+    ////***********************************************************************////
     public function __construct()
-{
-    $this->middleware('auth');
-}
+    {
+        $this->middleware('auth');
+    }
 
+    ////***********************************************************************////
+    ////*****************************  Portal Page  ***************************////
+    ////***********************************************************************////
     public function index(Request $request){
         if (Auth::user()->account_type == 'admin') {
             return view('admin.adminpage');
@@ -41,7 +47,9 @@ class AdminController extends Controller
     	
     }
 
-
+    ////***********************************************************************////
+    ////************************ New User Creation Page ***********************////
+    ////***********************************************************************////
     public function createUser(Request $request)
     {
         $this->validate($request, [
@@ -54,6 +62,9 @@ class AdminController extends Controller
                         ->with(['userName' => $request->username, 'passWord' => bcrypt($request->password), 'account' => $request->account_type]);
     }
 
+    ////***********************************************************************////
+    ////************************ New Teacher Creation  ************************////
+    ////***********************************************************************////
     public function createTeacher(Request $request)
     {
         $newUser = new User;
@@ -76,10 +87,6 @@ class AdminController extends Controller
             'account_type' => $request->account_type,
         ]);
 
-
-
-        //$dept = DB::table('department')->where('dept_name', $request->dept_name)->first();
-
         $newTeacher->create([
         	'username' => $request->user,
             'first_name' => $request->first_name,
@@ -94,26 +101,26 @@ class AdminController extends Controller
         ]);
         $dept = new Department;
         $dept->inc($request->dept_id);
-
-/*
-        DB::table('department')
-            ->where('dept_id', $request->dept_id)
-            ->increment('total_teacher');
-*/
         return view('admin.redirect', ['msg' => 'Succesfully Added A New Teacher', 
             'page' => 'Admin Portal', 'url' => 'admin'
             ]);
     }
 
-
+    ////***********************************************************************////
+    ////************************ New Student Creation  ************************////
+    ////***********************************************************************////
     public function createStudent(Request $request)
     {
+        if ($request->class_id != '' & $request->section_id != '') {
+            $sec = new Section;
+            $total = $sec->getTotal($request->class_id, $request->section_id)->capacity;
+        }
         $newUser = new User;
         $newTeacher = new Student;
         $this->validate($request, [
             'class_id' => 'required',
             'section_id' => 'required',
-            'student_id' => 'unique:student,student_id,NULL,username,class_id,'.$request->class_id.',section_id,'.$request->section_id.'|required',
+            'student_id' => 'unique:student,student_id,NULL,username,class_id,'.$request->class_id.',section_id,'.$request->section_id.'|required|max:'.$total,
             'first_name' => 'max:255',
             'last_name' => 'max:255',
             'email' => 'email|unique:users',
@@ -128,12 +135,6 @@ class AdminController extends Controller
             'email' => $request->email,
             'account_type' => $request->account_type,
         ]);
-        /*echo ($request->date_of_birth);
-        $date_of_birth = strtotime($request->date_of_birth);
-        echo ($date_of_birth);
-        $new_date_of_birth = date('Y-m-d',$date_of_birth);
-        echo ($new_date_of_birth);
-*/
         if ($request->profile_pic == '') {
             $request->profile_pic = 'default_avatar.png';
         }
@@ -164,6 +165,18 @@ class AdminController extends Controller
             ]);
     }
 
+    ////***********************************************************************////
+    ////*************************** Club Management  **************************////
+    ////***********************************************************************////
+    public function clubModeratorPage(){
+        if (Auth::check()) {
+        if (Auth::user()->account_type == 'admin') {
+          return view('admin.moderator');
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+      }
+      return redirect(url('/').'/login');
+    }
 
     public function addClubModerator(Request $request){
         $this->validate($request, [
@@ -173,54 +186,81 @@ class AdminController extends Controller
         ]);
         $club = new Club;
 
-/*        DB::table('club')
-            ->select('club_name')
-            ->where('club_id', $request->club_id)
-            ->get();*/
-
         $club->addModerator($request->club_id, $request->username);
+        $club = new Club;
+        $notif = new Notification;
+            $notif->create([
+              'username' => $request->username,
+              'type' => 'clubModerator',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been assigned as Moderator of '.$club->getClub($request->club_id)->club_name,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
 
         return view('admin.redirect1', ['msg' => 'Succesfully Changed The Moderator of '.$club->getClub($request->club_id)->club_name, 
             'page' => 'Club Management', 'url' => 'admin/club_management'
             ]);
-        //echo ($request->club_id).($request->dept_id).($request->username);
+    }
+
+    public function clubEventPage(){
+      if (Auth::check()) {
+        if (Auth::user()->account_type == 'admin') {
+          return view('admin.clubNotice');
+        }
+        return redirect(url('/').'/'.Auth::user()->account_type);
+      }
+      return redirect(url('/').'/login');
     }
 
     public function addClubNotice(Request $request){
-        //if ($request->has('notes')) {
-        //    echo "string";
-        //}
-        //else echo "string2";
-        //echo "in";
         $this->validate($request, [
             'club_id' => 'required',
             'type' => 'required',
             'date' => 'required',
             'notes' => 'required',
         ]);
+        $clubEvent = new Club_Event;
+        //echo ($request->club_id).($request->type).($request->date).($request->notes);
+        $clubEvent->create([
+              'club_id' => $request->club_id, 
+              'event_type' => $request->type,
+              'date' => $request->date, 
+              'details' => $request->notes, 
+              'uploader' => Auth::user()->username,
+            ]);
         $club = new Club;
-
-
-        //echo "in";
-        /*$club = DB::table('club')
-            ->select('club_name')
-            ->where('club_id', $request->club_id)
-            ->get();
-        DB::table('club')
-            ->where('club_id', $request->club_id)
-            ->update(['moderator_id' => $request->username]);
-        foreach ($club as $key) {
-            $name = $key->club_name;
+        $clubModerator = $club->getModerator($request->club_id)->moderator_id;
+        $notif = new Notification;
+            $notif->create([
+              'username' => $clubModerator,
+              'type' => 'clubEvent',
+              'hlink' => '#',
+              'details' => 'An Event has been added to '.$club->getModerator($request->club_id)->club_name,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+        $members = $club->members($request->club_id);
+        foreach ($members as $key) {
+            $notif = new Notification;
+            $notif->create([
+              'username' => $key->member_username,
+              'type' => 'clubEvent',
+              'hlink' => 'student/club/events',
+              'details' => 'An Event has been added to '.$club->getModerator($request->club_id)->club_name,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
         }
-        return view('admin.redirect', ['msg' => 'Succesfully Changed The Moderator of '.$name, 
-            'page' => 'Club Management', 'url' => 'club_management'
-            ]);*/
-        echo ($request->club_id).($request->type).($request->date).($request->notes);
         return view('admin.redirect1', ['msg' => 'Succesfully Added A New Event of '.$club->getClub($request->club_id)->club_name, 
             'page' => 'Club Management', 'url' => 'admin/club_management'
             ]);
     }
 
+    ////***********************************************************************////
+    ////************************** Teacher Management  ************************////
+    ////***********************************************************************////
+    
     public function subjectTeacher(Request $request){
         if (Auth::user()->account_type == 'admin') {
             return view('admin.addSubjectTeacher');
@@ -243,7 +283,6 @@ class AdminController extends Controller
         
     }
 
-
     public function addSubjectTeacher(Request $request){
         $this->validate($request, [
             'class_id' => 'required',
@@ -263,10 +302,42 @@ class AdminController extends Controller
                 'duration' => $request->duration,
                 'classes_per_week' => $request->classes_per_week,
             ]);
+            $subject = new Subject;
+            $notif = new Notification;
+            $notif->create([
+              'username' => $request->username,
+              'type' => 'subjectTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been assigned to take '.$subject->getSubjectName($request->subject_id)->subject_name.' subject of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+
         }
         else{
             $subject = new assigned_subject;
             $subject->setSubjectTeacher($request->class_id, $request->section_id, $request->subject_id, $request->username);
+            $subject = new Subject;
+            $notif = new Notification;
+            $notif->create([
+              'username' => $request->username,
+              'type' => 'subjectTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been assigned to take '.$subject->getSubjectName($request->subject_id)->subject_name.' subject of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+
+            $noti = new Notification;
+            $noti->create([
+              'username' => $request->moderatorid,
+              'type' => 'subjectTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been released from taking class on '.$subject->getSubjectName($request->subject_id)->subject_name.' subject of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+
             /*DB::table('assigned_subject')
             ->where('class_id', $request->class_id)
             ->where('section_id', $request->section_id)
@@ -297,6 +368,7 @@ class AdminController extends Controller
             return view('admin.addClassTeacher');
         }
         return redirect(url('/').'/'.Auth::user()->account_type);
+
 /*
         $club = DB::table('club')
             ->select('club_name')
@@ -322,6 +394,46 @@ class AdminController extends Controller
         ]);
             $section = new Section;
             $section->setClassTeacher($request->class_id1, $request->section_id1, $request->username1);
+        if ($request->moderator2 == '') {
+            
+            $subject = new Subject;
+            $notif = new Notification;
+            $notif->create([
+              'username' => $request->username1,
+              'type' => 'classTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been assigned as Class Teacher of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username1,
+              'date' => date('Y-m-d'),
+            ]);
+
+        }
+        else{
+            $notif = new Notification;
+            $notif->create([
+              'username' => $request->username1,
+              'type' => 'classTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been assigned as Class Teacher of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+            $noti = new Notification;
+            $noti->create([
+              'username' => $request->moderator2,
+              'type' => 'classTeacher',
+              'hlink' => 'teacher/activities',
+              'details' => 'You have been released from Class Teacher of class '.$request->class_id.' section '.$request->section_id,
+              'uploader' => Auth::user()->username,
+              'date' => date('Y-m-d'),
+            ]);
+
+            /*DB::table('assigned_subject')
+            ->where('class_id', $request->class_id)
+            ->where('section_id', $request->section_id)
+            ->where('subject_id', $request->subject_id)
+            ->update(['teacher_username' => $request->username]);*/
+        }
             /*DB::table('section')
             ->where('class_id', $request->class_id1)
             ->where('section_id', $request->section_id1)
@@ -346,20 +458,244 @@ class AdminController extends Controller
     }
 
 
-    public function set(Request $request){
-        $one = '10';
-        $two = 'A';
-        $this->validate($request, [
-            'username' => 'required|unique:student,student_id,NULL,username,class_id,'.$one.',section_id,'.$two
-        ]);
-
-    	return redirect(url('/').'/temp1')->with([ 'none' => $request->username1, 'ntwo' => $two]);
+    ////***********************************************************************////
+    ////*************************** Exam Management  **************************////
+    ////***********************************************************************////
+    public function addNewExamPage(){
+        if (Auth::check()) {
+            if (Auth::user()->account_type == 'admin') {
+            return view('admin.addNewExam');
+        }
+            return redirect(url('/').'/'.Auth::user()->account_type);
+        }
+        return redirect(url('/').'/login');
     }
 
-    public function get(Request $request){
+    public function addNewExam(Request $request){
         $this->validate($request, [
-            'username' => 'max:1'
+            'date' => 'required',
+        ]);
+        $exam = new Exam;
+        $today = date('m');
+        if ($today<7) {
+            $exam_name = '2nd Terminal Exam';  
+            $exam_id = '2ndt' ;
+        }
+        elseif ($today<4) {
+            $exam_name = '1st Terminal Exam';
+            $exam_id = '1stt' ;    
+        }
+        elseif ($today<11) {
+            $exam_name = 'Term Final Exam'; 
+            $exam_id = 'ter' ; 
+        }
+        $exam->create([
+            'exam_id' => $exam_id,
+            'exam_name' => $exam_name,
+            'exam_date' => $request->date,
+        ]);
+
+        $students = new Student;
+      $student = $students->getEntire();
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'exam',
+          'hlink' => 'student/download',
+          'details' => 'Class Routine has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+      }
+
+      return view('admin.redirect', [
+        'msg' => 'Successfully Announced the '.$exam_name,
+        'page' => 'Your Portal',
+        'url' => 'admin',
+        ]); 
+    }
+
+
+
+    public function classRoutinePage(){
+        if (Auth::check()) {
+            if (Auth::user()->account_type == 'admin') {
+                $section = new Section;
+            return view('admin.classRoutinePage', ['classes' => $section->getAllClasses()]);
+        }
+            return redirect(url('/').'/'.Auth::user()->account_type);
+        }
+        return redirect(url('/').'/login');
+    }
+
+    public function classRoutineAdd(Request $request){
+        $this->validate($request, [
+          'file' => 'mimes:pdf,doc,docx,xls|required',
+          'class_id' => 'required|max:255',
+          'section_id' => 'required|max:255',
+      ]);
+      $file = $request->file('file');
+      $date = date("Y-m-d-h:m:s");
+      $name = $request->class_id.$request->section_id.$date.$file->getClientOriginalName();
+      $file->move('classRoutines/', $name);
+      $section = new Section;
+      $section->uploadClassRoutine(($request->class_id), ($request->section_id), 'classRoutines/'.$name);
+
+
+      $students = new Student;
+      $student = $students->getAll($request->class_id, $request->section_id);
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'class_routine',
+          'hlink' => 'student/download',
+          'details' => 'Class Routine has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+      }
+
+      return view('admin.redirect1', [
+        'msg' => 'Successfully Uploaded Class Routine',
+        'page' => 'Your Portal',
+        'url' => 'admin',
+        ]); 
+    }
+
+    public function seatPlanPage(){
+        if (Auth::check()) {
+            if (Auth::user()->account_type == 'admin') {
+                $exam = new Exam;
+            return view('admin.seatPlanPage', ['exams' => $exam->getExamsForUploadSeatPlan()]);
+        }
+            return redirect(url('/').'/'.Auth::user()->account_type);
+        }
+        return redirect(url('/').'/login');
+    }
+
+    
+    public function examResult(){
+        if (Auth::check()) {
+            if (Auth::user()->account_type == 'admin') {
+                $exam = new Exam;
+            return view('admin.uploadResult', ['exams' => $exam->getExamsForPublishResult()]);
+        }
+            return redirect(url('/').'/'.Auth::user()->account_type);
+        }
+        return redirect(url('/').'/login');
+    }
+
+    public function publish(Request $request)
+    {
+        $this->validate($request, [
+          'exam' => 'required'
+      ]);
+
+
+
+        $ex = new Exam;
+        $ex->announce($request->date);
+
+        $students = new Student;
+        $student = $students->getEntire();
+        foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'seat_plan',
+          'hlink' => 'student/download',
+          'details' => 'Seat Plan of '.$request->exam_name.' has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+
+        return view('admin.redirect1', [
+        'msg' => 'Successfully Announced Result of '.$request->name,
+        'page' => 'Your Portal',
+        'url' => 'admin',
         ]);
     }
+}
+
+    public function seatPlan(Request $request)
+    {
+        $this->validate($request, [
+          'file' => 'mimes:pdf,doc,docx,xls|required',
+      ]);
+      $file = $request->file('file');
+      $date = date("Y-m-d-h:m:s");
+      $name = $request->exam_id.$date.$file->getClientOriginalName();
+      $file->move('seatPlans/', $name);
+      $exam = new Exam;
+      $exam->uploadSeatPlan($request->exam_id, 'seatPlans/'.$name);
+
+
+      $students = new Student;
+      $student = $students->getEntire();
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'seat_plan',
+          'hlink' => 'student/download',
+          'details' => 'Seat Plan of '.$request->exam_name.' has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+      }
+
+      return view('admin.redirect1', [
+        'msg' => 'Successfully Uploaded Seat Plan',
+        'page' => 'Your Portal',
+        'url' => 'admin',
+        ]);
+    }
+    public function examRoutinePage(){
+        if (Auth::check()) {
+            if (Auth::user()->account_type == 'admin') {
+                $exam = new Exam;
+            return view('admin.examRoutinePage', ['exams' => $exam->getExamsForUploadRoutine()]);
+        }
+            return redirect(url('/').'/'.Auth::user()->account_type);
+        }
+        return redirect(url('/').'/login');
+    }
+
+    public function examRoutine(Request $request)
+    {
+        $this->validate($request, [
+          'file' => 'mimes:pdf,doc,docx,xls|required',
+      ]);
+      $file = $request->file('file');
+      $date = date("Y-m-d-h:m:s");
+      $name = $request->exam_id.$date.$file->getClientOriginalName();
+      $file->move('examRoutines/', $name);
+      $exam = new Exam;
+      $exam->uploadRoutine($request->exam_id, 'examRoutines/'.$name);
+
+
+      $students = new Student;
+      $student = $students->getEntire();
+      foreach ($student as $std) {
+        $notif = new Notification;
+        $notif->create([
+          'username' => $std->username,
+          'type' => 'exam_routine',
+          'hlink' => 'student/download',
+          'details' => 'Exam Routine of '.$request->exam_name.' has been uploaded',
+          'uploader' => Auth::user()->username,
+          'date' => date('Y-m-d'),
+        ]);
+      }
+
+      return view('admin.redirect1', [
+        'msg' => 'Successfully Uploaded Exam Routine',
+        'page' => 'Your Portal',
+        'url' => 'admin',
+        ]);
+    }
+
     
 }

@@ -25,6 +25,10 @@ class ClubMember extends Model
     }
     public function editMemberStatus($id, $new)
     {
-        return ClubMember::where('id', $id)->update(['membership_status' => $new]);
+    return ClubMember::where('id', $id)->update(['membership_status' => $new]);
+    }
+        public function getME($username, $club_id)
+    {
+        return ClubMember::where('club_id', $club_id)->where('member_username', $username)->first();
     }
 }

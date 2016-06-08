@@ -139,7 +139,7 @@ $departments = DB::table('department')
                           	<div class="form-group">
                               <div class="col-md-6 col-md-offset-4">
                                   <button type="submit" class="btn btn-primary">
-                                      <i class=""></i>Next
+                                      <i class=""></i>Confirm
                                   </button>
                               </div>
                           </div>

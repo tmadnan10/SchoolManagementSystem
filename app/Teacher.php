@@ -44,6 +44,14 @@ class Teacher extends Model
             ->where('username', $username)
             ->update(['profile_pic' => $image_name]);    
     }
+
+    public function search($key)
+    {
+        return Teacher::where('first_name', 'like', '%'.$key.'%')
+                      ->orWhere('last_name', 'like', '%'.$key.'%')
+                      ->select('first_name', 'last_name')
+                      ->get();
+    }
     
 
 }

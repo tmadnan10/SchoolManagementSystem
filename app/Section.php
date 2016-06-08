@@ -9,13 +9,13 @@ class Section extends Model
     //
     protected $table = 'section';
     protected $fillable = [
-        'class_id', 'section_id', 'room_no', 'total_students', 'class_teacher', 'duration', 'classes_per_week'
+        'class_id', 'section_id', 'room_no', 'total_students', 'class_teacher', 'routine',
     ];
 
     public function getClassTeacher($username)
     {
     	return Section::where('class_teacher', $username)
-                        ->get();
+                        ->first();
     }
 
     public function setClassTeacher($class_id1, $section_id1, $username1)
@@ -31,6 +31,27 @@ class Section extends Model
             ->where('class_id', $class_id)
             ->where('section_id', $section_id)
             ->increment('total_students');
+    }
+    public function getAllClasses()
+    {
+        return Section::select('class_id')
+                        ->distinct()->get();
+    }
+    public function uploadClassRoutine($class_id, $section_id, $file)
+    {
+        return Section::where('class_id', $class_id)->where('section_id', $section_id)
+                       ->update(['routine' => $file]);
+    }
+
+    public function getSection($class_id, $section_id)
+    {
+         return Section::where('class_id', $class_id)->where('section_id', $section_id)
+                       ->first();
+    }
+
+    public function getTotal($class_id, $section_id)
+    {
+        return Section::where('class_id', $class_id)->where('section_id', $section_id)->first();
     }
     
 }

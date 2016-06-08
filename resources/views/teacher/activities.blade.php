@@ -27,7 +27,7 @@
             <div class="row">
               
               <header class="sec-heading">
-                <h2>Latest from our blog</h2>
+                <h2>Activities</h2>
                 <span class="subheading">Check out our blog to see what were up to</span>
               </header>
 
@@ -42,25 +42,15 @@
                   <div class="bp-content">
                     
                     <!-- Meta data -->
-                    <div class="post-meta">
-                      <a href="#" class="post-date">
-                        <i class="fa fa-calendar-o"></i>
-                        <span>August 01.2015</span>
-                      </a>
-                      <a href="#" class="post-comments">
-                        <i class="fa fa-comments-o"></i>
-                        <span>12</span>
-                      </a>
-                    </div><!-- / .meta -->
-
+                    
                     <!-- Post Title -->
-                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Blog Post Title</h4></a>
+                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Assigned Classes</h4></a>
 
                     <!-- Blurb -->
-                    <p>Lorem ipsum dolor sit amet, tempor consectetur adipisicing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad ...</p>
+                    <p>Click Read More to see your Assigned Classes...</p>
 
                     <!-- Link -->
-                    <a href="pages/blog/blog-post.html" class="btn btn-small">Read More</a>
+                    <a href="{{url('/teacher/assignedclasses')}}" class="btn btn-small">Read More</a>
 
                   </div><!-- / .bp-content -->
 
@@ -78,25 +68,27 @@
                   <div class="bp-content">
                     
                     <!-- Meta data -->
-                    <div class="post-meta">
-                      <a href="#" class="post-date">
-                        <i class="fa fa-calendar-o"></i>
-                        <span>August 01.2015</span>
-                      </a>
-                      <a href="#" class="post-comments">
-                        <i class="fa fa-comments-o"></i>
-                        <span>12</span>
-                      </a>
-                    </div><!-- / .meta -->
+                    
 
                     <!-- Post Title -->
-                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Blog Post Title</h4></a>
+                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Class Teacher</h4></a>
 
                     <!-- Blurb -->
-                    <p>Lorem ipsum dolor sit amet, tempor consectetur adipisicing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad ...</p>
+                    @if (count($class_teacher) > 0)
+                    <br><b>Class:</b> {{$class_teacher->class_id}}
+                    <br><b>Section:</b> {{$class_teacher->section_id}}
+                    <br><b>Room No:</b> {{$class_teacher->room_no}}
+                    <br>
+                    <br>
+                    
+
+
+                    @else
+                    <p>You are currently not a Class teacher of any class...</p>
+                    @endif
 
                     <!-- Link -->
-                    <a href="pages/blog/blog-post.html" class="btn btn-small">Read More</a>
+                
 
                   </div><!-- / .bp-content -->
 
@@ -114,25 +106,31 @@
                   <div class="bp-content">
                     
                     <!-- Meta data -->
-                    <div class="post-meta">
-                      <a href="#" class="post-date">
-                        <i class="fa fa-calendar-o"></i>
-                        <span>August 01.2015</span>
-                      </a>
-                      <a href="#" class="post-comments">
-                        <i class="fa fa-comments-o"></i>
-                        <span>12</span>
-                      </a>
-                    </div><!-- / .meta -->
+                    
 
                     <!-- Post Title -->
-                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Blog Post Title</h4></a>
+                    <a href="pages/blog/blog-post.html" class="post-title"><h4>Club Moderator</h4></a>
 
                     <!-- Blurb -->
-                    <p>Lorem ipsum dolor sit amet, tempor consectetur adipisicing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Ut enim ad ...</p>
+                     @if (count($club) > 0)
+                     @foreach($club as $as)
+                                  <br><b>Club Name:</b> {{$as->club_name}}
+                                  <br><b>Club ID:</b> {{$as->club_id}}
+                                  <br><b>Office Room:</b> {{$as->office_room_no}}
+                                  <br><b>Total Members:</b> {{$as->total_members}}
+            
+                                  @endforeach
+                    
+                    
+                    <br>
+                    
 
+
+                    @else
+                    <p>You are currently not a Cloass teacher of any class...</p>
+                    @endif
                     <!-- Link -->
-                    <a href="pages/blog/blog-post.html" class="btn btn-small">Read More</a>
+          
 
                   </div><!-- / .bp-content -->
 

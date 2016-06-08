@@ -27,6 +27,13 @@
 
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <style>
+        .search{
+            width: 200px;
+        }
+        </style>
+
+
 
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -79,7 +86,14 @@
                 <li class="utilities-index utilities-view utilities-add"> 
                     <a href="{{url('/student/club')}}"> <span class="glyphicon glyphicon-th-large"></span> My Clubs </a>
                 </li>
+                <li class="dropdown">
+                  <a href="{{url('/student/club')}}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-search"></i> Search</a>
+                  <ul class="dropdown-menu search-dropdown">
+                    <li class="search" ><form role="form" method="POST" action="{{ url('/search') }}"> {!! csrf_field() !!} <input name="q" type="search" class="form-control" placeholder="Search..."></form></li>
+                  </ul>
+                </li>
             </ul>
+
 
 
 
@@ -93,7 +107,7 @@
                             <a href="{{url('/student/changepropic')}}"> <i class="fa fa-camera"></i> Change Profile Picture </a>
                         </li>
                         <li>
-                            <a href="/student/changepass"> <i class="fa fa-gear"></i> Change Password </a>
+                            <a href="{{url('/student/changepass')}}"> <i class="fa fa-gear"></i> Change Password </a>
                         </li>
                         <li>
                             <a href="{{ url('/logout') }}"> <i class="fa fa-power-off"></i> Logout </a>
@@ -103,6 +117,7 @@
             </ul>
         </div>
     </div> 
+
 </header>
 <br><br><br style="line-height: .5em"/>
     @yield('content')

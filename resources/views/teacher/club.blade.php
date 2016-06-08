@@ -103,7 +103,7 @@
                     </div><!-- / .meta -->
 
                     <!-- Post Title -->
-                    <a href="{{url('/teacher/club_management/notices')}}" class="post-title"><h4>Event Management</h4></a>
+                    <a href="{{url('/teacher/notices')}}" class="post-title"><h4>Event Management</h4></a>
 
                     <!-- Blurb -->
                     <p>Here you can add any club event.
@@ -112,7 +112,7 @@
                     as soon as you add a new event</p>
 
                     <!-- Link -->
-                    <a href="{{url('/teacher/club_management/notices')}}" class="btn btn-small">Enter</a>
+                    <a href="{{url('/teacher/notices')}}" class="btn btn-small">Enter</a>
 
                   </div><!-- / .bp-content -->
 

@@ -40,4 +40,19 @@ class assigned_subject extends Model
             ->where('subject_id', $subject_id)
             ->update(['teacher_username' => $username]);
     }
+    public function getAllJoined($username)
+    {
+      $subject = DB::table('assigned_subject')
+            ->join('subject', 'subject.subject_id', '=', 'assigned_subject.subject_id')
+            ->select('assigned_subject.id', 'subject.subject_name', 'assigned_subject.class_id', 'assigned_subject.section_id')
+            ->where('assigned_subject.teacher_username', '=', $username)
+            ->get();
+      return $subject;    
+    }
+
+    public function getByID($subject_id)
+    {
+      return assigned_subject::where('id', $subject_id)
+            ->first();
+    }
 }
